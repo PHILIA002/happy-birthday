@@ -1,10 +1,12 @@
-import { BicepsFlexed, Castle, HeartPulse, Tv, MessageCircle, Package, RefreshCcw,
+import {
+  BicepsFlexed, Castle, HeartPulse, Tv, MessageCircle, Package, RefreshCcw,
   Building2, Layers, Zap, Train, Music, Crown, Sword, Swords, Pickaxe,
   FlameKindling,
   TentTree,
   Hammer,
   Anvil,
-  Plane, } from "lucide-react";
+  Plane,
+} from "lucide-react";
 
 export const SERVERS = [
   {
@@ -36,20 +38,20 @@ export const SERVERS = [
     date: "2023.11 ~",
     title: "마카오톡",
     text: "분내신도시",
-    imgSrc: "/servers/마카오톡.webp",
+    imgSrc: "/servers/분내신도시.png",
     icon: MessageCircle,
   },
   {
     date: "2024.03 ~",
     title: "포켓꾸",
-    imgSrc: "/servers/포켓꾸.webp",
+    imgSrc: null,
     icon: Package,
   },
   {
     date: "2024.09 ~",
     title: "마카오톡 1.5",
     text: "마왕컴퍼니",
-    imgSrc: null,
+    imgSrc: "/servers/마왕컴퍼니.png",
     icon: Anvil,
   },
   {
@@ -65,6 +67,12 @@ export const SERVERS = [
     text: "특별소대",
     imgSrc: "/servers/마병대2.webp",
     icon: Sword,
+  },
+  {
+    date: "2025.02 ~",
+    title: "오함마 시즌 1/2",
+    imgSrc: null,
+    icon: Hammer,
   },
   {
     date: "2025.03 ~",
@@ -84,7 +92,7 @@ export const SERVERS = [
     date: "2025.07 ~",
     title: "킹콩서버",
     text: "곽하",
-    imgSrc: null,
+    imgSrc: "/servers/킹콩서버.png",
     icon: TentTree,
   },
   {

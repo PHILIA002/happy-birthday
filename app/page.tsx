@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Gallery from "@/components/sections/Gallery";
-import Quote from "@/components/sections/Quote";
 import Server from "@/components/sections/Server";
 import Keyword from "@/components/sections/Keyword";
 import Letter from "@/components/sections/Letter";
@@ -14,7 +13,6 @@ export default function Home() {
 
       <PageFadeIn>
         <Gallery />
-        <Quote />
         <Keyword />
         <Letter />
         <Server />

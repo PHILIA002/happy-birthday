@@ -56,7 +56,7 @@ export default function Countdown() {
     <GlassCard
       className="px-4 py-2 rounded-full animate-pulseSlow">
       <div className="flex items-center gap-2 whitespace-nowrap">
-        <Cake className="w-4 h-4 md:w-5 md:h-5 text-nini-accent" />
+        <Cake className="w-4 h-4 md:w-5 md:h-5 text-violet-900" />
 
         <span
           className="
@@ -64,8 +64,8 @@ export default function Countdown() {
             font-semibold tracking-wide
             tabular-nums
             bg-gradient-to-r
-            from-nini-accent
-            via-purple-400
+            from-fuchsia-400
+            via-violet-400
             to-pink-400
             bg-clip-text text-transparent
           "

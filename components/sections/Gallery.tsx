@@ -39,11 +39,15 @@ export default function Gallery() {
                   src={img.src}
                   alt={img.alt}
                   className={`
-                    rounded-3xl border border-white/70
+                    rounded-3xl
+                    border border-white/50
+                    ring-1 ring-violet-200/40
                     transition-all duration-700 ease-out
-                    ${activeIndex === idx
-                      ? "scale-100 opacity-100 shadow-[0_10px_10px_rgba(180,140,255,0.55)]"
-                      : "scale-[0.84] opacity-55"}
+                    ${
+                      activeIndex === idx
+                        ? "scale-100 opacity-100 shadow-[0_12px_24px_rgba(120,80,200,0.35)]"
+                        : "scale-[0.86] opacity-60 blur-[0.3px]"
+                    }
                   `}
                 />
               </div>
@@ -51,26 +55,23 @@ export default function Gallery() {
           ))}
         </Swiper>
 
-        <div className="
-          mt-6
-          hidden md:flex
-          justify-center gap-3
-          overflow-visible
-        ">
+        {/* 하단 썸네일 */}
+        <div className="mt-6 hidden md:flex justify-center gap-3">
           {GALLERY.map((img, idx) => (
             <button
               key={img.src}
               onClick={() => swiperRef?.slideToLoop(idx)}
               className={`
-                w-12 h-12               /* ⭐ 고정 프레임 */
+                w-12 h-12
                 rounded-lg
                 border
                 cursor-pointer
                 flex items-center justify-center
                 transition-all duration-300 ease-out
-                ${activeIndex === idx
-                  ? "border-nini-accent scale-105 shadow-[0_0_10px_rgba(180,140,255,0.6)]"
-                  : "border-white/40 opacity-70 hover:opacity-100 hover:scale-100"
+                ${
+                  activeIndex === idx
+                    ? "border-[#8b6cff] scale-105 shadow-[0_0_8px_rgba(139,108,255,0.45)]"
+                    : "border-[#cfc7e6] opacity-70 hover:opacity-100"
                 }
               `}
             >
@@ -82,10 +83,6 @@ export default function Gallery() {
             </button>
           ))}
         </div>
-
-        <p className="mt-6 text-center text-sm text-nini-subtext">
-          니니밍의 순간들
-        </p>
       </div>
     </section>
   );

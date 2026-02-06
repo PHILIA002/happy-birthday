@@ -8,15 +8,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        nini: {
-          text: "var(--nini-text)",
-          subtext: "var(--nini-subtext)",
-          accent: "var(--nini-accent)",
-          panel: "var(--glass-bg)",
-          panelBorder: "var(--glass-border)",
-        },
-      },
       boxShadow: {
         glass: "0 12px 32px rgba(120,90,255,0.35)",
       },

@@ -29,14 +29,7 @@ export default function Links() {
               relative
               w-9 h-9 md:w-11 md:h-11
               rounded-full
-              bg-white/25
-              border border-white/50
-              backdrop-blur-md
               flex items-center justify-center
-
-              shadow-[0_4px_12px_rgba(140,110,255,0.25)]
-              transition-all duration-200 ease-out
-
               group-hover:scale-110
               group-hover:bg-white/35
               active:scale-95

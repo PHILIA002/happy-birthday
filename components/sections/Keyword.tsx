@@ -12,19 +12,25 @@ export default function Keyword() {
             className="
               px-3.5 py-1.5 md:px-5 md:py-2
               rounded-full
-              hover:scale-105 transition-transform
+              transition-all duration-300
+              hover:scale-105
+              hover:bg-white/10
+              hover:shadow-[0_0_22px_rgba(139,92,246,0.25)]
             "
           >
             <div className="flex items-center gap-1.5 whitespace-nowrap">
               <Hash
-                className={`w-3.5 h-3.5 md:w-4 md:h-4
-                  ${tag.highlight ? "text-nini-accent" : "text-nini-subtext"}
-                `}
+                className="w-3.5 h-3.5 md:w-4 md:h-4"
+                style={{
+                  color: tag.highlight ? "#8B6FE8" : "#7C66B4",
+                }}
               />
+
               <span
-                className={`text-xs md:text-sm font-semibold tracking-wide
-                  ${tag.highlight ? "text-nini-accent" : "text-nini-text"}
-                `}
+                className="text-xs md:text-sm font-semibold tracking-wide"
+                style={{
+                  color: tag.highlight ? "#8B6FE8" : "#6E5A8A",
+                }}
               >
                 {tag.text}
               </span>
