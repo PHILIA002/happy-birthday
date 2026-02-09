@@ -5,13 +5,13 @@ import GlassCard from "./GlassCard";
 
 export default function Links() {
   return (
-    <div className="flex items-center gap-2 md:gap-3">
+    <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
       {LINKS.map((link) => (
         <a
           key={link.href}
           href={link.href}
           target="_blank"
-          className="group relative"
+          className="group relative cursor-pointer"
         >
           {/* Glow ring */}
           <div
@@ -38,7 +38,7 @@ export default function Links() {
             <img
               src={link.img}
               alt=""
-              className="w-5 h-5 md:w-7 md:h-7"
+              className="w-5 h-5 md:w-7 md:h-7 pointer-events-none"
             />
           </GlassCard>
         </a>

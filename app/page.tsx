@@ -1,7 +1,6 @@
 import Header from "@/components/Header";
 import Gallery from "@/components/sections/Gallery";
 import Server from "@/components/sections/Server";
-import Keyword from "@/components/sections/Keyword";
 import Letter from "@/components/sections/Letter";
 import MusicPlayer from "@/components/MusicPlayer";
 import PageFadeIn from "@/components/PageFadeIn";
@@ -13,9 +12,8 @@ export default function Home() {
 
       <PageFadeIn>
         <Gallery />
-        <Keyword />
-        <Letter />
         <Server />
+        <Letter />
       </PageFadeIn>
 
       <MusicPlayer />

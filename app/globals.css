@@ -46,13 +46,23 @@ body::before {
 /* ===============================
    ANIMATION
    =============================== */
-@keyframes pulseDot {
-  0%,100% { box-shadow: 0 0 10px rgba(180,140,255,0.6); }
-  50% { box-shadow: 0 0 18px rgba(200,160,255,1); }
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-.animate-dot {
-  animation: pulseDot 2.5s ease-in-out infinite;
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 12s linear infinite;
+}
+
+.marquee:hover {
+  animation-play-state: running;
 }
 
 /* ===============================
