@@ -6,6 +6,7 @@ import {
   Hammer,
   Anvil,
   Plane,
+  Moon,
 } from "lucide-react";
 
 export const SERVERS = [
@@ -39,7 +40,7 @@ export const SERVERS = [
     title: "마카오톡",
     text: "분내신도시",
     imgSrc: "/servers/분내신도시.png",
-    icon: MessageCircle,
+    icon: Moon,
   },
   {
     date: "2024.03 ~",

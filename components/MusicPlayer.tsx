@@ -8,6 +8,7 @@ import {
   SkipBack,
   SkipForward,
   Volume2,
+  VolumeX,
   Repeat,
   Repeat1,
   ListMusic,
@@ -26,10 +27,10 @@ export default function MusicPlayer() {
   const [repeatMode, setRepeatMode] = useState<RepeatMode>("all");
   const [showList, setShowList] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
+  const [prevVolume, setPrevVolume] = useState(70);
 
   const playerRef = useRef<any>(null);
 
-  /* marquee refs */
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -57,22 +58,19 @@ export default function MusicPlayer() {
 
   /* ================= YouTube ================= */
 
-  useEffect(() => {
-    setPlayerReady(false);
-  }, [currentIndex]);
-
   const onReady: YouTubeProps["onReady"] = (event) => {
     playerRef.current = event.target;
+
     event.target.setVolume(volume);
 
     setDuration(event.target.getDuration());
     setCurrentTime(0);
     setPlayerReady(true);
-
-    if (playing) event.target.playVideo();
   };
 
   const onStateChange: YouTubeProps["onStateChange"] = (event) => {
+    const state = event.data;
+
     if (event.data === 1) setPlaying(true);
     if (event.data === 2) setPlaying(false);
 
@@ -89,24 +87,66 @@ export default function MusicPlayer() {
   /* ================= Controls ================= */
 
   const togglePlay = () => {
-    if (!playerRef.current) return;
-    playing ? playerRef.current.pauseVideo() : playerRef.current.playVideo();
+    if (!playerRef.current || !playerReady) return;
+
+    const state = playerRef.current.getPlayerState();
+
+    if (state === 1) {
+      playerRef.current.pauseVideo();
+    } else {
+      playerRef.current.playVideo();
+    }
   };
 
   const nextTrack = () => {
-    setCurrentIndex((prev) => (prev + 1) % MUSIC_LIST.length);
+    if (!playerRef.current) return;
+
+    const nextIndex = (currentIndex + 1) % MUSIC_LIST.length;
+
+    playerRef.current.loadVideoById(
+      MUSIC_LIST[nextIndex].videoId,
+      0
+    );
+
+    setCurrentIndex(nextIndex);
+    setPlaying(true);
     setCurrentTime(0);
+    setPlayerReady(true);
   };
 
   const prevTrack = () => {
-    setCurrentIndex(
-      (prev) => (prev - 1 + MUSIC_LIST.length) % MUSIC_LIST.length
+    if (!playerRef.current) return;
+
+    const prevIndex =
+      (currentIndex - 1 + MUSIC_LIST.length) % MUSIC_LIST.length;
+
+    playerRef.current.loadVideoById(
+      MUSIC_LIST[prevIndex].videoId,
+      0
     );
+
+    setCurrentIndex(prevIndex);
+    setPlaying(true);
     setCurrentTime(0);
+    setPlayerReady(true);
   };
 
   const toggleRepeat = () => {
     setRepeatMode((prev) => (prev === "all" ? "one" : "all"));
+  };
+
+  const toggleMute = () => {
+    if (!playerRef.current) return;
+
+    if (volume === 0) {
+      const restore = prevVolume || 50;
+      setVolume(restore);
+      playerRef.current.setVolume(restore);
+    } else {
+      setPrevVolume(volume);
+      setVolume(0);
+      playerRef.current.setVolume(0);
+    }
   };
 
   /* ================= Progress ================= */
@@ -130,6 +170,7 @@ export default function MusicPlayer() {
 
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const vol = Number(e.target.value);
+    if (vol > 0) setPrevVolume(vol);
     setVolume(vol);
     playerRef.current?.setVolume(vol);
   };
@@ -148,8 +189,7 @@ export default function MusicPlayer() {
       {/* Hidden Player */}
       <div className="hidden">
         <YouTube
-          key={current.videoId}
-          videoId={current.videoId}
+          videoId={MUSIC_LIST[0].videoId}
           opts={{
             width: "0",
             height: "0",
@@ -207,9 +247,8 @@ export default function MusicPlayer() {
                   className="overflow-hidden w-full [mask-image:linear-gradient(to_right,black_10%,black_90%)]"
                 >
                   <div
-                    className={`whitespace-nowrap flex gap-10 ${
-                      isOverflowing ? "marquee" : ""
-                    }`}
+                    className={`whitespace-nowrap flex gap-10 ${isOverflowing ? "marquee" : ""
+                      }`}
                   >
                     <span
                       ref={textRef}
@@ -240,26 +279,47 @@ export default function MusicPlayer() {
                   max={duration || 0}
                   value={currentTime}
                   onChange={handleSeek}
+                  style={{
+                    background: `linear-gradient(
+                      to right,
+                      #A78BFA 0%,
+                      #8B6FE8 ${(currentTime / (duration || 1)) * 100}%,
+                      rgba(255,255,255,0.2) ${(currentTime / (duration || 1)) * 100}%,
+                      rgba(255,255,255,0.2) 100%
+                    )`,
+                  }}
                   className="
                     w-full
-                    h-[2px]
+                    h-[6px]
                     appearance-none
-                    bg-white/30
                     rounded-full
-                    accent-[#8B6FE8]
                     cursor-pointer
+                    transition
+
+                    [&::-webkit-slider-runnable-track]:h-[6px]
+                    [&::-webkit-slider-runnable-track]:rounded-full
+                    [&::-webkit-slider-runnable-track]:bg-transparent
 
                     [&::-webkit-slider-thumb]:appearance-none
-                    [&::-webkit-slider-thumb]:h-2
-                    [&::-webkit-slider-thumb]:w-2
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:w-4
                     [&::-webkit-slider-thumb]:rounded-full
-                    [&::-webkit-slider-thumb]:bg-[#8B6FE8]
+                    [&::-webkit-slider-thumb]:bg-white
+                    [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
+                    [&::-webkit-slider-thumb]:-mt-[5px]
+                    [&::-webkit-slider-thumb]:transition
+                    [&::-webkit-slider-thumb]:hover:scale-110
 
-                    [&::-moz-range-thumb]:h-2
-                    [&::-moz-range-thumb]:w-2
+                    [&::-moz-range-track]:h-[6px]
+                    [&::-moz-range-track]:rounded-full
+                    [&::-moz-range-track]:bg-transparent
+
+                    [&::-moz-range-thumb]:h-4
+                    [&::-moz-range-thumb]:w-4
                     [&::-moz-range-thumb]:border-none
                     [&::-moz-range-thumb]:rounded-full
-                    [&::-moz-range-thumb]:bg-[#8B6FE8]
+                    [&::-moz-range-thumb]:bg-white
+                    [&::-moz-range-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
                   "
                 />
               </div>
@@ -270,47 +330,85 @@ export default function MusicPlayer() {
                 <span>{formatTime(duration)}</span>
               </div>
 
-              {/* Buttons */}
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setShowList((v) => !v)}
-                  className={controlBtn}
-                >
-                  <ListMusic size={16} color="#7C66B4" />
-                </button>
+              {/* Controls Row */}
+              <div className="flex items-center w-full">
 
-                <button onClick={prevTrack} className={controlBtn}>
-                  <SkipBack size={18} color="#7C66B4" />
-                </button>
+                {/* LEFT */}
+                <div className="flex items-center justify-end flex-1">
+                  <button onClick={prevTrack} className={controlBtn}>
+                    <SkipBack size={18} color="#7C66B4" />
+                  </button>
+                </div>
 
-                <button
-                  onClick={togglePlay}
-                  className="w-11 h-11 rounded-full flex items-center justify-center shadow cursor-pointer active:scale-95"
-                  style={{
-                    background: "linear-gradient(135deg,#A78BFA,#8B6FE8)",
-                    color: "white",
-                  }}
-                >
-                  {playing ? <Pause size={20} /> : <Play size={20} />}
-                </button>
+                {/* ⭐ CENTER (항상 가운데) */}
+                <div className="flex items-center justify-center px-4">
+                  <button
+                    onClick={togglePlay}
+                    className="
+                      w-14 h-14
+                      rounded-full
+                      flex items-center justify-center
+                      shadow-lg
+                      cursor-pointer
+                      active:scale-95
+                      transition
+                    "
+                    style={{
+                      background: "linear-gradient(135deg,#A78BFA,#8B6FE8)",
+                      color: "white",
+                    }}
+                  >
+                    {playing ? <Pause size={24} /> : <Play size={24} />}
+                  </button>
+                </div>
 
-                <button onClick={nextTrack} className={controlBtn}>
-                  <SkipForward size={18} color="#7C66B4" />
-                </button>
+                {/* RIGHT */}
+                <div className="flex items-center gap-3 flex-1">
 
-                <button onClick={toggleRepeat} className={controlBtn}>
-                  {repeatMode === "one" ? (
-                    <Repeat1 size={16} color="#8B6FE8" />
-                  ) : (
-                    <Repeat size={16} color="#7C66B4" />
-                  )}
-                </button>
+                  <button onClick={nextTrack} className={controlBtn}>
+                    <SkipForward size={18} color="#7C66B4" />
+                  </button>
+
+                  <button
+                    onClick={toggleRepeat}
+                    className="
+                      w-8 h-8 rounded-full
+                      bg-white/10 hover:bg-white/20
+                      flex items-center justify-center
+                      transition cursor-pointer
+                    "
+                  >
+                    {repeatMode === "one" ? (
+                      <Repeat1 size={14} color="#8B6FE8" />
+                    ) : (
+                      <Repeat size={14} color="#7C66B4" />
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => setShowList((v) => !v)}
+                    className="
+                      w-8 h-8 rounded-full
+                      bg-white/10 hover:bg-white/20
+                      flex items-center justify-center
+                      transition cursor-pointer
+                    "
+                  >
+                    <ListMusic size={14} color="#7C66B4" />
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* RIGHT - Volume */}
             <div className="hidden md:flex items-center gap-2 w-[18%] justify-end">
-              <Volume2 size={15} color="#7C66B4" />
+              <button onClick={toggleMute} className="cursor-pointer">
+                {volume === 0 ? (
+                  <VolumeX size={15} color="#7C66B4" />
+                ) : (
+                  <Volume2 size={15} color="#7C66B4" />
+                )}
+              </button>
 
               <input
                 type="range"
@@ -318,26 +416,47 @@ export default function MusicPlayer() {
                 max={100}
                 value={volume}
                 onChange={handleVolume}
+                style={{
+                  background: `linear-gradient(
+                    to right,
+                    #A78BFA 0%,
+                    #8B6FE8 ${volume}%,
+                    rgba(255,255,255,0.2) ${volume}%,
+                    rgba(255,255,255,0.2) 100%
+                  )`,
+                }}
                 className="
                   w-20
-                  h-[2px]
+                  h-[6px]
                   appearance-none
-                  bg-white/30
                   rounded-full
-                  accent-[#8B6FE8]
                   cursor-pointer
+                  transition
+
+                  [&::-webkit-slider-runnable-track]:h-[6px]
+                  [&::-webkit-slider-runnable-track]:rounded-full
+                  [&::-webkit-slider-runnable-track]:bg-transparent
 
                   [&::-webkit-slider-thumb]:appearance-none
-                  [&::-webkit-slider-thumb]:h-2
-                  [&::-webkit-slider-thumb]:w-2
+                  [&::-webkit-slider-thumb]:h-4
+                  [&::-webkit-slider-thumb]:w-4
                   [&::-webkit-slider-thumb]:rounded-full
-                  [&::-webkit-slider-thumb]:bg-[#8B6FE8]
+                  [&::-webkit-slider-thumb]:bg-white
+                  [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
+                  [&::-webkit-slider-thumb]:-mt-[5px]
+                  [&::-webkit-slider-thumb]:transition
+                  [&::-webkit-slider-thumb]:hover:scale-110
 
-                  [&::-moz-range-thumb]:h-2
-                  [&::-moz-range-thumb]:w-2
+                  [&::-moz-range-track]:h-[6px]
+                  [&::-moz-range-track]:rounded-full
+                  [&::-moz-range-track]:bg-transparent
+
+                  [&::-moz-range-thumb]:h-4
+                  [&::-moz-range-thumb]:w-4
                   [&::-moz-range-thumb]:border-none
                   [&::-moz-range-thumb]:rounded-full
-                  [&::-moz-range-thumb]:bg-[#8B6FE8]
+                  [&::-moz-range-thumb]:bg-white
+                  [&::-moz-range-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
                 "
               />
             </div>
@@ -350,15 +469,16 @@ export default function MusicPlayer() {
                 <button
                   key={item.videoId}
                   onClick={() => {
+                    playerRef.current?.loadVideoById(MUSIC_LIST[idx].videoId, 0);
                     setCurrentIndex(idx);
+                    setPlaying(true);
                     setShowList(false);
                   }}
                   className={`w-full text-left px-4 py-2 rounded-lg text-sm cursor-pointer transition
-                  ${
-                    idx === currentIndex
+                  ${idx === currentIndex
                       ? "bg-white/40 text-[#4F3F6B]"
                       : "hover:bg-white/25 text-[#6E5A8A]"
-                  }`}
+                    }`}
                 >
                   {item.title}
                 </button>

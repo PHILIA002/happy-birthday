@@ -10,11 +10,12 @@ import "swiper/css";
 export default function Gallery() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
+  const [modal, setModal] = useState<string | null>(null);
 
   return (
     <section
       id="gallery"
-      className="pt-16 md:pt-24 pb-28 overflow-visible"
+      className="pt-12 md:pt-24 pb-28 overflow-visible"
     >
       <div className="max-w-full mx-auto overflow-visible">
 
@@ -43,6 +44,7 @@ export default function Gallery() {
                 <img
                   src={img.src}
                   alt={img.alt}
+                  onClick={() => setModal(img.src)}
                   className={`
                     w-[72vw] sm:w-[50vw] md:w-[36vw] lg:w-[28vw] xl:w-[22vw]
                     max-w-[460px]
@@ -51,6 +53,7 @@ export default function Gallery() {
                     border border-white/40
                     ring-1 ring-violet-200/30
                     transition-all duration-700 ease-out
+                    cursor-zoom-in
 
                     ${
                       activeIndex === idx
@@ -101,6 +104,32 @@ export default function Gallery() {
         </div>
 
       </div>
+
+      {/* ✅ MODAL (추가된 부분) */}
+      {modal && (
+        <div
+          onClick={() => setModal(null)}
+          className="
+            fixed inset-0 z-[999]
+            bg-black/85 backdrop-blur-sm
+            flex items-center justify-center
+            p-6
+            cursor-zoom-out
+          "
+        >
+          <img
+            src={modal}
+            alt=""
+            className="
+              max-h-[90vh]
+              w-auto
+              rounded-2xl
+              shadow-2xl
+            "
+          />
+        </div>
+      )}
+
     </section>
   );
 }

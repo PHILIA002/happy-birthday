@@ -3,18 +3,18 @@ import Gallery from "@/components/sections/Gallery";
 import Server from "@/components/sections/Server";
 import Letter from "@/components/sections/Letter";
 import MusicPlayer from "@/components/MusicPlayer";
-import PageFadeIn from "@/components/PageFadeIn";
+import FadeIn from "@/components/FadeIn";
 
 export default function Home() {
   return (
     <main className="min-h-screen pb-24 md:pb-28">
       <Header />
 
-      <PageFadeIn>
+      <FadeIn>
         <Gallery />
         <Server />
         <Letter />
-      </PageFadeIn>
+      </FadeIn>
 
       <MusicPlayer />
     </main>
