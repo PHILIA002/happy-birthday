@@ -5,6 +5,21 @@ import { Baloo_2, Jua } from "next/font/google";
 export const metadata: Metadata = {
   title: "니니밍 생일 축하해 🎂",
   description: "니니밍을 위한 생일 기념 페이지",
+
+  icons: {
+    icon: "/favicons/favicon.ico",
+    apple: "/favicons/apple-touch-icon.png",
+  },
+
+  manifest: "/favicons/manifest.webmanifest",
+
+  themeColor: "#ffffff",
+
+  openGraph: {
+    title: "Happy Birthday Project",
+    description: "Happy Birthday Web Project",
+    type: "website",
+  },
 };
 
 const baloo = Baloo_2({
