@@ -38,7 +38,7 @@ export default function Links() {
             <img
               src={link.img}
               alt=""
-              className="w-5 h-5 md:w-7 md:h-7 pointer-events-none"
+              className="w-6 h-6 md:w-7 md:h-7 pointer-events-none"
             />
           </GlassCard>
         </a>

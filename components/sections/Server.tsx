@@ -11,18 +11,13 @@ export default function Server() {
 
   return (
     <section className="relative py-28 md:py-36 overflow-hidden">
-      {/* 배경 감성 오로라 */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-violet-300/20 blur-[160px] rounded-full" />
-        <div className="absolute bottom-[-200px] left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-fuchsia-300/10 blur-[160px] rounded-full" />
-      </div>
 
       {/* 타임라인 라인 (0번 이후부터) */}
       <div
         className="
           hidden md:block
           absolute left-1/2
-          top-[950px] bottom-0
+          top-[920px] bottom-0
           -translate-x-1/2
           w-[2px]
           bg-gradient-to-b
@@ -85,25 +80,27 @@ export default function Server() {
               {/* 중앙 감성 도트 */}
               <div
                 className="
-                  hidden md:flex
-                  absolute -top-4 left-1/2 -translate-x-1/2
+                  flex
+                  absolute -top-4 md:-top-5
+                  left-1/2 -translate-x-1/2
                   items-center justify-center
-                  w-9 h-9
+                  w-7 h-7 md:w-9 md:h-9
                   rounded-full
                   bg-white/40
                   backdrop-blur-md
                   border border-white/60
-                  shadow-[0_0_35px_rgba(160,130,255,0.9)]
+                  shadow-[0_0_25px_rgba(160,130,255,0.7)]
+                  md:shadow-[0_0_35px_rgba(160,130,255,0.9)]
                   transition duration-300
                   hover:scale-110
                   z-20
                 "
               >
                 <Sparkles
-                  className="w-4 h-4"
+                  className="w-3.5 h-3.5 md:w-4 md:h-4"
                   style={{
                     color: "#9F84FF",
-                    filter: "drop-shadow(0 0 6px rgba(160,130,255,0.9))",
+                    filter: "drop-shadow(0 0 5px rgba(160,130,255,0.8))",
                   }}
                 />
               </div>

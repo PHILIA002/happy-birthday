@@ -13,10 +13,7 @@ export default function Gallery() {
   const [modal, setModal] = useState<string | null>(null);
 
   return (
-    <section
-      id="gallery"
-      className="pt-12 md:pt-24 pb-28 overflow-visible"
-    >
+    <section className="pt-12 md:pt-24 pb-28 overflow-visible">
       <div className="max-w-full mx-auto overflow-visible">
 
         <Swiper

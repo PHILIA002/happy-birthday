@@ -182,6 +182,28 @@ export default function MusicPlayer() {
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
+  /* ================= Mobile Scroll Hide ================= */
+
+  const [mobileVisible, setMobileVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const current = window.scrollY;
+
+      if (current > lastScrollY.current && current > 80) {
+        setMobileVisible(false); // scroll down
+      } else {
+        setMobileVisible(true); // scroll up
+      }
+
+      lastScrollY.current = current;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   /* ================= Render ================= */
 
   return (
@@ -203,37 +225,31 @@ export default function MusicPlayer() {
         />
       </div>
 
-      {/* Player UI */}
-      <footer className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[85%] md:w-[94%] max-w-4xl">
-        <GlassCard
+      {/* ===== 📱 Mobile Floating Play Button ===== */}
+      <div className="md:hidden fixed bottom-6 right-4 z-50">
+        <button
+          onClick={togglePlay}
           className="
-            px-2 py-[4px]
+            w-9 h-9
             rounded-full
-            md:px-5 md:py-2
-            md:rounded-3xl
-            space-y-2
+            flex items-center justify-center
+            shadow-[0_15px_40px_rgba(120,90,255,0.45)]
+            active:scale-95
+            transition
           "
+          style={{
+            background: "linear-gradient(135deg,#A78BFA,#8B6FE8)",
+            color: "white",
+          }}
         >
-          {/* ===== Mobile Layout ===== */}
-          <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={togglePlay}
-              className="w-9 h-9 rounded-full flex items-center justify-center shadow cursor-pointer active:scale-95"
-              style={{
-                background: "linear-gradient(135deg,#A78BFA,#8B6FE8)",
-                color: "white",
-              }}
-            >
-              {playing ? <Pause size={16} /> : <Play size={16} />}
-            </button>
+          {playing ? <Pause size={16} /> : <Play size={16} />}
+        </button>
+      </div>
 
-            <p className="text-xs font-semibold text-[#4F3F6B] truncate flex-1">
-              {current.title}
-            </p>
-          </div>
-
-          {/* ===== Desktop Layout ===== */}
-          <div className="hidden md:flex items-center gap-6">
+      {/* Player UI */}
+      <footer className="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl">
+        <GlassCard className="px-5 py-2 rounded-3xl space-y-2">
+          <div className="flex items-center gap-6">
             {/* LEFT */}
             <div className="flex items-center gap-3 w-[28%] min-w-0">
               <img
@@ -369,6 +385,18 @@ export default function MusicPlayer() {
                     <SkipForward size={18} color="#7C66B4" />
                   </button>
 
+                  {/* 구분선 */}
+                  <div className="
+                    mx-2
+                    w-[1px] h-5
+                    bg-gradient-to-b
+                    from-transparent
+                    via-[#7C66B4]
+                    to-transparent
+                    opacity-70
+                  " />
+
+                  {/* 반복 */}
                   <button
                     onClick={toggleRepeat}
                     className="
