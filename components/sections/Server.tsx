@@ -10,7 +10,7 @@ export default function Server() {
   const [modal, setModal] = useState<string | null>(null);
 
   return (
-    <section className="relative py-28 md:py-36 overflow-hidden">
+    <section className="relative py-12 md:py-24 overflow-hidden">
 
       {/* 타임라인 라인 (0번 이후부터) */}
       <div

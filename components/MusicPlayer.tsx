@@ -230,7 +230,7 @@ export default function MusicPlayer() {
         <button
           onClick={togglePlay}
           className="
-            w-9 h-9
+            w-11 h-11
             rounded-full
             flex items-center justify-center
             shadow-[0_15px_40px_rgba(120,90,255,0.45)]
@@ -242,7 +242,7 @@ export default function MusicPlayer() {
             color: "white",
           }}
         >
-          {playing ? <Pause size={16} /> : <Play size={16} />}
+          {playing ? <Pause size={20} /> : <Play size={20} />}
         </button>
       </div>
 
@@ -361,7 +361,7 @@ export default function MusicPlayer() {
                   <button
                     onClick={togglePlay}
                     className="
-                      w-14 h-14
+                      w-11 h-11
                       rounded-full
                       flex items-center justify-center
                       shadow-lg

@@ -53,7 +53,7 @@ export default function Countdown() {
   }, []);
 
   return (
-    <GlassCard className="px-4 py-2 rounded-full animate-pulseSlow">
+    <GlassCard className="px-4 py-2 rounded-full">
       <div className="flex items-center gap-2 whitespace-nowrap">
 
         <Cake className="w-4 h-4 md:w-5 md:h-5 text-[#7C66B4]" />

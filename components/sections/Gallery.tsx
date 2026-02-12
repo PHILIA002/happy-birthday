@@ -13,7 +13,7 @@ export default function Gallery() {
   const [modal, setModal] = useState<string | null>(null);
 
   return (
-    <section className="pt-12 md:pt-24 pb-28 overflow-visible">
+    <section className="py-12 md:py-24 overflow-visible">
       <div className="max-w-full mx-auto overflow-visible">
 
         <Swiper
@@ -37,7 +37,7 @@ export default function Gallery() {
         >
           {GALLERY.map((img, idx) => (
             <SwiperSlide key={img.src} className="overflow-visible">
-              <div className="flex justify-center py-12 md:py-10 px-4 md:px-2 overflow-visible">
+              <div className="flex justify-center py-12 md:py-16 px-4 md:px-2 overflow-visible">
                 <img
                   src={img.src}
                   alt={img.alt}
@@ -45,13 +45,12 @@ export default function Gallery() {
                   className={`
                     w-[72vw] sm:w-[50vw] md:w-[36vw] lg:w-[28vw] xl:w-[22vw]
                     max-w-[460px]
-
                     rounded-3xl
                     border border-white/40
                     ring-1 ring-violet-200/30
                     transition-all duration-700 ease-out
                     cursor-zoom-in
-
+                    
                     ${
                       activeIndex === idx
                         ? `
@@ -86,7 +85,7 @@ export default function Gallery() {
                 transition-all duration-300 ease-out
                 ${
                   activeIndex === idx
-                    ? "border-[#8b6cff] scale-105 shadow-[0_0_8px_rgba(139,108,255,0.45)]"
+                    ? "border-[#a78bf4] scale-105 shadow-[0_0_8px_rgba(139,108,255,0.45)]"
                     : "border-[#cfc7e6] opacity-70 hover:opacity-100"
                 }
               `}
