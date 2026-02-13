@@ -100,7 +100,14 @@ export default function GuestbookList() {
   }
 
   return (
-    <>
+    <section
+      className="
+        w-full
+        max-w-[820px] md:max-w-[900px]
+        mx-auto
+        px-4 md:px-6
+      "
+    >
       {/* LIST */}
       <div className="space-y-4 mt-6">
         {list.map((item) => (
@@ -130,57 +137,99 @@ export default function GuestbookList() {
         ))}
       </div>
 
-      {/* PAGINATION */}
-      <div className="
-        sticky bottom-0
-        backdrop-blur-md
-        pt-6 pb-4
-        mt-12
-      ">
-        <div className="flex justify-center gap-2 flex-wrap">
+      {/* Pagination Full Width Background */}
+      <div
+        className="
+          sticky bottom-0 z-30
+          mt-12
+        "
+      >
+        {/* Full Screen Background */}
+        <div
+          className="
+            relative
+            left-1/2
+            -translate-x-1/2
+            backdrop-blur
+            bg-gradient-to-t from-white/20 to-transparent
+          "
+        >
+          {/* Content Container */}
+          <div
+            className="
+              max-w-[820px] md:max-w-[1000px] xl:max-w-[1100px]
+              mx-auto
+              px-4 md:px-6
+              pt-5
+              pb-[calc(env(safe-area-inset-bottom)+16px)]
+            "
+          >
+            <div className="flex justify-center gap-1.5 md:gap-2 flex-wrap">
 
-          <PageBtn disabled={page === 1} onClick={() => setPage(1)}>
-            First
-          </PageBtn>
+              {/* PC Only */}
+              <div className="hidden md:flex gap-2">
+                <PageBtn disabled={page === 1} onClick={() => setPage(1)}>
+                  First
+                </PageBtn>
+              </div>
 
-          <PageBtn disabled={page === 1} onClick={() => setPage(page - 1)}>
-            Prev
-          </PageBtn>
+              {/* Prev */}
+              <PageBtn disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Prev
+              </PageBtn>
 
-          {pages.map((p, i) =>
-            p === "..." ? (
-              <span key={i} className="px-2 text-[#6E5A8A]">...</span>
-            ) : (
-              <button
-                key={p}
-                aria-label={`페이지 ${p}`}
-                onClick={() => setPage(p)}
-                className={`
-                  cursor-pointer
-                  w-11 h-11 md:w-10 md:h-10
-                  rounded-xl transition font-medium
-                  ${p === page
-                    ? "bg-[#A78BFA] text-white shadow-lg"
-                    : "bg-white/40 hover:bg-white/60 text-[#6E5A8A]"
-                  }
-                `}
-              >
-                {p}
-              </button>
-            )
-          )}
+              {/* Numbers */}
+              {pages.map((p, i) =>
+                p === "..." ? (
+                  <span
+                    key={i}
+                    className="px-1 md:px-2 text-[#6E5A8A] text-sm md:text-base"
+                  >
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    aria-label={`페이지 ${p}`}
+                    onClick={() => setPage(p)}
+                    className={`
+                      cursor-pointer
+                      w-9 h-9 md:w-10 md:h-10
+                      text-sm md:text-base
+                      rounded-lg md:rounded-xl
+                      transition font-medium
 
-          <PageBtn disabled={page === totalPage} onClick={() => setPage(page + 1)}>
-            Next
-          </PageBtn>
+                      ${p === page
+                        ? "bg-[#A78BFA] text-white shadow-md"
+                        : "bg-white/40 hover:bg-white/60 text-[#6E5A8A]"
+                      }
+                    `}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
 
-          <PageBtn disabled={page === totalPage} onClick={() => setPage(totalPage)}>
-            Last
-          </PageBtn>
+              {/* Next */}
+              <PageBtn disabled={page === totalPage} onClick={() => setPage(page + 1)}>
+                Next
+              </PageBtn>
 
+              {/* PC Only */}
+              <div className="hidden md:flex gap-2">
+                <PageBtn
+                  disabled={page === totalPage}
+                  onClick={() => setPage(totalPage)}
+                >
+                  Last
+                </PageBtn>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </section>
   );
 }
 
@@ -189,13 +238,15 @@ function PageBtn({ children, ...props }: any) {
     <button
       {...props}
       className="
-        px-3 md:px-4
-        h-11 md:h-10
-        rounded-xl
+        px-2 md:px-4
+        h-9 md:h-10
+        text-sm md:text-base
+        rounded-lg md:rounded-xl
         bg-white/40
         hover:bg-white/60
         text-[#6E5A8A]
         disabled:opacity-40
+        disabled:pointer-events-none
         transition
         font-medium
         cursor-pointer

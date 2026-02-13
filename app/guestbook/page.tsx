@@ -3,7 +3,7 @@ import GuestbookList from "@/components/GuestbookList";
 
 export default function GuestbookPage() {
   return (
-    <main className="max-w-2xl mx-auto p-6 space-y-6">
+    <main className="max-w-3xl mx-auto pt-12 md:pt-24">
       <GuestbookForm />
       <GuestbookList />
     </main>

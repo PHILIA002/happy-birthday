@@ -10,49 +10,51 @@ export default function Links() {
     <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
 
       {/* ===== 외부 링크 ===== */}
-      {LINKS.map((link) => (
-        <a
-          key={link.href}
-          href={link.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative cursor-pointer"
-        >
-          {/* Glow ring */}
-          <div
-            className="
-              absolute inset-0 rounded-full
-              bg-purple-300/30 blur-md opacity-0
-              group-hover:opacity-100
-              transition-opacity duration-300
-            "
-          />
-
-          {/* Button */}
-          <GlassCard
-            className="
-              relative
-              w-9 h-9 md:w-11 md:h-11
-              rounded-full
-              flex items-center justify-center
-              group-hover:scale-110
-              group-hover:bg-white/35
-              active:scale-95
-            "
+      <div className="hidden md:flex items-center gap-3">
+        {LINKS.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative cursor-pointer"
           >
-            <img
-              src={link.img}
-              alt=""
-              className="w-6 h-6 md:w-7 md:h-7 pointer-events-none"
+            {/* Glow ring */}
+            <div
+              className="
+                absolute inset-0 rounded-full
+                bg-purple-300/30 blur-md opacity-0
+                group-hover:opacity-100
+                transition-opacity duration-300
+              "
             />
-          </GlassCard>
-        </a>
-      ))}
+
+            {/* Button */}
+            <GlassCard
+              className="
+                relative
+                w-9 h-9 md:w-11 md:h-11
+                rounded-full
+                flex items-center justify-center
+                group-hover:scale-110
+                group-hover:bg-white/35
+                active:scale-95
+              "
+            >
+              <img
+                src={link.img}
+                alt=""
+                className="w-6 h-6 md:w-7 md:h-7 pointer-events-none"
+              />
+            </GlassCard>
+          </a>
+        ))}
+      </div>
 
       {/* ===== 방명록 (내부 라우팅) ===== */}
       <Link
         href="/guestbook"
-        className="group relative cursor-pointer mt-3 ml-0 md:mt-0 md:ml-4"
+        className="group relative cursor-pointer"
       >
         {/* Glow ring */}
         <div
