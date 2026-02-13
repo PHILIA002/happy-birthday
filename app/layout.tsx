@@ -14,8 +14,6 @@ export const metadata: Metadata = {
 
   manifest: "/favicons/manifest.webmanifest",
 
-  themeColor: "#ffffff",
-
   openGraph: {
     title: "Happy Birthday Project",
     description: "Happy Birthday Web Project",
