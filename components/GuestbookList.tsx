@@ -11,7 +11,7 @@ export default function GuestbookList() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
 
   const PAGE_WINDOW = 1;
 
@@ -141,7 +141,6 @@ export default function GuestbookList() {
       <div
         className="
           sticky bottom-0 z-30
-          mt-12
         "
       >
         {/* Full Screen Background */}
@@ -192,7 +191,7 @@ export default function GuestbookList() {
                     onClick={() => setPage(p)}
                     className={`
                       cursor-pointer
-                      w-9 h-9 md:w-10 md:h-10
+                      w-8 h-8 md:w-9 md:h-9
                       text-sm md:text-base
                       rounded-lg md:rounded-xl
                       transition font-medium
@@ -237,7 +236,7 @@ function PageBtn({ children, ...props }: any) {
       {...props}
       className="
         px-2 md:px-4
-        h-9 md:h-10
+        h-8 md:h-9
         text-sm md:text-base
         rounded-lg md:rounded-xl
         backdrop-blur

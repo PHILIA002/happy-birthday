@@ -11,9 +11,23 @@ body {
 
 body {
   font-family: var(--font-jua), var(--font-baloo), sans-serif;
-  background: #e0d4ef url("/images/bg.png") center / 100% auto no-repeat fixed;
+  background: #e0d4ef;
 }
 
+/* 배경 이미지 레이어 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+
+  background-image: url("/images/bg.png");
+  background-position: center;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+/* 기존 오버레이 */
 body::before {
   content: "";
   position: fixed;
@@ -24,7 +38,7 @@ body::before {
 }
 
 /* ===============================
-   GLASS (컬러 변수 제거)
+   GLASS
    =============================== */
 .glass {
   background: rgba(255, 255, 255, 0.55);

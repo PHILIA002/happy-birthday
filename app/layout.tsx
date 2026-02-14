@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Baloo_2, Jua } from "next/font/google";
 import Header from "@/components/Header";
+import MusicPlayer from "@/components/MusicPlayer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body className={`${baloo.variable} ${jua.variable}`}>
         <Header />
         {children}
+        <MusicPlayer />
       </body>
     </html>
   );

@@ -1,16 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import GlassCard from "./GlassCard";
+import Toast from "./Toast";
 
 export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "info" as "success" | "error" | "info",
+  });
+
+  const showToast = (
+    message: string,
+    type: "success" | "error" | "info" = "info"
+  ) => {
+    setToast({
+      show: true,
+      message,
+      type,
+    });
+  };
+
   const handleSubmit = async () => {
-    if (!message.trim() || loading) return;
+    if (loading) return;
+
+    if (!message.trim()) {
+      showToast("메시지를 입력해주세요!", "error");
+      textareaRef.current?.focus();
+      return;
+    }
 
     setLoading(true);
 
@@ -35,12 +61,24 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
       .select()
       .single();
 
-    if (error || !data) onRollback?.(tempId);
-    else onConfirmAdd?.(data, tempId);
+    if (error || !data) {
+      onRollback?.(tempId);
+      showToast("등록 실패. 다시 시도해주세요.", "error");
+    } else {
+      onConfirmAdd?.(data, tempId);
+      showToast("등록 완료! 반영이 늦으면 새로고침 해주세요.", "success");
+    }
 
     setMessage("");
     setName("");
     setLoading(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // 줄바꿈 막기
+      handleSubmit();
+    }
   };
 
   return (
@@ -71,6 +109,7 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
 
         {/* 닉네임 */}
         <input
+          autoFocus
           placeholder="닉네임 (미입력 시 '익명'으로 표기됩니다.)"
           value={name}
           maxLength={20}
@@ -92,10 +131,12 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
 
         {/* 메시지 */}
         <textarea
-          placeholder="메시지를 남겨주세요."
+          ref={textareaRef}
+          placeholder="축하 메시지를 남겨주세요."
           value={message}
           maxLength={300}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="
             w-full px-4 py-3 rounded-xl
             bg-white/20
@@ -133,14 +174,13 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
         </button>
       </GlassCard>
 
-      <div className="mb-4 text-center">
-        <p
-          className="text-center text-xs md:text-sm mt-2"
-          style={{ color: "red", opacity: 0.7 }}
-        >
-          등록 후 바로 반영되지 않으면 새로고침 해주세요.
-        </p>
-      </div>
+      {/* ✅ 토스트 */}
+      <Toast
+        show={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast((t) => ({ ...t, show: false }))}
+      />
     </section>
   );
 }
