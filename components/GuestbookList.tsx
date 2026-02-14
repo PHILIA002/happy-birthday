@@ -150,8 +150,6 @@ export default function GuestbookList() {
             relative
             left-1/2
             -translate-x-1/2
-            backdrop-blur
-            bg-gradient-to-t from-white/20 to-transparent
           "
         >
           {/* Content Container */}
@@ -198,7 +196,7 @@ export default function GuestbookList() {
                       text-sm md:text-base
                       rounded-lg md:rounded-xl
                       transition font-medium
-
+                      backdrop-blur
                       ${p === page
                         ? "bg-[#A78BFA] text-white shadow-md"
                         : "bg-white/40 hover:bg-white/60 text-[#6E5A8A]"
@@ -242,6 +240,7 @@ function PageBtn({ children, ...props }: any) {
         h-9 md:h-10
         text-sm md:text-base
         rounded-lg md:rounded-xl
+        backdrop-blur
         bg-white/40
         hover:bg-white/60
         text-[#6E5A8A]
