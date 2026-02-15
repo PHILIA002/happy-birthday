@@ -80,11 +80,15 @@ export default function MusicPlayer() {
       setRepeatMode(restored.repeatMode ?? "all");
       setPlaying(false);
 
-      // ⭐ mute 없이 로드
-      player.loadVideoById(MUSIC_LIST[index].videoId, time);
+      player.loadVideoById(MUSIC_LIST[index].videoId);
 
       setTimeout(() => {
+        player.seekTo(time, true);
+        player.pauseVideo();
         player.setVolume(vol);
+
+        setCurrentTime(time);
+        setDuration(player.getDuration() || 0);
       }, 300);
 
     } else {
@@ -119,6 +123,44 @@ export default function MusicPlayer() {
 
   /* ================= Controls ================= */
 
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (!playerReady || !playerRef.current) return;
+
+      const target = e.target as HTMLElement;
+
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) return;
+
+      switch (e.code) {
+
+        case "Space":
+          e.preventDefault();
+          togglePlay();
+          break;
+
+        case "KeyM":
+          toggleMute();
+          break;
+
+        case "ArrowLeft":
+          prevTrack();
+          break;
+
+        case "ArrowRight":
+          nextTrack();
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+
+  }, [playerReady, currentIndex, volume]);
+
   const togglePlay = () => {
     if (!playerRef.current || !playerReady) return;
 
@@ -127,14 +169,14 @@ export default function MusicPlayer() {
     if (state === 1) {
       playerRef.current.pauseVideo();
     } else {
-      // ⭐ 여기서만 unmute 허용
-      playerRef.current.unMute();
       playerRef.current.playVideo();
     }
   };
 
   const nextTrack = () => {
     if (!playerRef.current) return;
+
+    const wasPlaying = playing;
 
     const nextIndex = (currentIndex + 1) % MUSIC_LIST.length;
 
@@ -144,14 +186,24 @@ export default function MusicPlayer() {
     );
 
     setCurrentIndex(nextIndex);
-    setPlaying(true);
     setCurrentTime(0);
-    setPlayerReady(true);
+
+    // ⭐ 여기 핵심
+    if (wasPlaying) {
+      playerRef.current.playVideo();
+      setPlaying(true);
+    } else {
+      playerRef.current.pauseVideo();
+      setPlaying(false);
+    }
+
     setTimeout(saveState, 300);
   };
 
   const prevTrack = () => {
     if (!playerRef.current) return;
+
+    const wasPlaying = playing;
 
     const prevIndex =
       (currentIndex - 1 + MUSIC_LIST.length) % MUSIC_LIST.length;
@@ -162,9 +214,17 @@ export default function MusicPlayer() {
     );
 
     setCurrentIndex(prevIndex);
-    setPlaying(true);
     setCurrentTime(0);
-    setPlayerReady(true);
+
+    // ⭐ 동일 로직
+    if (wasPlaying) {
+      playerRef.current.playVideo();
+      setPlaying(true);
+    } else {
+      playerRef.current.pauseVideo();
+      setPlaying(false);
+    }
+
     setTimeout(saveState, 300);
   };
 
