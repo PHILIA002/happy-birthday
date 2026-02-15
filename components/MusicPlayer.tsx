@@ -70,29 +70,25 @@ export default function MusicPlayer() {
       if (raw) restored = JSON.parse(raw);
     } catch { }
 
-    player.mute();
-
     if (restored) {
       const index = restored.currentIndex ?? 0;
       const time = restored.currentTime ?? 0;
       const vol = restored.volume ?? 70;
-      const shouldPlay = restored.playing ?? true;
 
       setCurrentIndex(index);
       setVolume(vol);
       setRepeatMode(restored.repeatMode ?? "all");
-      setPlaying(shouldPlay);
+      setPlaying(false);
 
+      // ⭐ mute 없이 로드
       player.loadVideoById(MUSIC_LIST[index].videoId, time);
 
-      // ⭐⭐⭐ 핵심
       setTimeout(() => {
-        forceAutoPlay(player, vol, shouldPlay);
-      }, 500);
+        player.setVolume(vol);
+      }, 300);
 
     } else {
       player.setVolume(volume);
-      player.unMute();
     }
 
     setPlayerReady(true);
@@ -131,6 +127,8 @@ export default function MusicPlayer() {
     if (state === 1) {
       playerRef.current.pauseVideo();
     } else {
+      // ⭐ 여기서만 unmute 허용
+      playerRef.current.unMute();
       playerRef.current.playVideo();
     }
   };
@@ -255,7 +253,7 @@ export default function MusicPlayer() {
       currentIndex,
       currentTime: playerRef.current.getCurrentTime() || 0,
       volume,
-      playing,
+      playing: false, // ⭐ 항상 false 저장
       repeatMode,
     };
 
@@ -269,39 +267,6 @@ export default function MusicPlayer() {
     return () => clearInterval(interval);
   }, [currentIndex, volume, playing, repeatMode, playerReady]);
 
-  const autoPlayRetryRef = useRef<number | null>(null);
-
-  const forceAutoPlay = (player: any, volume: number, shouldPlay: boolean) => {
-    if (!shouldPlay) return;
-
-    let tryCount = 0;
-
-    autoPlayRetryRef.current = window.setInterval(() => {
-      try {
-        const state = player.getPlayerState();
-
-        // 이미 재생 중이면 종료
-        if (state === 1) {
-          clearInterval(autoPlayRetryRef.current!);
-          autoPlayRetryRef.current = null;
-
-          player.setVolume(volume);
-          player.unMute();
-          return;
-        }
-
-        // 계속 재생 시도
-        player.playVideo();
-
-        tryCount++;
-        if (tryCount > 10) {
-          clearInterval(autoPlayRetryRef.current!);
-          autoPlayRetryRef.current = null;
-        }
-      } catch { }
-    }, 400);
-  };
-
   /* ================= Render ================= */
 
   return (
@@ -314,8 +279,11 @@ export default function MusicPlayer() {
             width: "0",
             height: "0",
             playerVars: {
-              autoplay: 1,
+              autoplay: 0,
               controls: 0,
+              playsinline: 1,
+              rel: 0,
+              modestbranding: 1
             },
           }}
           onReady={onReady}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
+import { Sparkle } from "lucide-react";
 import { useState } from "react";
 import { SERVERS } from "@/data/servers";
 import GlassCard from "../GlassCard";
@@ -84,7 +84,7 @@ export default function Server() {
                   absolute -top-4 md:-top-5
                   left-1/2 -translate-x-1/2
                   items-center justify-center
-                  w-7 h-7 md:w-9 md:h-9
+                  w-7 h-7 md:w-8 md:h-8
                   rounded-full
                   bg-white/40
                   backdrop-blur-md
@@ -96,7 +96,7 @@ export default function Server() {
                   z-20
                 "
               >
-                <Sparkles
+                <Sparkle
                   className="w-3.5 h-3.5 md:w-4 md:h-4"
                   style={{
                     color: "#9F84FF",
