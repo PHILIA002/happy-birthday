@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import GlassCard from "./GlassCard";
+import { ChevronFirst, ChevronLeft, ChevronRight, ChevronLast } from "lucide-react";
 
 export default function GuestbookList() {
   const [list, setList] = useState<any[]>([]);
@@ -154,10 +155,8 @@ export default function GuestbookList() {
           {/* Content Container */}
           <div
             className="
-              max-w-[820px] md:max-w-[1000px] xl:max-w-[1100px]
-              mx-auto
-              px-4 md:px-6
-              pt-5
+              max-w-[820px] md:max-w-[1000px] xl:max-w-screen
+              mx-auto pt-5
               pb-[calc(env(safe-area-inset-bottom)+16px)]
             "
           >
@@ -166,13 +165,13 @@ export default function GuestbookList() {
               {/* PC Only */}
               <div className="hidden md:flex gap-2">
                 <PageBtn disabled={page === 1} onClick={() => setPage(1)}>
-                  First
+                  <ChevronFirst className="w-5 h-5" />
                 </PageBtn>
               </div>
 
               {/* Prev */}
               <PageBtn disabled={page === 1} onClick={() => setPage(page - 1)}>
-                Prev
+                <ChevronLeft className="w-5 h-5" />
               </PageBtn>
 
               {/* Numbers */}
@@ -209,7 +208,7 @@ export default function GuestbookList() {
 
               {/* Next */}
               <PageBtn disabled={page === totalPage} onClick={() => setPage(page + 1)}>
-                Next
+                <ChevronRight className="w-5 h-5" />
               </PageBtn>
 
               {/* PC Only */}
@@ -218,7 +217,7 @@ export default function GuestbookList() {
                   disabled={page === totalPage}
                   onClick={() => setPage(totalPage)}
                 >
-                  Last
+                  <ChevronLast className="w-5 h-5" />
                 </PageBtn>
               </div>
 
@@ -235,7 +234,7 @@ function PageBtn({ children, ...props }: any) {
     <button
       {...props}
       className="
-        px-2 md:px-4
+        px-2 md:px-3
         h-8 md:h-9
         text-sm md:text-base
         rounded-lg md:rounded-xl

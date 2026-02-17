@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import GlassCard from "@/components/GlassCard";
-import { Cake } from "lucide-react";
+import { Timer, Cake } from "lucide-react";
 
 export default function Countdown() {
   const [timeText, setTimeText] = useState("");
+  const [isBirthday, setIsBirthday] = useState(false);
 
   const targetDate = new Date(
     new Date().getFullYear(),
@@ -15,8 +16,15 @@ export default function Countdown() {
   );
 
   function updateCountdown() {
-    const now = new Date().getTime();
+    const nowDate = new Date();
+    const now = nowDate.getTime();
     let distance = targetDate.getTime() - now;
+
+    const isToday =
+      nowDate.getMonth() === 3 &&
+      nowDate.getDate() === 19;
+
+    setIsBirthday(isToday);
 
     if (distance < 0) {
       const nextYear = new Date(
@@ -34,15 +42,15 @@ export default function Countdown() {
     const seconds = Math.floor((distance / 1000) % 60);
 
     setTimeText(
-      days === 0 && hours === 0 && minutes === 0 && seconds === 0
+      isToday
         ? "니니밍 생일축하해!"
         : `니니밍 생일까지 D-${days} · ${hours
-            .toString()
-            .padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${minutes
             .toString()
             .padStart(2, "0")}:${seconds
-            .toString()
-            .padStart(2, "0")}`
+              .toString()
+              .padStart(2, "0")}`
     );
   }
 
@@ -56,18 +64,35 @@ export default function Countdown() {
     <GlassCard className="px-4 py-2 rounded-full">
       <div className="flex items-center gap-2 whitespace-nowrap">
 
-        <Cake className="w-4 h-4 md:w-5 md:h-5 text-[#7C66B4]" />
+        {isBirthday ? (
+          <Cake
+            className="
+              w-4 h-4 md:w-5 md:h-5
+              text-[#FFD700]
+              drop-shadow-[0_0_6px_rgba(255,215,0,0.7)]
+            "
+          />
+        ) : (
+          <Timer
+            className="
+              w-4 h-4 md:w-5 md:h-5
+              text-[#7C66B4]
+              
+            "
+          />
+        )}
+
         <span
-          className="
+          className={`
             text-xs md:text-base
             font-semibold tracking-wide
             tabular-nums
-            bg-gradient-to-r
-            from-[#F0ABFC]
-            via-[#A78BFA]
-            to-[#885CF6]
             bg-clip-text text-transparent
-          "
+            ${isBirthday
+              ? "bg-gradient-to-r from-[#FFD700] via-[#FFF3B0] to-[#FFC300]"
+              : "bg-gradient-to-r from-[#F0ABFC] via-[#A78BFA] to-[#885CF6]"
+            }
+          `}
         >
           {timeText}
         </span>

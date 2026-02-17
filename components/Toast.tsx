@@ -31,7 +31,7 @@ export default function Toast({
       : "bg-[#A78BFA]/90";
 
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2">
+    <div className="fixed top-16 md:top-12 lg:top-8 left-1/2 -translate-x-1/2">
       <div
         className={`
           px-5 py-3
