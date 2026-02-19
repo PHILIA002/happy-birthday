@@ -19,7 +19,7 @@ export default function GuestbookList() {
   // ---------- Responsive Page Size ----------
   useEffect(() => {
     const handleResize = () => {
-      setPageSize(window.innerWidth >= 768 ? 10 : 5);
+      setPageSize(window.innerWidth >= 1024 ? 10 : 5);
     };
 
     handleResize();
@@ -191,7 +191,7 @@ export default function GuestbookList() {
                     className={`
                       cursor-pointer
                       w-8 h-8 md:w-9 md:h-9
-                      text-sm md:text-base
+                      text-xs md:text-sm
                       rounded-lg md:rounded-xl
                       transition font-medium
                       backdrop-blur
@@ -234,7 +234,7 @@ function PageBtn({ children, ...props }: any) {
     <button
       {...props}
       className="
-        px-2 md:px-3
+        px-1 md:px-2
         h-8 md:h-9
         text-sm md:text-base
         rounded-lg md:rounded-xl

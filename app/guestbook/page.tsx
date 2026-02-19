@@ -26,14 +26,14 @@ export default function GuestbookPage() {
 
         {/* FORM */}
         <div className="flex justify-center">
-          <div className="w-3xl max-w-[820px] md:max-w-[900px]">
+          <div className="w-3xl max-w-[760px] md:max-w-[820px] lg:max-w-[900px]">
             <GuestbookForm />
             <GuestbookList />
           </div>
         </div>
 
         {/* GUIDE */}
-        <div className="hidden md:flex justify-center">
+        <div className="hidden xl:flex justify-center">
           <div className="w-[300px]">
             <GuestbookGuide />
           </div>

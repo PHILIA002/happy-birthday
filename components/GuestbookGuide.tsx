@@ -56,7 +56,7 @@ export default function GuestbookGuide() {
                 group-hover:-rotate-180
               "
             />
-            <span>등록 후 반영이 늦으면 새로고침 해주세요</span>
+            <span>등록 후 새로고침하면 반영됩니다.</span>
           </div>
         </GlassCard>
 

@@ -18,22 +18,20 @@ export default function Countdown() {
   function updateCountdown() {
     const nowDate = new Date();
     const now = nowDate.getTime();
-    let distance = targetDate.getTime() - now;
 
-    const isToday =
-      nowDate.getMonth() === 3 &&
-      nowDate.getDate() === 19;
+    const year = nowDate.getFullYear();
 
+    const birthdayStart = new Date(year, 1, 19, 0, 0, 0).getTime();
+    const birthdayEnd = new Date(year, 3, 20, 0, 0, 0).getTime();
+
+    const isToday = now >= birthdayStart && now < birthdayEnd;
     setIsBirthday(isToday);
 
+    let distance = birthdayStart - now;
+
     if (distance < 0) {
-      const nextYear = new Date(
-        new Date().getFullYear() + 1,
-        3,
-        19,
-        0, 0, 0
-      );
-      distance = nextYear.getTime() - now;
+      const nextYearStart = new Date(year + 1, 3, 19, 0, 0, 0).getTime();
+      distance = nextYearStart - now;
     }
 
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -61,41 +59,48 @@ export default function Countdown() {
   }, []);
 
   return (
-    <GlassCard className="px-4 py-2 rounded-full">
-      <div className="flex items-center gap-2 whitespace-nowrap">
+    <GlassCard className="px-4 py-2 h-9 md:h-11 rounded-full">
+      <div className="flex items-center justify-center h-full gap-2 whitespace-nowrap">
 
-        {isBirthday ? (
-          <Cake
-            className="
-              w-4 h-4 md:w-5 md:h-5
-              text-[#FFD700]
-              drop-shadow-[0_0_6px_rgba(255,215,0,0.7)]
-            "
-          />
-        ) : (
-          <Timer
-            className="
-              w-4 h-4 md:w-5 md:h-5
-              text-[#7C66B4]
-              
-            "
-          />
-        )}
+        <span
+          className="
+            flex items-center justify-center
+            w-4 h-4 md:w-5 md:h-5
+            animate-[floatSoft_3s_ease-in-out_infinite]
+          "
+        >
+          {isBirthday ? (
+            <Cake
+              className="
+                block w-full h-full text-[#efa0b0]
+                animate-[glowPulseCake_2.2s_ease-in-out_infinite]
+              "
+            />
+          ) : (
+            <Timer
+              className="
+                block w-full h-full text-[#a78bf4]
+                animate-[glowPulseTimer_2.4s_ease-in-out_infinite]
+              "
+            />
+          )}
+        </span>
 
         <span
           className={`
-            text-xs md:text-base
+            text-sm md:text-lg
             font-semibold tracking-wide
             tabular-nums
             bg-clip-text text-transparent
             ${isBirthday
-              ? "bg-gradient-to-r from-[#FFD700] via-[#FFF3B0] to-[#FFC300]"
+              ? "bg-gradient-to-r from-[#F1D999] via-[#EFA0B0] to-[#C4A1FF]"
               : "bg-gradient-to-r from-[#F0ABFC] via-[#A78BFA] to-[#885CF6]"
             }
           `}
         >
           {timeText}
         </span>
+
       </div>
     </GlassCard>
   );
