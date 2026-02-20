@@ -14,7 +14,6 @@ body {
   background: #e0d4ef;
 }
 
-/* 배경 이미지 레이어 */
 body::after {
   content: "";
   position: fixed;
@@ -27,7 +26,6 @@ body::after {
   background-repeat: no-repeat;
 }
 
-/* 기존 오버레이 */
 body::before {
   content: "";
   position: fixed;
@@ -46,15 +44,6 @@ body::before {
   border-radius: 1.2rem;
   backdrop-filter: blur(18px);
   box-shadow: 0 12px 32px rgba(120, 90, 255, 0.35);
-}
-
-/* rotate util */
-.rotate-x-0 {
-  transform: rotateX(0deg);
-}
-
-.rotate-x-\[-20deg\] {
-  transform: rotateX(-20deg);
 }
 
 /* ===============================
@@ -106,9 +95,20 @@ body::before {
   }
 }
 
+@keyframes sparkleFloat {
+  0% { transform: rotate(-6deg) translateY(0); }
+  50% { transform: rotate(6deg) translateY(0); }
+  100% { transform: rotate(-6deg) translateY(0); }
+}
+
+.animate-sparkle {
+  animation: sparkleFloat 3.2s ease-in-out infinite;
+}
+
 /* ===============================
    SCROLLBAR
    =============================== */
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

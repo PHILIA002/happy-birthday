@@ -12,7 +12,56 @@ export default function Server() {
   return (
     <section className="relative py-12 md:py-24 overflow-hidden">
 
-      {/* 타임라인 라인 (0번 이후부터) */}
+      <div className="relative flex flex-col items-center mb-16 md:mb-24 px-6">
+        {/* 글로우 배경 */}
+        <div
+          className="
+            absolute
+            -top-4
+            w-64 h-20
+            bg-gradient-to-r
+            from-[#C8B8FF]
+            via-[#A78BFA]
+            to-[#8B6FE8]
+            blur-3xl
+            opacity-30
+            pointer-events-none
+          "
+        />
+
+        {/* 타이틀 */}
+        <h2
+          className="
+            relative
+            text-2xl md:text-4xl
+            font-semibold
+            tracking-[0.18em]
+            bg-gradient-to-r
+            from-[#6E5A8A]
+            via-[#7C66B4]
+            to-[#A78BFA]
+            bg-clip-text
+            text-transparent
+          "
+        >
+          SERVER
+        </h2>
+
+        {/* 얇은 장식 라인 */}
+        <div
+          className="
+            mt-4
+            w-24 h-[2px]
+            bg-gradient-to-r
+            from-transparent
+            via-[#B7A6FF]
+            to-transparent
+            opacity-60
+          "
+        />
+      </div>
+
+      {/* 타임라인 */}
       <div
         className="
           hidden md:block
@@ -71,11 +120,10 @@ export default function Server() {
           return (
             <div
               key={index}
-              className={`relative max-w-6xl mx-auto px-6 ${
-                hasImage
+              className={`relative max-w-6xl mx-auto px-6 ${hasImage
                   ? `flex flex-col md:flex-row items-center gap-8 md:gap-12 ${isReversed ? "md:flex-row-reverse" : ""}`
                   : "flex justify-center"
-              }`}
+                }`}
             >
               {/* 중앙 감성 도트 */}
               <div
@@ -97,7 +145,7 @@ export default function Server() {
                 "
               >
                 <Sparkle
-                  className="w-3.5 h-3.5 md:w-4 md:h-4"
+                  className="w-3.5 h-3.5 md:w-4 md:h-4 animate-sparkle"
                   style={{
                     color: "#9F84FF",
                     filter: "drop-shadow(0 0 5px rgba(160,130,255,0.8))",

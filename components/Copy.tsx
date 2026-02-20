@@ -6,7 +6,7 @@ export default function Copy() {
       className="
         w-full
         flex items-center justify-center
-        py-6
+        py-4 md:py-6
         text-center
         select-none
       "
@@ -20,7 +20,7 @@ export default function Copy() {
         "
       >
         © {new Date().getFullYear()} Niniming Fan Site. <br className="md:hidden"/>
-        Fan-made, non-commercial project. All rights belong to original creators.
+        Made by PHILIA.
       </p>
     </footer>
   );

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
+import Link from "next/link";
 import {
   Play,
   Pause,
@@ -380,7 +381,12 @@ export default function MusicPlayer() {
           <GlassCard className="px-5 py-2 rounded-3xl space-y-2">
             <div className="flex items-center gap-6">
               {/* LEFT */}
-              <div className="flex items-center gap-3 w-[28%] min-w-0">
+              <Link
+                href={`https://www.youtube.com/watch?v=${current.videoId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 w-[28%] min-w-0 group"
+              >
                 <img
                   src={`https://img.youtube.com/vi/${current.videoId}/default.jpg`}
                   className="w-11 h-11 rounded-xl shadow"
@@ -412,7 +418,7 @@ export default function MusicPlayer() {
 
                   <p className="text-xs text-[#6E5A8A]">니니밍 플레이리스트</p>
                 </div>
-              </div>
+              </Link>
 
               {/* CENTER */}
               <div className="flex-1 flex flex-col items-center">
