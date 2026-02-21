@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
-import Link from "next/link";
 import {
   Play,
   Pause,
@@ -14,13 +13,19 @@ import {
   Repeat1,
   ListMusic,
 } from "lucide-react";
-import { MUSIC_LIST } from "@/data/music";
+
 import GlassCard from "./GlassCard";
+import { MUSIC_LIST } from "@/data/music";
+import { usePlayer } from "./MusicPlayerProvider";
 import { usePathname } from "next/navigation";
 
 type RepeatMode = "all" | "one";
 
+const STORAGE_KEY = "music_player_state_v1";
+
 export default function MusicPlayer() {
+  const { playerRef } = usePlayer();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -29,304 +34,169 @@ export default function MusicPlayer() {
   const [repeatMode, setRepeatMode] = useState<RepeatMode>("all");
   const [showList, setShowList] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
-  const [prevVolume, setPrevVolume] = useState(70);
 
-  const playerRef = useRef<any>(null);
+  const current = MUSIC_LIST[currentIndex];
+  const pathname = usePathname();
+  const hideUI = pathname.startsWith("/guestbook");
 
+  const controlBtn =
+    "w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition cursor-pointer";
+
+  /* marquee refs */
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
-  const current = MUSIC_LIST[currentIndex];
-
-  const controlBtn =
-    "w-9 h-9 rounded-full bg-white/25 backdrop-blur flex items-center justify-center cursor-pointer transition active:scale-95";
-
-  /* ================= Marquee ================= */
-
+  /* overflow detect */
   useEffect(() => {
-    const checkOverflow = () => {
-      if (!containerRef.current || !textRef.current) return;
+    const el = containerRef.current;
+    const text = textRef.current;
+    if (!el || !text) return;
 
-      setIsOverflowing(
-        textRef.current.scrollWidth > containerRef.current.clientWidth
-      );
+    const check = () => {
+      setIsOverflowing(text.scrollWidth > el.clientWidth);
     };
 
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
-  }, [current.title]);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [currentIndex]);
+
+  /* repeat toggle */
+  const toggleRepeat = () => {
+    setRepeatMode((m) => (m === "all" ? "one" : "all"));
+  };
+
+  /* volume */
+  const handleVolume = (e: any) => {
+    const v = Number(e.target.value);
+    setVolume(v);
+    playerRef.current?.setVolume(v);
+  };
+
+  /* time formatter */
+  const formatTime = (t: number) => {
+    if (!t) return "0:00";
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60);
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+
+  /* ================= Restore ================= */
+
+  const restore = (player: any) => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+
+      const s = JSON.parse(raw);
+
+      setCurrentIndex(s.currentIndex ?? 0);
+      setVolume(s.volume ?? 70);
+      setRepeatMode(s.repeatMode ?? "all");
+
+      player.loadVideoById(MUSIC_LIST[s.currentIndex ?? 0].videoId);
+
+      setTimeout(() => {
+        player.seekTo(s.currentTime ?? 0, true);
+        player.setVolume(s.volume ?? 70);
+        player.pauseVideo();
+
+        setCurrentTime(s.currentTime ?? 0);
+        setDuration(player.getDuration() || 0);
+      }, 300);
+    } catch { }
+  };
 
   /* ================= YouTube ================= */
 
-  const onReady: YouTubeProps["onReady"] = (event) => {
-    const player = event.target;
+  const onReady: YouTubeProps["onReady"] = (e) => {
+    const player = e.target;
     playerRef.current = player;
 
-    let restored: any = null;
-
-    try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (raw) restored = JSON.parse(raw);
-    } catch { }
-
-    if (restored) {
-      const index = restored.currentIndex ?? 0;
-      const time = restored.currentTime ?? 0;
-      const vol = restored.volume ?? 70;
-
-      setCurrentIndex(index);
-      setVolume(vol);
-      setRepeatMode(restored.repeatMode ?? "all");
-      setPlaying(false);
-
-      player.loadVideoById(MUSIC_LIST[index].videoId);
-
-      setTimeout(() => {
-        player.seekTo(time, true);
-        player.pauseVideo();
-        player.setVolume(vol);
-
-        setCurrentTime(time);
-        setDuration(player.getDuration() || 0);
-      }, 300);
-
-    } else {
-      player.setVolume(volume);
-    }
-
+    restore(player);
     setPlayerReady(true);
   };
 
-  useEffect(() => {
-    const handleBeforeUnload = () => saveState();
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () =>
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, []);
+  const onStateChange: YouTubeProps["onStateChange"] = (e) => {
+    if (e.data === 1) setPlaying(true);
+    if (e.data === 2) setPlaying(false);
 
-  const onStateChange: YouTubeProps["onStateChange"] = (event) => {
-    const state = event.data;
-
-    if (event.data === 1) setPlaying(true);
-    if (event.data === 2) setPlaying(false);
-
-    if (event.data === 0) {
+    if (e.data === 0) {
       if (repeatMode === "one") {
         playerRef.current?.seekTo(0, true);
         playerRef.current?.playVideo();
-      } else {
-        nextTrack();
-      }
+      } else nextTrack();
     }
   };
 
   /* ================= Controls ================= */
 
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (!playerReady || !playerRef.current) return;
-
-      const target = e.target as HTMLElement;
-
-      if (
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable
-      ) return;
-
-      switch (e.code) {
-
-        case "Space":
-          e.preventDefault();
-          togglePlay();
-          break;
-
-        case "KeyM":
-          toggleMute();
-          break;
-
-        case "ArrowLeft":
-          prevTrack();
-          break;
-
-        case "ArrowRight":
-          nextTrack();
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-
-  }, [playerReady, currentIndex, volume]);
-
   const togglePlay = () => {
-    if (!playerRef.current || !playerReady) return;
+    if (!playerRef.current) return;
 
     const state = playerRef.current.getPlayerState();
-
-    if (state === 1) {
-      playerRef.current.pauseVideo();
-    } else {
-      playerRef.current.playVideo();
-    }
+    if (state === 1) playerRef.current.pauseVideo();
+    else playerRef.current.playVideo();
   };
 
   const nextTrack = () => {
-    if (!playerRef.current) return;
-
-    const wasPlaying = playing;
-
-    const nextIndex = (currentIndex + 1) % MUSIC_LIST.length;
-
-    playerRef.current.loadVideoById(
-      MUSIC_LIST[nextIndex].videoId,
-      0
-    );
-
-    setCurrentIndex(nextIndex);
-    setCurrentTime(0);
-
-    // ⭐ 여기 핵심
-    if (wasPlaying) {
-      playerRef.current.playVideo();
-      setPlaying(true);
-    } else {
-      playerRef.current.pauseVideo();
-      setPlaying(false);
-    }
-
-    setTimeout(saveState, 300);
+    const next = (currentIndex + 1) % MUSIC_LIST.length;
+    playerRef.current?.loadVideoById(MUSIC_LIST[next].videoId, 0);
+    setCurrentIndex(next);
   };
 
   const prevTrack = () => {
-    if (!playerRef.current) return;
-
-    const wasPlaying = playing;
-
-    const prevIndex =
+    const prev =
       (currentIndex - 1 + MUSIC_LIST.length) % MUSIC_LIST.length;
-
-    playerRef.current.loadVideoById(
-      MUSIC_LIST[prevIndex].videoId,
-      0
-    );
-
-    setCurrentIndex(prevIndex);
-    setCurrentTime(0);
-
-    // ⭐ 동일 로직
-    if (wasPlaying) {
-      playerRef.current.playVideo();
-      setPlaying(true);
-    } else {
-      playerRef.current.pauseVideo();
-      setPlaying(false);
-    }
-
-    setTimeout(saveState, 300);
-  };
-
-  const toggleRepeat = () => {
-    setRepeatMode((prev) => (prev === "all" ? "one" : "all"));
+    playerRef.current?.loadVideoById(MUSIC_LIST[prev].videoId, 0);
+    setCurrentIndex(prev);
   };
 
   const toggleMute = () => {
-    if (!playerRef.current) return;
-
-    if (volume === 0) {
-      const restore = prevVolume || 50;
-      setVolume(restore);
-      playerRef.current.setVolume(restore);
-    } else {
-      setPrevVolume(volume);
-      setVolume(0);
-      playerRef.current.setVolume(0);
-    }
+    const v = volume === 0 ? 70 : 0;
+    setVolume(v);
+    playerRef.current?.setVolume(v);
   };
 
   /* ================= Progress ================= */
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (playerRef.current && playing && playerReady) {
-        setCurrentTime(playerRef.current.getCurrentTime());
-        setDuration(playerRef.current.getDuration());
-      }
+    const t = setInterval(() => {
+      if (!playerRef.current || !playerReady) return;
+      setCurrentTime(playerRef.current.getCurrentTime());
+      setDuration(playerRef.current.getDuration());
     }, 500);
+    return () => clearInterval(t);
+  }, [playerReady]);
 
-    return () => clearInterval(timer);
-  }, [playing, playerReady]);
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const time = Number(e.target.value);
-    setCurrentTime(time);
-    playerRef.current?.seekTo(time, true);
+  const handleSeek = (e: any) => {
+    const t = Number(e.target.value);
+    setCurrentTime(t);
+    playerRef.current?.seekTo(t, true);
   };
 
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const vol = Number(e.target.value);
-    if (vol > 0) setPrevVolume(vol);
-    setVolume(vol);
-    playerRef.current?.setVolume(vol);
-  };
+  /* ================= Persist ================= */
 
-  const formatTime = (time: number) => {
-    if (!time) return "0:00";
-    const m = Math.floor(time / 60);
-    const s = Math.floor(time % 60);
-    return `${m}:${s.toString().padStart(2, "0")}`;
-  };
+  const save = () => {
+    if (!playerRef.current) return;
 
-  /* ================= Mobile Scroll Hide ================= */
-
-  const [mobileVisible, setMobileVisible] = useState(true);
-  const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const current = window.scrollY;
-
-      if (current > lastScrollY.current && current > 80) {
-        setMobileVisible(false); // scroll down
-      } else {
-        setMobileVisible(true); // scroll up
-      }
-
-      lastScrollY.current = current;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const pathname = usePathname();
-  const hideUI = pathname.startsWith("/guestbook");
-
-  const STORAGE_KEY = "music_player_state_v1";
-
-  const saveState = () => {
-    if (!playerRef.current || !playerReady) return;
-
-    const data = {
-      currentIndex,
-      currentTime: playerRef.current.getCurrentTime() || 0,
-      volume,
-      playing: false, // ⭐ 항상 false 저장
-      repeatMode,
-    };
-
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    sessionStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        currentIndex,
+        currentTime: playerRef.current.getCurrentTime(),
+        volume,
+        repeatMode,
+      })
+    );
   };
 
   useEffect(() => {
     if (!playerReady) return;
-
-    const interval = setInterval(saveState, 1000);
-    return () => clearInterval(interval);
-  }, [currentIndex, volume, playing, repeatMode, playerReady]);
+    const i = setInterval(save, 1000);
+    return () => clearInterval(i);
+  }, [currentIndex, volume, repeatMode, playerReady]);
 
   /* ================= Render ================= */
 
@@ -377,16 +247,11 @@ export default function MusicPlayer() {
 
       {/* Player UI */}
       {!hideUI && (
-        <footer className="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl px-4 md:px-8">
-          <GlassCard className="px-5 py-2 rounded-3xl space-y-2">
+        <footer className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl px-4 md:px-8">
+          <GlassCard className="px-4 py-1.5 rounded-3xl space-y-1">
             <div className="flex items-center gap-6">
               {/* LEFT */}
-              <Link
-                href={`https://www.youtube.com/watch?v=${current.videoId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 w-[28%] min-w-0 group"
-              >
+              <div className="flex items-center gap-3 w-[28%] min-w-0">
                 <img
                   src={`https://img.youtube.com/vi/${current.videoId}/default.jpg`}
                   className="w-11 h-11 rounded-xl shadow"
@@ -418,7 +283,7 @@ export default function MusicPlayer() {
 
                   <p className="text-xs text-[#6E5A8A]">니니밍 플레이리스트</p>
                 </div>
-              </Link>
+              </div>
 
               {/* CENTER */}
               <div className="flex-1 flex flex-col items-center">
@@ -457,7 +322,7 @@ export default function MusicPlayer() {
                       [&::-webkit-slider-thumb]:rounded-full
                       [&::-webkit-slider-thumb]:bg-white
                       [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
-                      [&::-webkit-slider-thumb]:-mt-[5px]
+                      [&::-webkit-slider-thumb]:-mt-[4.5px]
                       [&::-webkit-slider-thumb]:transition
                       [&::-webkit-slider-thumb]:hover:scale-110
 
@@ -496,7 +361,7 @@ export default function MusicPlayer() {
                     <button
                       onClick={togglePlay}
                       className="
-                        w-11 h-11
+                        w-10 h-10
                         rounded-full
                         flex items-center justify-center
                         shadow-lg
@@ -534,15 +399,15 @@ export default function MusicPlayer() {
                     {/* 반복 */}
                     <button
                       onClick={toggleRepeat}
-                      className="
+                      className={`
                         w-8 h-8 rounded-full
-                        bg-white/10 hover:bg-white/20
                         flex items-center justify-center
                         transition cursor-pointer
-                      "
+                        ${repeatMode === "one" ? "bg-white/40" : "bg-white/10 hover:bg-white/20"}
+                      `}
                     >
                       {repeatMode === "one" ? (
-                        <Repeat1 size={14} color="#8B6FE8" />
+                        <Repeat1 size={14} color="#A78BFA" />
                       ) : (
                         <Repeat size={14} color="#7C66B4" />
                       )}
@@ -550,14 +415,14 @@ export default function MusicPlayer() {
 
                     <button
                       onClick={() => setShowList((v) => !v)}
-                      className="
+                      className={`
                         w-8 h-8 rounded-full
-                        bg-white/10 hover:bg-white/20
                         flex items-center justify-center
                         transition cursor-pointer
-                      "
+                        ${showList ? "bg-white/40" : "bg-white/10 hover:bg-white/20"}
+                      `}
                     >
-                      <ListMusic size={14} color="#7C66B4" />
+                      <ListMusic size={14} color={showList ? "#A78BFA" : "#7C66B4"} />
                     </button>
                   </div>
                 </div>
@@ -567,7 +432,7 @@ export default function MusicPlayer() {
               <div className="hidden md:flex items-center gap-2 w-[18%] justify-end">
                 <button onClick={toggleMute} className="cursor-pointer">
                   {volume === 0 ? (
-                    <VolumeX size={15} color="#7C66B4" />
+                    <VolumeX size={15} color="#A78BFA" />
                   ) : (
                     <Volume2 size={15} color="#7C66B4" />
                   )}
@@ -590,7 +455,7 @@ export default function MusicPlayer() {
                   }}
                   className="
                     w-20
-                    h-[6px]
+                    h-[5px]
                     appearance-none
                     rounded-full
                     cursor-pointer
@@ -601,12 +466,12 @@ export default function MusicPlayer() {
                     [&::-webkit-slider-runnable-track]:bg-transparent
 
                     [&::-webkit-slider-thumb]:appearance-none
-                    [&::-webkit-slider-thumb]:h-4
-                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:h-3.5
+                    [&::-webkit-slider-thumb]:w-3.5
                     [&::-webkit-slider-thumb]:rounded-full
                     [&::-webkit-slider-thumb]:bg-white
                     [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
-                    [&::-webkit-slider-thumb]:-mt-[5px]
+                    [&::-webkit-slider-thumb]:-mt-[4px]
                     [&::-webkit-slider-thumb]:transition
                     [&::-webkit-slider-thumb]:hover:scale-110
 

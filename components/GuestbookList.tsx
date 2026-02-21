@@ -94,9 +94,11 @@ export default function GuestbookList() {
   // ---------- Empty ----------
   if (!list.length) {
     return (
-      <GlassCard className="p-10 text-center text-[#6E5A8A]">
-        아직 방명록이 없어요
-      </GlassCard>
+      <div className="px-4 md:px-6 space-y-4 mt-6">
+        <GlassCard className="p-10 text-center text-[#6E5A8A]">
+          아직 방명록이 없어요
+        </GlassCard>
+      </div>
     );
   }
 

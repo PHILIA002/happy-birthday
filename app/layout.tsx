@@ -1,8 +1,6 @@
 import { Metadata } from "next";
 import { Baloo_2, Jua } from "next/font/google";
-import Header from "@/components/Header";
-import MusicPlayer from "@/components/MusicPlayer";
-import Copy from "@/components/Copy";
+import ClientShell from "@/components/ClientShell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -42,11 +40,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={`${baloo.variable} ${jua.variable}`}>
-        <Header />
-        {children}
-        <MusicPlayer />
-        <Copy />
+      <body
+        className={`
+          ${baloo.variable} ${jua.variable}
+          min-h-screen flex flex-col
+        `}
+      >
+        <ClientShell>{children}</ClientShell>
       </body>
     </html>
   );

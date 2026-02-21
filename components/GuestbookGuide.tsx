@@ -30,11 +30,11 @@ export default function GuestbookGuide() {
             </li>
             <li>닉네임은 선택 입력입니다.</li>
             <li>
-              메시지 입력 후 버튼 또는 Enter<br />
+              메시지 입력 후 버튼 또는 <span className="text-[#8b6fe8]">Enter</span><br />
               를 누르면 등록됩니다.
             </li>
             <li>
-              메시지 입력 중 Shift + Enter<br />
+              메시지 입력 중 <span className="text-[#8b6fe8]">Shift + Enter</span><br />
               를 누르면 줄바꿈이 됩니다.
             </li>
             <li>최대 300자까지 입력 가능합니다.</li>

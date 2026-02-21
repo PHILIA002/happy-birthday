@@ -4,6 +4,7 @@ import { Sparkle } from "lucide-react";
 import { useState } from "react";
 import { SERVERS } from "@/data/servers";
 import GlassCard from "../GlassCard";
+import RevealCard from "../RevealCard";
 
 export default function Server() {
   const TopIcon = SERVERS[0].icon;
@@ -118,11 +119,13 @@ export default function Server() {
           const isReversed = index % 2 === 1;
 
           return (
-            <div
+            <RevealCard
               key={index}
+              index={index}
               className={`relative max-w-6xl mx-auto px-6 ${hasImage
-                  ? `flex flex-col md:flex-row items-center gap-8 md:gap-12 ${isReversed ? "md:flex-row-reverse" : ""}`
-                  : "flex justify-center"
+                ? `flex flex-col md:flex-row items-center gap-8 md:gap-12 ${isReversed ? "md:flex-row-reverse" : ""
+                }`
+                : "flex justify-center"
                 }`}
             >
               {/* 중앙 감성 도트 */}
@@ -197,7 +200,7 @@ export default function Server() {
                   </GlassCard>
                 </div>
               )}
-            </div>
+            </RevealCard>
           );
         })}
       </div>
