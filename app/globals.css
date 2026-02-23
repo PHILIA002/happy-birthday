@@ -11,8 +11,18 @@ body {
 
 body {
   font-family: var(--font-jua), var(--font-baloo), sans-serif;
-  background: #e0d4ef;
+  background: #ddcfe7;
+  /* cursor: none; */
 }
+
+/* .cursor {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background: url("/cursor.gif") center/contain no-repeat;
+} */
 
 body::after {
   content: "";

@@ -35,6 +35,25 @@ export default function GuestbookList() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page, pageSize]);
 
+  useEffect(() => {
+    const channel = supabase
+      .channel("guestbook-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "guestbook" },
+        (payload) => {
+          console.log("realtime:", payload);
+
+          fetchPage(page);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [page, pageSize]);
+
   const fetchPage = async (pageNumber: number) => {
     setLoading(true);
 

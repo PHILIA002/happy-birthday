@@ -31,6 +31,7 @@ export default function MusicPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(70);
+  const [lastVolume, setLastVolume] = useState(70);
   const [repeatMode, setRepeatMode] = useState<RepeatMode>("all");
   const [showList, setShowList] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
@@ -95,16 +96,14 @@ export default function MusicPlayer() {
       setVolume(s.volume ?? 70);
       setRepeatMode(s.repeatMode ?? "all");
 
-      player.loadVideoById(MUSIC_LIST[s.currentIndex ?? 0].videoId);
-
-      setTimeout(() => {
-        player.seekTo(s.currentTime ?? 0, true);
-        player.setVolume(s.volume ?? 70);
-        player.pauseVideo();
-
-        setCurrentTime(s.currentTime ?? 0);
-        setDuration(player.getDuration() || 0);
-      }, 300);
+      player.loadVideoById({
+        videoId: MUSIC_LIST[s.currentIndex ?? 0].videoId,
+        startSeconds: s.currentTime ?? 0,
+      });
+      player.setVolume(s.volume ?? 70);
+      setCurrentTime(s.currentTime ?? 0);
+      setDuration(player.getDuration() || 0);
+      setPlaying(false);
     } catch { }
   };
 
@@ -142,21 +141,35 @@ export default function MusicPlayer() {
 
   const nextTrack = () => {
     const next = (currentIndex + 1) % MUSIC_LIST.length;
-    playerRef.current?.loadVideoById(MUSIC_LIST[next].videoId, 0);
     setCurrentIndex(next);
+
+    const isPlaying = playing;
+    playerRef.current?.loadVideoById(MUSIC_LIST[next].videoId, 0);
+
+    if (!isPlaying) playerRef.current?.pauseVideo();
+    else playerRef.current?.playVideo();
   };
 
   const prevTrack = () => {
-    const prev =
-      (currentIndex - 1 + MUSIC_LIST.length) % MUSIC_LIST.length;
-    playerRef.current?.loadVideoById(MUSIC_LIST[prev].videoId, 0);
+    const prev = (currentIndex - 1 + MUSIC_LIST.length) % MUSIC_LIST.length;
     setCurrentIndex(prev);
+
+    const isPlaying = playing;
+    playerRef.current?.loadVideoById(MUSIC_LIST[prev].videoId, 0);
+
+    if (!isPlaying) playerRef.current?.pauseVideo();
+    else playerRef.current?.playVideo();
   };
 
   const toggleMute = () => {
-    const v = volume === 0 ? 70 : 0;
-    setVolume(v);
-    playerRef.current?.setVolume(v);
+    if (volume === 0) {
+      setVolume(lastVolume);
+      playerRef.current?.setVolume(lastVolume);
+    } else {
+      setLastVolume(volume);
+      setVolume(0);
+      playerRef.current?.setVolume(0);
+    }
   };
 
   /* ================= Progress ================= */
@@ -346,21 +359,55 @@ export default function MusicPlayer() {
                   <span>{formatTime(duration)}</span>
                 </div>
 
-                {/* Controls Row */}
-                <div className="flex items-center w-full">
+                {/* Controls */}
+                <div className="flex items-center justify-between w-full px-6">
+                  {/* left */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={toggleRepeat}
+                      className={`
+                        w-8 h-8 rounded-full
+                        flex items-center justify-center
+                        transition cursor-pointer
+                        ${repeatMode === "one" ? "bg-white/40" : "bg-white/10 hover:bg-white/20"}
+                      `}
+                    >
+                      {repeatMode === "one" ? (
+                        <Repeat1 size={14} color="#8B6FE8" />
+                      ) : (
+                        <Repeat size={14} color="#7C66B4" />
+                      )}
+                    </button>
 
-                  {/* LEFT */}
-                  <div className="flex items-center justify-end flex-1">
-                    <button onClick={prevTrack} className={controlBtn}>
-                      <SkipBack size={18} color="#7C66B4" />
+                    <button
+                      onClick={() => setShowList((v) => !v)}
+                      className={`
+                        w-8 h-8 rounded-full
+                        flex items-center justify-center
+                        transition cursor-pointer
+                        ${showList ? "bg-white/40" : "bg-white/10 hover:bg-white/20"}
+                      `}
+                    >
+                      <ListMusic size={14} color={showList ? "#8B6FE8" : "#7C66B4"} />
                     </button>
                   </div>
 
-                  {/* ⭐ CENTER (항상 가운데) */}
-                  <div className="flex items-center justify-center px-4">
+                  {/* Center */}
+                  <div className="relative flex flex-1 items-center justify-center">
+                    <div className="flex items-center justify-between w-36">
+                      <button onClick={prevTrack} className={controlBtn}>
+                        <SkipBack size={18} color="#7C66B4" />
+                      </button>
+
+                      <button onClick={nextTrack} className={controlBtn}>
+                        <SkipForward size={18} color="#7C66B4" />
+                      </button>
+                    </div>
+
                     <button
                       onClick={togglePlay}
                       className="
+                        absolute
                         w-10 h-10
                         rounded-full
                         flex items-center justify-center
@@ -378,115 +425,67 @@ export default function MusicPlayer() {
                     </button>
                   </div>
 
-                  {/* RIGHT */}
-                  <div className="flex items-center gap-3 flex-1">
-
-                    <button onClick={nextTrack} className={controlBtn}>
-                      <SkipForward size={18} color="#7C66B4" />
-                    </button>
-
-                    {/* 구분선 */}
-                    <div className="
-                      mx-2
-                      w-[1px] h-5
-                      bg-gradient-to-b
-                      from-transparent
-                      via-[#7C66B4]
-                      to-transparent
-                      opacity-70
-                    " />
-
-                    {/* 반복 */}
-                    <button
-                      onClick={toggleRepeat}
-                      className={`
-                        w-8 h-8 rounded-full
-                        flex items-center justify-center
-                        transition cursor-pointer
-                        ${repeatMode === "one" ? "bg-white/40" : "bg-white/10 hover:bg-white/20"}
-                      `}
-                    >
-                      {repeatMode === "one" ? (
-                        <Repeat1 size={14} color="#A78BFA" />
+                  {/* RIGHT - Volume */}
+                  <div className="flex items-center gap-3 w-[20%] justify-end">
+                    <button onClick={toggleMute} className="cursor-pointer">
+                      {volume === 0 ? (
+                        <VolumeX size={15} color="#8B6FE8" />
                       ) : (
-                        <Repeat size={14} color="#7C66B4" />
+                        <Volume2 size={15} color="#7C66B4" />
                       )}
                     </button>
 
-                    <button
-                      onClick={() => setShowList((v) => !v)}
-                      className={`
-                        w-8 h-8 rounded-full
-                        flex items-center justify-center
-                        transition cursor-pointer
-                        ${showList ? "bg-white/40" : "bg-white/10 hover:bg-white/20"}
-                      `}
-                    >
-                      <ListMusic size={14} color={showList ? "#A78BFA" : "#7C66B4"} />
-                    </button>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      value={volume}
+                      onChange={handleVolume}
+                      style={{
+                        background: `linear-gradient(
+                          to right,
+                          #A78BFA 0%,
+                          #8B6FE8 ${volume}%,
+                          rgba(255,255,255,0.2) ${volume}%,
+                          rgba(255,255,255,0.2) 100%
+                        )`,
+                      }}
+                      className="
+                        w-20
+                        h-[5px]
+                        appearance-none
+                        rounded-full
+                        cursor-pointer
+                        transition
+
+                        [&::-webkit-slider-runnable-track]:h-[6px]
+                        [&::-webkit-slider-runnable-track]:rounded-full
+                        [&::-webkit-slider-runnable-track]:bg-transparent
+
+                        [&::-webkit-slider-thumb]:appearance-none
+                        [&::-webkit-slider-thumb]:h-3.5
+                        [&::-webkit-slider-thumb]:w-3.5
+                        [&::-webkit-slider-thumb]:rounded-full
+                        [&::-webkit-slider-thumb]:bg-white
+                        [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
+                        [&::-webkit-slider-thumb]:-mt-[4px]
+                        [&::-webkit-slider-thumb]:transition
+                        [&::-webkit-slider-thumb]:hover:scale-110
+
+                        [&::-moz-range-track]:h-[6px]
+                        [&::-moz-range-track]:rounded-full
+                        [&::-moz-range-track]:bg-transparent
+
+                        [&::-moz-range-thumb]:h-4
+                        [&::-moz-range-thumb]:w-4
+                        [&::-moz-range-thumb]:border-none
+                        [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:bg-white
+                        [&::-moz-range-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
+                      "
+                    />
                   </div>
                 </div>
-              </div>
-
-              {/* RIGHT - Volume */}
-              <div className="hidden md:flex items-center gap-2 w-[18%] justify-end">
-                <button onClick={toggleMute} className="cursor-pointer">
-                  {volume === 0 ? (
-                    <VolumeX size={15} color="#A78BFA" />
-                  ) : (
-                    <Volume2 size={15} color="#7C66B4" />
-                  )}
-                </button>
-
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  value={volume}
-                  onChange={handleVolume}
-                  style={{
-                    background: `linear-gradient(
-                      to right,
-                      #A78BFA 0%,
-                      #8B6FE8 ${volume}%,
-                      rgba(255,255,255,0.2) ${volume}%,
-                      rgba(255,255,255,0.2) 100%
-                    )`,
-                  }}
-                  className="
-                    w-20
-                    h-[5px]
-                    appearance-none
-                    rounded-full
-                    cursor-pointer
-                    transition
-
-                    [&::-webkit-slider-runnable-track]:h-[6px]
-                    [&::-webkit-slider-runnable-track]:rounded-full
-                    [&::-webkit-slider-runnable-track]:bg-transparent
-
-                    [&::-webkit-slider-thumb]:appearance-none
-                    [&::-webkit-slider-thumb]:h-3.5
-                    [&::-webkit-slider-thumb]:w-3.5
-                    [&::-webkit-slider-thumb]:rounded-full
-                    [&::-webkit-slider-thumb]:bg-white
-                    [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
-                    [&::-webkit-slider-thumb]:-mt-[4px]
-                    [&::-webkit-slider-thumb]:transition
-                    [&::-webkit-slider-thumb]:hover:scale-110
-
-                    [&::-moz-range-track]:h-[6px]
-                    [&::-moz-range-track]:rounded-full
-                    [&::-moz-range-track]:bg-transparent
-
-                    [&::-moz-range-thumb]:h-4
-                    [&::-moz-range-thumb]:w-4
-                    [&::-moz-range-thumb]:border-none
-                    [&::-moz-range-thumb]:rounded-full
-                    [&::-moz-range-thumb]:bg-white
-                    [&::-moz-range-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
-                  "
-                />
               </div>
             </div>
 

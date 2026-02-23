@@ -21,7 +21,7 @@ export default function Countdown() {
 
     const year = nowDate.getFullYear();
 
-    const birthdayStart = new Date(year, 1, 19, 0, 0, 0).getTime();
+    const birthdayStart = new Date(year, 3, 19, 0, 0, 0).getTime();
     const birthdayEnd = new Date(year, 3, 20, 0, 0, 0).getTime();
 
     const isToday = now >= birthdayStart && now < birthdayEnd;

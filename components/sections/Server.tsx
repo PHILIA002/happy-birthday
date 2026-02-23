@@ -13,19 +13,20 @@ export default function Server() {
   return (
     <section className="relative py-12 md:py-24 overflow-hidden">
 
+      {/* 상단 타이틀 */}
       <div className="relative flex flex-col items-center mb-16 md:mb-24 px-6">
-        {/* 글로우 배경 */}
+        {/* 은은한 글로우 배경 */}
         <div
           className="
             absolute
-            -top-4
-            w-64 h-20
+            -top-2
+            w-40 h-16
             bg-gradient-to-r
-            from-[#C8B8FF]
-            via-[#A78BFA]
-            to-[#8B6FE8]
-            blur-3xl
-            opacity-30
+            from-[#C8B8FF]/40
+            via-[#A78BFA]/30
+            to-[#8B6FE8]/20
+            blur-2xl
+            opacity-25
             pointer-events-none
           "
         />
@@ -34,13 +35,13 @@ export default function Server() {
         <h2
           className="
             relative
-            text-2xl md:text-4xl
+            text-3xl md:text-4xl
             font-semibold
-            tracking-[0.18em]
+            tracking-[0.1em]
             bg-gradient-to-r
-            from-[#6E5A8A]
-            via-[#7C66B4]
-            to-[#A78BFA]
+            from-[#7C66B4]
+            via-[#A78BFA]/80
+            to-[#BDA6FF]/90
             bg-clip-text
             text-transparent
           "
@@ -48,16 +49,16 @@ export default function Server() {
           SERVER
         </h2>
 
-        {/* 얇은 장식 라인 */}
+        {/* 장식 라인 */}
         <div
           className="
-            mt-4
-            w-24 h-[2px]
+            mt-3
+            w-20 h-[1.5px]
             bg-gradient-to-r
             from-transparent
-            via-[#B7A6FF]
+            via-[#B7A6FF]/60
             to-transparent
-            opacity-60
+            opacity-50
           "
         />
       </div>
@@ -71,10 +72,10 @@ export default function Server() {
           -translate-x-1/2
           w-[2px]
           bg-gradient-to-b
-          from-[#E9DEFF]
-          via-[#C8B8FF]
+          from-[#E9DEFF]/50
+          via-[#C8B8FF]/40
           to-transparent
-          opacity-70
+          opacity-50
           blur-[0.3px]
           pointer-events-none
         "
@@ -92,13 +93,13 @@ export default function Server() {
               h-[280px] md:h-[400px]
               object-contain
               rounded-[28px] md:rounded-3xl
-              border border-white/40
-              shadow-[0_30px_80px_rgba(180,160,255,0.25)]
+              border border-white/20
+              shadow-[0_25px_70px_rgba(180,160,255,0.18)]
               mb-12 md:mb-14
               cursor-zoom-in
               transition duration-500
               hover:scale-[1.02]
-              hover:shadow-[0_40px_100px_rgba(180,160,255,0.35)]
+              hover:shadow-[0_35px_90px_rgba(180,160,255,0.25)]
             "
           />
         )}
@@ -123,8 +124,7 @@ export default function Server() {
               key={index}
               index={index}
               className={`relative max-w-6xl mx-auto px-6 ${hasImage
-                ? `flex flex-col md:flex-row items-center gap-8 md:gap-12 ${isReversed ? "md:flex-row-reverse" : ""
-                }`
+                ? `flex flex-col md:flex-row items-center gap-8 md:gap-12 ${isReversed ? "md:flex-row-reverse" : ""}`
                 : "flex justify-center"
                 }`}
             >
@@ -137,11 +137,10 @@ export default function Server() {
                   items-center justify-center
                   w-7 h-7 md:w-8 md:h-8
                   rounded-full
-                  bg-white/40
+                  bg-white/30
                   backdrop-blur-md
-                  border border-white/60
-                  shadow-[0_0_25px_rgba(160,130,255,0.7)]
-                  md:shadow-[0_0_35px_rgba(160,130,255,0.9)]
+                  border border-white/40
+                  shadow-[0_0_20px_rgba(160,130,255,0.5)]
                   transition duration-300
                   hover:scale-110
                   z-20
@@ -151,13 +150,12 @@ export default function Server() {
                   className="w-3.5 h-3.5 md:w-4 md:h-4 animate-sparkle"
                   style={{
                     color: "#9F84FF",
-                    filter: "drop-shadow(0 0 5px rgba(160,130,255,0.8))",
+                    filter: "drop-shadow(0 0 4px rgba(160,130,255,0.6))",
                   }}
                 />
               </div>
 
               {hasImage ? (
-                // 이미지 + 카드 묶음
                 <div className={`flex flex-col md:flex-row items-center gap-6 md:gap-8 w-full ${isReversed ? "md:flex-row-reverse" : ""}`}>
                   <img
                     src={item.imgSrc!}
@@ -168,16 +166,16 @@ export default function Server() {
                       h-[220px] md:h-[320px]
                       object-contain
                       rounded-[26px] md:rounded-3xl
-                      border border-white/30
-                      shadow-[0_15px_45px_rgba(180,160,255,0.18)]
+                      border border-white/20
+                      shadow-[0_15px_40px_rgba(180,160,255,0.15)]
                       cursor-zoom-in
                       transition duration-500
                       hover:scale-[1.03]
-                      hover:shadow-[0_25px_65px_rgba(180,160,255,0.28)]
+                      hover:shadow-[0_25px_60px_rgba(180,160,255,0.22)]
                     "
                   />
                   <div className="flex-1 flex justify-center">
-                    <GlassCard className="w-full max-w-md px-7 md:px-9 py-7 md:py-8 text-center backdrop-blur-xl transition duration-500 hover:scale-[1.02] hover:shadow-[0_25px_70px_rgba(160,130,255,0.25)]">
+                    <GlassCard className="w-full max-w-md px-7 md:px-9 py-7 md:py-8 text-center backdrop-blur-xl transition duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(160,130,255,0.2)]">
                       {item.date && <p className="mb-2 text-[11px] md:text-xs tracking-[0.25em]" style={{ color: "#8B6FE8" }}>{item.date}</p>}
                       <h3 className="flex items-center justify-center gap-2 text-base md:text-xl font-semibold" style={{ color: "#4F3F6B" }}>
                         <Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: "#7C66B4" }} />
@@ -188,9 +186,8 @@ export default function Server() {
                   </div>
                 </div>
               ) : (
-                // 이미지 없는 카드
                 <div className="flex justify-center w-full">
-                  <GlassCard className="w-full max-w-lg px-7 md:px-9 py-7 md:py-8 text-center backdrop-blur-xl transition duration-500 hover:scale-[1.02] hover:shadow-[0_25px_70px_rgba(160,130,255,0.25)]">
+                  <GlassCard className="w-full max-w-lg px-7 md:px-9 py-7 md:py-8 text-center backdrop-blur-xl transition duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(160,130,255,0.2)]">
                     {item.date && <p className="mb-2 text-[11px] md:text-xs tracking-[0.25em]" style={{ color: "#8B6FE8" }}>{item.date}</p>}
                     <h3 className="flex items-center justify-center gap-2 text-base md:text-xl font-semibold" style={{ color: "#4F3F6B" }}>
                       <Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: "#7C66B4" }} />
@@ -214,7 +211,7 @@ export default function Server() {
           <img
             src={modal}
             alt=""
-            className="max-h-[90vh] w-auto rounded-2xl shadow-[0_40px_120px_rgba(0,0,0,0.6)]"
+            className="max-h-[90vh] w-auto rounded-2xl shadow-[0_40px_120px_rgba(0,0,0,0.5)]"
           />
         </div>
       )}
