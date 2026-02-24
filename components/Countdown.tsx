@@ -8,13 +8,6 @@ export default function Countdown() {
   const [timeText, setTimeText] = useState("");
   const [isBirthday, setIsBirthday] = useState(false);
 
-  const targetDate = new Date(
-    new Date().getFullYear(),
-    3, // April
-    19,
-    0, 0, 0
-  );
-
   function updateCountdown() {
     const nowDate = new Date();
     const now = nowDate.getTime();

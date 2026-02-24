@@ -12,6 +12,7 @@ import {
   Repeat,
   Repeat1,
   ListMusic,
+  ChevronDown,
 } from "lucide-react";
 
 import GlassCard from "./GlassCard";
@@ -35,13 +36,14 @@ export default function MusicPlayer() {
   const [repeatMode, setRepeatMode] = useState<RepeatMode>("all");
   const [showList, setShowList] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   const current = MUSIC_LIST[currentIndex];
   const pathname = usePathname();
   const hideUI = pathname.startsWith("/guestbook");
 
   const controlBtn =
-    "w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition cursor-pointer";
+    "w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition cursor-pointer";
 
   /* marquee refs */
   const containerRef = useRef<HTMLDivElement>(null);
@@ -258,16 +260,52 @@ export default function MusicPlayer() {
         </div>
       )}
 
-      {/* Player UI */}
+      {/* ===== HANDLE (항상 표시) ===== */}
       {!hideUI && (
+        <div
+          className={`fixed left-1/2 -translate-x-1/2 z-50 transition
+            ${collapsed ? "bottom-2" : "bottom-24"}
+          `}
+        >
+          <button
+            onClick={() => setCollapsed(v => !v)}
+            className="
+              text-white/90
+              drop-shadow
+              transition
+              hover:scale-110
+              active:scale-95
+              cursor-pointer
+              animate-[float_3s_ease-in-out_infinite]
+            "
+          >
+            <ChevronDown
+              size={40}
+              className={`transition ${collapsed ? "rotate-180" : ""}`}
+            />
+          </button>
+        </div>
+      )}
+
+      {/* Player UI */}
+      {!hideUI && !collapsed && (
         <footer className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl px-4 md:px-8">
-          <GlassCard className="px-4 py-1.5 rounded-3xl space-y-1">
+          <GlassCard className="
+            px-5
+            py-2
+            rounded-[28px]
+            space-y-2
+            backdrop-blur-xl
+            bg-white/40
+            border border-white/40
+            shadow-[0_20px_60px_rgba(120,90,255,0.18)]
+          ">
             <div className="flex items-center gap-6">
               {/* LEFT */}
               <div className="flex items-center gap-3 w-[28%] min-w-0">
                 <img
                   src={`https://img.youtube.com/vi/${current.videoId}/default.jpg`}
-                  className="w-11 h-11 rounded-xl shadow"
+                  className="w-12 rounded-xl shadow-md"
                 />
 
                 <div className="min-w-0">
@@ -281,20 +319,20 @@ export default function MusicPlayer() {
                     >
                       <span
                         ref={textRef}
-                        className="text-sm font-semibold text-[#4F3F6B]"
+                        className="text-[13px] font-semibold text-[#463A63]"
                       >
                         {current.title}
                       </span>
 
                       {isOverflowing && (
-                        <span className="text-sm font-semibold text-[#4F3F6B]">
+                        <span className="text-[13px] font-semibold text-[#463A63]">
                           {current.title}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <p className="text-xs text-[#6E5A8A]">니니밍 플레이리스트</p>
+                  <p className="text-[11px] text-[#8B7AA8]">니니밍 플레이리스트</p>
                 </div>
               </div>
 
@@ -319,7 +357,7 @@ export default function MusicPlayer() {
                     }}
                     className="
                       w-full
-                      h-[6px]
+                      h-[4px]
                       appearance-none
                       rounded-full
                       cursor-pointer
@@ -334,7 +372,7 @@ export default function MusicPlayer() {
                       [&::-webkit-slider-thumb]:w-4
                       [&::-webkit-slider-thumb]:rounded-full
                       [&::-webkit-slider-thumb]:bg-white
-                      [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
+                      [&::-webkit-slider-thumb]:shadow-[0_0_6px_rgba(139,111,232,0.6)]
                       [&::-webkit-slider-thumb]:-mt-[4.5px]
                       [&::-webkit-slider-thumb]:transition
                       [&::-webkit-slider-thumb]:hover:scale-110
@@ -360,7 +398,7 @@ export default function MusicPlayer() {
                 </div>
 
                 {/* Controls */}
-                <div className="flex items-center justify-between w-full px-6">
+                <div className="flex items-center justify-between gap-6">
                   {/* left */}
                   <div className="flex items-center gap-3">
                     <button
@@ -408,10 +446,10 @@ export default function MusicPlayer() {
                       onClick={togglePlay}
                       className="
                         absolute
-                        w-10 h-10
+                        w-11 h-11
                         rounded-full
                         flex items-center justify-center
-                        shadow-lg
+                        shadow-[0_10px_30px_rgba(139,111,232,0.45)]
                         cursor-pointer
                         active:scale-95
                         transition
@@ -429,9 +467,9 @@ export default function MusicPlayer() {
                   <div className="flex items-center gap-3 w-[20%] justify-end">
                     <button onClick={toggleMute} className="cursor-pointer">
                       {volume === 0 ? (
-                        <VolumeX size={15} color="#8B6FE8" />
+                        <VolumeX size={14} color="#8B6FE8" />
                       ) : (
-                        <Volume2 size={15} color="#7C66B4" />
+                        <Volume2 size={14} color="#7C66B4" />
                       )}
                     </button>
 
@@ -451,8 +489,9 @@ export default function MusicPlayer() {
                         )`,
                       }}
                       className="
-                        w-20
-                        h-[5px]
+                        w-16
+                        opacity-80 hover:opacity-100
+                        h-[4px]
                         appearance-none
                         rounded-full
                         cursor-pointer
@@ -491,7 +530,7 @@ export default function MusicPlayer() {
 
             {/* PLAYLIST */}
             {showList && (
-              <div className="max-h-56 overflow-y-auto border-t border-white/30 pt-3">
+              <div className="mt-2 max-h-56 overflow-y-auto border-t border-white/30 p-2">
                 {MUSIC_LIST.map((item, idx) => (
                   <button
                     key={item.videoId}
@@ -503,7 +542,7 @@ export default function MusicPlayer() {
                     }}
                     className={`w-full text-left px-4 py-2 rounded-lg text-sm cursor-pointer transition
                     ${idx === currentIndex
-                        ? "bg-white/40 text-[#4F3F6B]"
+                        ? "bg-white/50 shadow-sm text-[#4F3F6B]"
                         : "hover:bg-white/25 text-[#6E5A8A]"
                       }`}
                   >
