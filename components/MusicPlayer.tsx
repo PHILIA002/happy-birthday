@@ -255,7 +255,7 @@ export default function MusicPlayer() {
               color: "white",
             }}
           >
-            {playing ? <Pause size={20} /> : <Play size={20} />}
+            {playing ? <Pause size={24} /> : <Play size={24} />}
           </button>
         </div>
       )}
@@ -263,7 +263,7 @@ export default function MusicPlayer() {
       {/* ===== HANDLE (항상 표시) ===== */}
       {!hideUI && (
         <div
-          className={`fixed left-1/2 -translate-x-1/2 z-50 transition
+          className={`md:fixed left-1/2 -translate-x-1/2 z-50 transition
             ${collapsed ? "bottom-2" : "bottom-24"}
           `}
         >
@@ -289,14 +289,12 @@ export default function MusicPlayer() {
 
       {/* Player UI */}
       {!hideUI && !collapsed && (
-        <footer className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl px-4 md:px-8">
+        <footer className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl md:px-8">
           <GlassCard className="
             px-5
             py-2
-            rounded-[28px]
+            rounded-2xl
             space-y-2
-            backdrop-blur-xl
-            bg-white/40
             border border-white/40
             shadow-[0_20px_60px_rgba(120,90,255,0.18)]
           ">
@@ -373,7 +371,7 @@ export default function MusicPlayer() {
                       [&::-webkit-slider-thumb]:rounded-full
                       [&::-webkit-slider-thumb]:bg-white
                       [&::-webkit-slider-thumb]:shadow-[0_0_6px_rgba(139,111,232,0.6)]
-                      [&::-webkit-slider-thumb]:-mt-[4.5px]
+                      [&::-webkit-slider-thumb]:-mt-[5px]
                       [&::-webkit-slider-thumb]:transition
                       [&::-webkit-slider-thumb]:hover:scale-110
 
@@ -398,7 +396,7 @@ export default function MusicPlayer() {
                 </div>
 
                 {/* Controls */}
-                <div className="flex items-center justify-between gap-6">
+                <div className="flex items-center justify-between gap-16">
                   {/* left */}
                   <div className="flex items-center gap-3">
                     <button
@@ -490,7 +488,6 @@ export default function MusicPlayer() {
                       }}
                       className="
                         w-16
-                        opacity-80 hover:opacity-100
                         h-[4px]
                         appearance-none
                         rounded-full
@@ -502,12 +499,12 @@ export default function MusicPlayer() {
                         [&::-webkit-slider-runnable-track]:bg-transparent
 
                         [&::-webkit-slider-thumb]:appearance-none
-                        [&::-webkit-slider-thumb]:h-3.5
-                        [&::-webkit-slider-thumb]:w-3.5
+                        [&::-webkit-slider-thumb]:h-3
+                        [&::-webkit-slider-thumb]:w-3
                         [&::-webkit-slider-thumb]:rounded-full
                         [&::-webkit-slider-thumb]:bg-white
-                        [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(139,111,232,0.8)]
-                        [&::-webkit-slider-thumb]:-mt-[4px]
+                        [&::-webkit-slider-thumb]:shadow-[0_0_6px_rgba(139,111,232,0.6)]
+                        [&::-webkit-slider-thumb]:-mt-[3.5px]
                         [&::-webkit-slider-thumb]:transition
                         [&::-webkit-slider-thumb]:hover:scale-110
 
