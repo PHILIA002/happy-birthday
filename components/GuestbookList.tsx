@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import GlassCard from "./GlassCard";
 import { ChevronFirst, ChevronLeft, ChevronRight, ChevronLast } from "lucide-react";
@@ -15,6 +15,12 @@ export default function GuestbookList() {
   const [pageSize, setPageSize] = useState(10);
 
   const PAGE_WINDOW = 1;
+
+  const pageRef = useRef(page);
+
+  useEffect(() => {
+    pageRef.current = page;
+  }, [page]);
 
   // ---------- Responsive Page Size ----------
   useEffect(() => {
@@ -36,25 +42,49 @@ export default function GuestbookList() {
   }, [page, pageSize]);
 
   useEffect(() => {
-    const channel = supabase
-      .channel("guestbook-realtime")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "guestbook" },
-        (payload) => {
-          console.log("realtime:", payload);
+    let channel: ReturnType<typeof supabase.channel> | null = null;
 
-          fetchPage(page);
-        }
-      )
-      .subscribe();
+    const subscribe = () => {
+      channel = supabase
+        .channel(`guestbook-realtime-${Math.random()}`)
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "guestbook" },
+          () => {
+            fetchPage(pageRef.current);
+          }
+        )
+        .subscribe((status) => {
+          console.log("realtime status:", status);
+        });
+    };
+
+    subscribe();
+
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        channel && supabase.removeChannel(channel);
+        subscribe();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisible);
 
     return () => {
-      supabase.removeChannel(channel);
+      document.removeEventListener("visibilitychange", onVisible);
+
+      if (channel) {
+        void supabase.removeChannel(channel); // ⭐ Promise 무시
+      }
     };
-  }, [page, pageSize]);
+  }, []);
+
+  const fetchingRef = useRef(false);
 
   const fetchPage = async (pageNumber: number) => {
+    if (fetchingRef.current) return;
+    fetchingRef.current = true;
+
     setLoading(true);
 
     const from = (pageNumber - 1) * pageSize;
@@ -69,6 +99,8 @@ export default function GuestbookList() {
     setList(data || []);
     setTotal(count || 0);
     setLoading(false);
+
+    fetchingRef.current = false;
   };
 
   // ---------- Pagination Logic ----------
