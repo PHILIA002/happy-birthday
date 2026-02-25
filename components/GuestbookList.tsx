@@ -42,63 +42,49 @@ export default function GuestbookList() {
   }, [page, pageSize]);
 
   useEffect(() => {
-    let channel: ReturnType<typeof supabase.channel> | null = null;
-
-    const subscribe = () => {
-      channel = supabase
-        .channel(`guestbook-realtime-${Math.random()}`)
-        .on(
-          "postgres_changes",
-          { event: "*", schema: "public", table: "guestbook" },
-          () => {
-            fetchPage(pageRef.current);
-          }
-        )
-        .subscribe((status) => {
-          console.log("realtime status:", status);
-        });
-    };
-
-    subscribe();
-
-    const onVisible = () => {
-      if (document.visibilityState === "visible") {
-        channel && supabase.removeChannel(channel);
-        subscribe();
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisible);
+    const channel = supabase
+      .channel("guestbook-realtime")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "guestbook" },
+        () => {
+          if (pageRef.current === 1) fetchPage(1);
+        }
+      )
+      .subscribe();
 
     return () => {
-      document.removeEventListener("visibilitychange", onVisible);
-
-      if (channel) {
-        void supabase.removeChannel(channel); // ⭐ Promise 무시
-      }
+      supabase.removeChannel(channel);
     };
   }, []);
 
   const fetchingRef = useRef(false);
 
-  const fetchPage = async (pageNumber: number) => {
+  const fetchPage = async (pageNumber: number, silent = false) => {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
 
-    setLoading(true);
+    if (!silent) setLoading(true);
 
     const from = (pageNumber - 1) * pageSize;
     const to = from + pageSize - 1;
 
-    const { data, count } = await supabase
+    const query = supabase
       .from("guestbook")
-      .select("*", { count: "exact" })
+      .select("*", silent ? undefined : { count: "exact" })
       .order("created_at", { ascending: false })
       .range(from, to);
 
-    setList(data || []);
-    setTotal(count || 0);
-    setLoading(false);
+    const { data, count } = await query;
+
+    setList(prev => data ?? prev);
+
+    if (!silent) {
+      setTotal(count || 0);
+      setLoading(false);
+    } else {
+      setTotal((t) => t + 1);
+    }
 
     fetchingRef.current = false;
   };

@@ -98,7 +98,7 @@ export default function MusicPlayer() {
       setVolume(s.volume ?? 70);
       setRepeatMode(s.repeatMode ?? "all");
 
-      player.loadVideoById({
+      player.cueVideoById({
         videoId: MUSIC_LIST[s.currentIndex ?? 0].videoId,
         startSeconds: s.currentTime ?? 0,
       });
@@ -145,22 +145,22 @@ export default function MusicPlayer() {
     const next = (currentIndex + 1) % MUSIC_LIST.length;
     setCurrentIndex(next);
 
-    const isPlaying = playing;
-    playerRef.current?.loadVideoById(MUSIC_LIST[next].videoId, 0);
-
-    if (!isPlaying) playerRef.current?.pauseVideo();
-    else playerRef.current?.playVideo();
+    if (playing) {
+      playerRef.current?.loadVideoById(MUSIC_LIST[next].videoId, 0);
+    } else {
+      playerRef.current?.cueVideoById(MUSIC_LIST[next].videoId, 0);
+    }
   };
 
   const prevTrack = () => {
-    const prev = (currentIndex - 1 + MUSIC_LIST.length) % MUSIC_LIST.length;
+    const prev = (currentIndex - 1) % MUSIC_LIST.length;
     setCurrentIndex(prev);
 
-    const isPlaying = playing;
-    playerRef.current?.loadVideoById(MUSIC_LIST[prev].videoId, 0);
-
-    if (!isPlaying) playerRef.current?.pauseVideo();
-    else playerRef.current?.playVideo();
+    if (playing) {
+      playerRef.current?.loadVideoById(MUSIC_LIST[prev].videoId, 0);
+    } else {
+      playerRef.current?.cueVideoById(MUSIC_LIST[prev].videoId, 0);
+    }
   };
 
   const toggleMute = () => {
@@ -264,7 +264,7 @@ export default function MusicPlayer() {
       {!hideUI && (
         <div
           className={`md:fixed left-1/2 -translate-x-1/2 z-50 transition
-            ${collapsed ? "bottom-2" : "bottom-24"}
+            ${collapsed ? "bottom-6" : "bottom-28"}
           `}
         >
           <button
@@ -532,7 +532,7 @@ export default function MusicPlayer() {
                   <button
                     key={item.videoId}
                     onClick={() => {
-                      playerRef.current?.loadVideoById(MUSIC_LIST[idx].videoId, 0);
+                      playerRef.current?.cueVideoById(MUSIC_LIST[idx].videoId, 0);
                       setCurrentIndex(idx);
                       setPlaying(true);
                       setShowList(false);

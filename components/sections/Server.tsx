@@ -35,7 +35,7 @@ export default function Server() {
         <h2
           className="
             relative
-            text-3xl md:text-4xl
+            text-2xl md:text-3xl
             font-semibold
             tracking-[0.1em]
             bg-gradient-to-r
@@ -46,7 +46,7 @@ export default function Server() {
             text-transparent
           "
         >
-          SERVER
+          니니밍의 순간들
         </h2>
 
         {/* 장식 라인 */}

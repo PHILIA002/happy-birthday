@@ -19,7 +19,7 @@ export default function ClientShell({
     <MusicPlayerProvider>
       <Header />
 
-      <main className={`flex-1 ${showPlayer ? "pb-28 md:pb-32" : ""}`}>
+      <main className={`flex-1 ${showPlayer ? "pb-4 md:pb-8" : ""}`}>
         {children}
       </main>
 

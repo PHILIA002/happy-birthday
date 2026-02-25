@@ -76,7 +76,7 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // 줄바꿈 막기
+      e.preventDefault();
       handleSubmit();
     }
   };
