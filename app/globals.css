@@ -105,6 +105,27 @@ body::before {
   animation: sparkleFloat 3.2s ease-in-out infinite;
 }
 
+@keyframes lineGlow {
+  0% { opacity:.2 }
+  50% { opacity:.8 }
+  100% { opacity:.2 }
+}
+
+.animate-lineGlow{
+  animation: lineGlow 4s ease-in-out infinite;
+}
+
+.cinematic-card{
+  transition: all .7s cubic-bezier(.2,.8,.2,1);
+  box-shadow:
+    0 20px 60px rgba(160,130,255,.18),
+    inset 0 1px rgba(255,255,255,.35);
+}
+
+.cinematic-card:hover{
+  transform: translateY(-6px) scale(1.02);
+}
+
 @keyframes float {
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
@@ -129,15 +150,6 @@ body::before {
 
 .animate-caret {
   animation: caretBlink 1.2s infinite;
-}
-
-@keyframes inkSpread {
-  0% { filter: blur(4px); opacity: 0.4; }
-  100% { filter: blur(0); opacity: 1; }
-}
-
-.ink {
-  animation: inkSpread 0.35s ease-out forwards;
 }
 
 /* ===============================

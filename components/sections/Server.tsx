@@ -11,7 +11,54 @@ export default function Server() {
   const [modal, setModal] = useState<string | null>(null);
 
   return (
-    <section className="relative py-12 md:py-24 overflow-hidden">
+    <section className="relative py-14 md:py-24 overflow-hidden">
+
+      <div
+        className="
+          pointer-events-none
+          absolute left-1/2 top-0 bottom-0
+          -translate-x-1/2
+          w-[2px]
+          bg-gradient-to-b
+          from-transparent
+          via-[#C8B8FF]/70
+          to-transparent
+          blur-[0.4px]
+          opacity-60
+          hidden md:block
+          animate-lineGlow
+        "
+      />
+
+      {/* MAIN */}
+      <div className="relative flex flex-col items-center mb-32 md:mb-56 px-6">
+        {SERVERS[0].imgSrc && (
+          <img
+            src={SERVERS[0].imgSrc}
+            alt={SERVERS[0].title}
+            onClick={() => setModal(SERVERS[0].imgSrc!)}
+            className="
+              w-full max-w-[720px]
+              aspect-[16/9]
+              object-contain
+              rounded-[28px] md:rounded-3xl
+              border border-white/20
+              shadow-[0_25px_70px_rgba(180,160,255,0.18)]
+              mb-10 md:mb-14
+              cursor-zoom-in
+              transition duration-500
+              hover:scale-[1.02]
+            "
+          />
+        )}
+
+        <GlassCard className="px-9 md:px-14 py-6 md:py-8">
+          <h2 className="flex items-center gap-3 text-lg md:text-2xl font-semibold" style={{ color: "#4F3F6B" }}>
+            <TopIcon className="w-5 h-5 md:w-6 md:h-6" style={{ color: "#7C66B4" }} />
+            {SERVERS[0].title}
+          </h2>
+        </GlassCard>
+      </div>
 
       {/* 상단 타이틀 */}
       <div className="relative flex flex-col items-center mb-16 md:mb-24 px-6">
@@ -63,57 +110,8 @@ export default function Server() {
         />
       </div>
 
-      {/* 타임라인 */}
-      <div
-        className="
-          hidden md:block
-          absolute left-1/2
-          top-[920px] bottom-0
-          -translate-x-1/2
-          w-[2px]
-          bg-gradient-to-b
-          from-[#E9DEFF]/50
-          via-[#C8B8FF]/40
-          to-transparent
-          opacity-50
-          blur-[0.3px]
-          pointer-events-none
-        "
-      />
-
-      {/* 메인 서버 */}
-      <div className="relative flex flex-col items-center mb-40 md:mb-52 px-6">
-        {SERVERS[0].imgSrc && (
-          <img
-            src={SERVERS[0].imgSrc}
-            alt={SERVERS[0].title}
-            onClick={() => setModal(SERVERS[0].imgSrc!)}
-            className="
-              w-full max-w-[760px]
-              h-[280px] md:h-[400px]
-              object-contain
-              rounded-[28px] md:rounded-3xl
-              border border-white/20
-              shadow-[0_25px_70px_rgba(180,160,255,0.18)]
-              mb-12 md:mb-14
-              cursor-zoom-in
-              transition duration-500
-              hover:scale-[1.02]
-              hover:shadow-[0_35px_90px_rgba(180,160,255,0.25)]
-            "
-          />
-        )}
-
-        <GlassCard className="px-10 md:px-14 py-7 md:py-8 backdrop-blur-xl">
-          <h2 className="flex items-center gap-3 text-lg md:text-2xl font-semibold" style={{ color: "#4F3F6B" }}>
-            <TopIcon className="w-5 h-5 md:w-6 md:h-6" style={{ color: "#7C66B4" }} />
-            {SERVERS[0].title}
-          </h2>
-        </GlassCard>
-      </div>
-
       {/* 타임라인 서버들 */}
-      <div className="space-y-28 md:space-y-44">
+      <div className="space-y-28 md:space-y-48">
         {SERVERS.slice(1).map((item, index) => {
           const Icon = item.icon;
           const hasImage = Boolean(item.imgSrc);
@@ -123,47 +121,43 @@ export default function Server() {
             <RevealCard
               key={index}
               index={index}
-              className={`relative max-w-6xl mx-auto px-6 ${hasImage
-                ? `flex flex-col md:flex-row items-center gap-8 md:gap-12 ${isReversed ? "md:flex-row-reverse" : ""}`
-                : "flex justify-center"
-                }`}
+              className="
+                relative max-w-6xl mx-auto px-4 md:px-6
+                py-6 md:py-10
+              "
             >
-              {/* 중앙 감성 도트 */}
-              <div
+              {/* dot */}
+              <GlassCard
                 className="
-                  flex
-                  absolute -top-4 md:-top-5
+                  absolute
+                  -top-3 md:-top-4
                   left-1/2 -translate-x-1/2
-                  items-center justify-center
                   w-7 h-7 md:w-8 md:h-8
-                  rounded-full
-                  bg-white/30
-                  backdrop-blur-md
-                  border border-white/40
-                  shadow-[0_0_20px_rgba(160,130,255,0.5)]
-                  transition duration-300
-                  hover:scale-110
-                  z-20
                 "
               >
                 <Sparkle
-                  className="w-3.5 h-3.5 md:w-4 md:h-4 animate-sparkle"
-                  style={{
-                    color: "#9F84FF",
-                    filter: "drop-shadow(0 0 4px rgba(160,130,255,0.6))",
-                  }}
+                  className="w-full h-full p-2 animate-sparkle"
+                  style={{ color: "#9F84FF" }}
                 />
-              </div>
+              </GlassCard>
 
-              {hasImage ? (
-                <div className={`flex flex-col md:flex-row items-center gap-6 md:gap-8 w-full ${isReversed ? "md:flex-row-reverse" : ""}`}>
+              <div
+                className={`
+                  flex flex-col
+                  md:flex-row
+                  items-center
+                  gap-7 md:gap-12
+                  ${isReversed ? "md:flex-row-reverse" : ""}
+                `}
+              >
+                {hasImage && (
                   <img
                     src={item.imgSrc!}
                     alt={item.title}
                     onClick={() => setModal(item.imgSrc!)}
                     className="
-                      w-full max-w-[480px]
-                      h-[220px] md:h-[320px]
+                      w-full max-w-[520px]
+                      aspect-[16/10]
                       object-contain
                       rounded-[26px] md:rounded-3xl
                       border border-white/20
@@ -171,32 +165,39 @@ export default function Server() {
                       cursor-zoom-in
                       transition duration-500
                       hover:scale-[1.03]
-                      hover:shadow-[0_25px_60px_rgba(180,160,255,0.22)]
                     "
                   />
-                  <div className="flex-1 flex justify-center">
-                    <GlassCard className="w-full max-w-md px-7 md:px-9 py-7 md:py-8 text-center backdrop-blur-xl transition duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(160,130,255,0.2)]">
-                      {item.date && <p className="mb-2 text-[11px] md:text-xs tracking-[0.25em]" style={{ color: "#8B6FE8" }}>{item.date}</p>}
-                      <h3 className="flex items-center justify-center gap-2 text-base md:text-xl font-semibold" style={{ color: "#4F3F6B" }}>
-                        <Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: "#7C66B4" }} />
-                        {item.title}
-                      </h3>
-                      {item.text && <p className="mt-2 text-sm md:text-base leading-relaxed" style={{ color: "#6E5A8A" }}>{item.text}</p>}
-                    </GlassCard>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex justify-center w-full">
-                  <GlassCard className="w-full max-w-lg px-7 md:px-9 py-7 md:py-8 text-center backdrop-blur-xl transition duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(160,130,255,0.2)]">
-                    {item.date && <p className="mb-2 text-[11px] md:text-xs tracking-[0.25em]" style={{ color: "#8B6FE8" }}>{item.date}</p>}
+                )}
+
+                <div className="flex-1 flex justify-center w-full">
+                  <GlassCard
+                    className="
+                      w-full
+                      max-w-[320px] md:max-w-md
+                      px-5 md:px-9
+                      py-6 md:py-8
+                      text-center
+                    "
+                  >
+                    {item.date && (
+                      <p className="mb-2 text-[11px] md:text-xs tracking-[0.25em]" style={{ color: "#8B6FE8" }}>
+                        {item.date}
+                      </p>
+                    )}
+
                     <h3 className="flex items-center justify-center gap-2 text-base md:text-xl font-semibold" style={{ color: "#4F3F6B" }}>
                       <Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: "#7C66B4" }} />
                       {item.title}
                     </h3>
-                    {item.text && <p className="mt-2 text-sm md:text-base leading-relaxed" style={{ color: "#6E5A8A" }}>{item.text}</p>}
+
+                    {item.text && (
+                      <p className="mt-2 text-sm md:text-base leading-relaxed" style={{ color: "#6E5A8A" }}>
+                        {item.text}
+                      </p>
+                    )}
                   </GlassCard>
                 </div>
-              )}
+              </div>
             </RevealCard>
           );
         })}
@@ -206,12 +207,23 @@ export default function Server() {
       {modal && (
         <div
           onClick={() => setModal(null)}
-          className="fixed inset-0 z-[999] bg-black/90 backdrop-blur-md flex items-center justify-center p-6 cursor-zoom-out animate-fadeIn"
+          className="
+            fixed inset-0 z-[999]
+            bg-black/85 backdrop-blur-lg
+            flex items-center justify-center
+            p-6 md:p-10
+            animate-fadeIn
+          "
         >
           <img
             src={modal}
             alt=""
-            className="max-h-[90vh] w-auto rounded-2xl shadow-[0_40px_120px_rgba(0,0,0,0.5)]"
+            className="
+              max-h-[92vh]
+              max-w-[92vw]
+              rounded-2xl
+              shadow-[0_40px_120px_rgba(0,0,0,0.5)]
+            "
           />
         </div>
       )}
