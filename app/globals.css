@@ -12,17 +12,31 @@ body {
 body {
   font-family: var(--font-jua), var(--font-baloo), sans-serif;
   background: #ddcfe7;
-  /* cursor: none; */
+  cursor: url("/cursor.gif") 8 8, auto;
 }
 
-/* .cursor {
+.cursor-companion {
   position: fixed;
-  width: 48px;
-  height: 48px;
+  top: 0;
+  left: 0;
+  width: 128px;
   pointer-events: none;
-  transform: translate(-50%, -50%);
-  background: url("/cursor.gif") center/contain no-repeat;
-} */
+  z-index: 9999;
+  will-change: transform;
+}
+
+.cursor-companion img {
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@media (hover: none) {
+  .cursor-companion {
+    display: none;
+  }
+}
 
 body::after {
   content: "";
@@ -30,7 +44,7 @@ body::after {
   inset: 0;
   z-index: -2;
 
-  background-image: url("/images/bg.png");
+  background-image: url("/bg.gif");
   background-position: center;
   background-size: 100% auto;
   background-repeat: no-repeat;

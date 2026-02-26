@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Baloo_2, Jua } from "next/font/google";
 import ClientShell from "@/components/ClientShell";
+import Cursor from "@/components/Cursor";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -46,6 +47,7 @@ export default function RootLayout({
           min-h-screen flex flex-col
         `}
       >
+        <Cursor />
         <ClientShell>{children}</ClientShell>
       </body>
     </html>
