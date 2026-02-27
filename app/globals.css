@@ -3,8 +3,7 @@
 /* ===============================
    BASE
    =============================== */
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
 }
@@ -12,30 +11,6 @@ body {
 body {
   font-family: var(--font-jua), var(--font-baloo), sans-serif;
   background: #ddcfe7;
-  cursor: url("/cursor.gif") 8 8, auto;
-}
-
-.cursor-companion {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 128px;
-  pointer-events: none;
-  z-index: 9999;
-  will-change: transform;
-}
-
-.cursor-companion img {
-  width: 100%;
-  height: auto;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-@media (hover: none) {
-  .cursor-companion {
-    display: none;
-  }
 }
 
 body::after {
