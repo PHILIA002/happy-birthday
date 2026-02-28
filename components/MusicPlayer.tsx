@@ -421,7 +421,7 @@ export default function MusicPlayer() {
               group-hover:translate-y-0
             "
           >
-            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">Space</span> ▶︎/⏸</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">Space</span> 재생/정지</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">←</span> 이전</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">→</span> 다음</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">↑ , ↓</span> 볼륨</span>
