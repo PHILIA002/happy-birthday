@@ -81,7 +81,7 @@ export default function Countdown() {
 
         <span
           className={`
-            text-sm md:text-lg
+            text-sm md:text-base
             font-semibold tracking-wide
             tabular-nums
             bg-clip-text text-transparent

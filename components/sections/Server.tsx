@@ -13,23 +13,6 @@ export default function Server() {
   return (
     <section className="relative py-14 md:py-24 overflow-hidden">
 
-      <div
-        className="
-          pointer-events-none
-          absolute left-1/2 top-0 bottom-0
-          -translate-x-1/2
-          w-[2px]
-          bg-gradient-to-b
-          from-transparent
-          via-[#C8B8FF]/70
-          to-transparent
-          blur-[0.4px]
-          opacity-60
-          hidden md:block
-          animate-lineGlow
-        "
-      />
-
       {/* MAIN */}
       <div className="relative flex flex-col items-center mb-32 md:mb-56 px-6">
         {SERVERS[0].imgSrc && (
@@ -60,52 +43,49 @@ export default function Server() {
         </GlassCard>
       </div>
 
-      {/* 상단 타이틀 */}
-      <div className="relative flex flex-col items-center mb-16 md:mb-24 px-6">
-        {/* 은은한 글로우 배경 */}
+      <div className="relative flex flex-col items-center mb-28 md:mb-36 px-6">
+
+        {/* radial glow */}
         <div
           className="
             absolute
-            -top-2
-            w-40 h-16
-            bg-gradient-to-r
-            from-[#C8B8FF]/40
-            via-[#A78BFA]/30
-            to-[#8B6FE8]/20
-            blur-2xl
-            opacity-25
+            -top-10
+            w-72 h-32
+            bg-[radial-gradient(circle_at_50%_50%,rgba(167,139,250,0.45),transparent_70%)]
+            blur-3xl
+            opacity-70
             pointer-events-none
           "
         />
 
-        {/* 타이틀 */}
+        {/* 제목 */}
         <h2
           className="
             relative
             text-2xl md:text-3xl
             font-semibold
-            tracking-[0.1em]
+            tracking-[0.14em]
             bg-gradient-to-r
-            from-[#7C66B4]
-            via-[#A78BFA]/80
-            to-[#BDA6FF]/90
+            from-[#6E5A8A]
+            via-[#8B6FE8]
+            to-[#B7A6FF]
             bg-clip-text
             text-transparent
+            drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]
           "
         >
           니니밍의 순간들
         </h2>
 
-        {/* 장식 라인 */}
+        {/* underline */}
         <div
           className="
-            mt-3
-            w-20 h-[1.5px]
+            mt-5
+            w-24 h-[1.5px]
             bg-gradient-to-r
             from-transparent
-            via-[#B7A6FF]/60
+            via-[#A78BFA]/60
             to-transparent
-            opacity-50
           "
         />
       </div>
@@ -140,6 +120,25 @@ export default function Server() {
                   style={{ color: "#9F84FF" }}
                 />
               </GlassCard>
+
+              <div
+                className="
+                  pointer-events-none
+                  absolute left-1/2
+                  top-0
+                  bottom-0
+                  -translate-x-1/2
+                  w-[2px]
+                  bg-gradient-to-b
+                  from-[#C8B8FF]/0
+                  via-[#C8B8FF]/80
+                  to-transparent
+                  blur-[0.3px]
+                  opacity-80
+                  hidden md:block
+                  animate-lineGlow
+                "
+              />
 
               <div
                 className={`

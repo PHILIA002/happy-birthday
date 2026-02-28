@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import GlassCard from "../GlassCard";
 import { LETTER_TEXT } from "@/data/letter";
 import Caret from "../Caret";
@@ -15,7 +15,7 @@ export default function Letter() {
   // ---------- Birthday Check ----------
   useEffect(() => {
     const now = new Date();
-    const birthday = new Date(`${now.getFullYear()}-02-19T00:00:00+09:00`);
+    const birthday = new Date(`${now.getFullYear()}-04-19T00:00:00+09:00`);
     setIsBirthdayPast(now >= birthday);
   }, []);
 
@@ -64,11 +64,11 @@ export default function Letter() {
               z-10
             "/>
 
-            {/* ===== BOTTOM FOLD (seam fix) ===== */}
+            {/* ===== BOTTOM FOLD ===== */}
             <div
               className="absolute inset-0 z-20"
               style={{
-                clipPath: "polygon(0 100%, 50% 58%, 100% 100%)",
+                clipPath: "polygon(0 100%, 50% 48%, 100% 100%)",
                 background:
                   "linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.05))",
                 backdropFilter: "blur(12px)",
@@ -85,35 +85,70 @@ export default function Letter() {
                 ${opened ? "rotate-x-[170deg]" : ""}
               `}
               style={{
-                clipPath: "polygon(0 0, 100% 0, 50% 56%)",
+                clipPath: "polygon(0 0, 100% 0, 50% 58%)",
                 background:
                   "linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.10))",
-                backdropFilter: "blur(24px)",
                 transformStyle: "preserve-3d",
               }}
             />
 
-            {/* ===== SEAL (smaller responsive) ===== */}
+            {/* ===== SEAL (Stamp Style) ===== */}
             <div
               className={`
                 absolute left-1/2 -translate-x-1/2
-                top-[48%]
-                w-[clamp(38px,8vw,56px)]
+                top-[40%]
+
+                w-[clamp(78px,10vw,100px)]
                 aspect-square
-                rounded-full
-                backdrop-blur-xl
-                bg-gradient-to-br from-white/85 to-white/30
-                border border-white/60
-                shadow-[0_10px_30px_rgba(120,90,255,.35)]
+
+                rotate-[-3deg]
+
                 flex items-center justify-center
-                text-sm md:text-base
-                transition
-                ${opened ? "scale-0 opacity-0" : ""}
+                text-center p-3
+
+                transition-all duration-500
+                ${opened ? "scale-75 opacity-0 rotate-10" : ""}
+
                 z-40
               `}
+              style={{
+                background: "#E9DDFF",
+                boxShadow: "0 6px 14px rgba(0,0,0,0.12)",
+                backgroundImage: "repeating-linear-gradient(45deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 4px)"
+              }}
             >
-              💜
+
+              {/* 내부 테두리 라인 */}
+              <div className="absolute inset-2 border border-[#9E84E6] pointer-events-none" />
+
+              {/* 텍스트 */}
+              <div className="relative z-10">
+                <div
+                  className="text-sm md:text-base font-bold tracking-[0.25em]"
+                  style={{ color: "#5B45A6" }}
+                >
+                  {!isBirthdayPast ? "OPEN" : "FOR YOU"}
+                </div>
+
+                <div
+                  className="text-sm md:text-base tracking-[0.2em]"
+                  style={{ color: "#7B66C9" }}
+                >
+                  {!isBirthdayPast ? "4.19" : ""}
+                </div>
+              </div>
             </div>
+
+            {/* Ground shadow */}
+            <div className="
+              absolute
+              -bottom-7 left-1/2 -translate-x-1/2
+              w-[85%] h-7
+              bg-[radial-gradient(ellipse_at_center,rgba(110,70,200,0.45),transparent_70%)]
+              blur-xl
+              opacity-70
+              pointer-events-none
+            "/>
 
             {/* subtle glow */}
             <div className="
@@ -144,12 +179,20 @@ function LetterCard() {
   }, []);
 
   const body = useHandwriting(LETTER_TEXT, 50);
-
   const thanks = useHandwriting(
     "항상 고마워 🌸",
     40,
     { start: body.done }
   );
+
+  const endRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, [body.display, thanks.display]);
 
   return (
     <GlassCard
@@ -176,6 +219,7 @@ function LetterCard() {
           "
           style={{
             color: "#5A4A72",
+            letterSpacing: "0.02em",
             lineHeight: "30px",
             backgroundImage: `
               repeating-linear-gradient(
@@ -195,6 +239,8 @@ function LetterCard() {
           {thanks.display ?? ""}
           {body.done && !thanks.done && <Caret small />}
         </p>
+
+        <div ref={endRef} />
       </div>
     </GlassCard>
   );

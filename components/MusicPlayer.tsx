@@ -37,6 +37,7 @@ export default function MusicPlayer() {
   const [showList, setShowList] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const current = MUSIC_LIST[currentIndex];
   const pathname = usePathname();
@@ -64,18 +65,6 @@ export default function MusicPlayer() {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, [currentIndex]);
-
-  /* repeat toggle */
-  const toggleRepeat = () => {
-    setRepeatMode((m) => (m === "all" ? "one" : "all"));
-  };
-
-  /* volume */
-  const handleVolume = (e: any) => {
-    const v = Number(e.target.value);
-    setVolume(v);
-    playerRef.current?.setVolume(v);
-  };
 
   /* time formatter */
   const formatTime = (t: number) => {
@@ -153,7 +142,9 @@ export default function MusicPlayer() {
   };
 
   const prevTrack = () => {
-    const prev = (currentIndex - 1) % MUSIC_LIST.length;
+    const prev =
+      (currentIndex - 1 + MUSIC_LIST.length) % MUSIC_LIST.length;
+
     setCurrentIndex(prev);
 
     if (playing) {
@@ -164,13 +155,52 @@ export default function MusicPlayer() {
   };
 
   const toggleMute = () => {
-    if (volume === 0) {
-      setVolume(lastVolume);
-      playerRef.current?.setVolume(lastVolume);
+    if (!playerRef.current) return;
+
+    const currentVol = playerRef.current.getVolume();
+
+    if (currentVol === 0) {
+      const restoreVolume = lastVolume > 0 ? lastVolume : 70;
+      playerRef.current.setVolume(restoreVolume);
+      setVolume(restoreVolume);
+      setToast("음소거 해제");
     } else {
-      setLastVolume(volume);
+      setLastVolume(currentVol);
+      playerRef.current.setVolume(0);
       setVolume(0);
-      playerRef.current?.setVolume(0);
+      setToast("음소거");
+    }
+  };
+
+  const toggleRepeat = () => {
+    setRepeatMode((m) => {
+      const next = m === "all" ? "one" : "all";
+      setToast(next === "one" ? "한 곡 반복" : "전체 반복");
+      return next;
+    });
+  };
+
+  const handleVolume = (e: any) => {
+    const v = Number(e.target.value);
+    setVolume(v);
+    playerRef.current?.setVolume(v);
+  };
+
+  const adjustVolume = (delta: number) => {
+    if (!playerRef.current) return;
+
+    const currentVol = playerRef.current.getVolume();
+    let nextVol = currentVol + delta;
+
+    nextVol = Math.max(0, Math.min(100, nextVol));
+
+    playerRef.current.setVolume(nextVol);
+    setVolume(nextVol);
+
+    if (nextVol === 0) {
+      setToast("음소거");
+    } else {
+      setToast(`볼륨 ${nextVol}%`);
     }
   };
 
@@ -212,6 +242,81 @@ export default function MusicPlayer() {
     const i = setInterval(save, 1000);
     return () => clearInterval(i);
   }, [currentIndex, volume, repeatMode, playerReady]);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 800);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  /* ================= Keyboard Control ================= */
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!playerReady) return;
+
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      switch (e.code) {
+        case "Space":
+          e.preventDefault();
+          togglePlay();
+          break;
+
+        case "KeyM":
+          e.preventDefault();
+          toggleMute();
+          break;
+
+        case "ArrowUp":
+          e.preventDefault();
+          adjustVolume(5);
+          break;
+
+        case "ArrowDown":
+          e.preventDefault();
+          adjustVolume(-5);
+          break;
+
+        case "KeyR":
+          e.preventDefault();
+          toggleRepeat();
+          break;
+
+        case "KeyL":
+          e.preventDefault();
+          setShowList((prev) => {
+            const next = !prev;
+            setToast(next ? "플레이리스트 열림" : "플레이리스트 닫힘");
+            return next;
+          });
+          break;
+
+        case "ArrowLeft":
+          e.preventDefault();
+          prevTrack();
+          break;
+
+        case "ArrowRight":
+          e.preventDefault();
+          nextTrack();
+          break;
+
+        case "KeyP":
+          e.preventDefault();
+          setCollapsed((prev) => {
+            const next = !prev;
+            setToast(next ? "플레이어 닫힘" : "플레이어 열림");
+            return next;
+          });
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [playerReady, currentIndex, playing, repeatMode, volume]);
 
   /* ================= Render ================= */
 
@@ -264,7 +369,7 @@ export default function MusicPlayer() {
       {!hideUI && (
         <div
           className={`md:fixed left-1/2 -translate-x-1/2 z-50 transition
-            ${collapsed ? "bottom-6" : "bottom-28"}
+            ${collapsed ? "bottom-8" : "bottom-28"}
           `}
         >
           <button
@@ -289,7 +394,43 @@ export default function MusicPlayer() {
 
       {/* Player UI */}
       {!hideUI && !collapsed && (
-        <footer className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl md:px-8">
+        <footer className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-4xl md:px-8 group">
+          <div
+            className="
+              w-2xl
+              absolute
+              -top-9
+              left-1/2 -translate-x-1/2
+
+              text-[11px]
+              px-4 py-1.5
+              rounded-full
+              backdrop-blur-md
+              bg-white/30
+              border border-white/40
+              text-[#5F4C84]
+              flex justify-center gap-5
+
+              opacity-0
+              translate-y-2
+              pointer-events-none
+
+              transition-all duration-300 ease-out
+
+              group-hover:opacity-100
+              group-hover:translate-y-0
+            "
+          >
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">Space</span> ▶︎/⏸</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">←</span> 이전</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">→</span> 다음</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">↑ , ↓</span> 볼륨</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">M</span> 음소거</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">R</span> 반복</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">L</span> 목록</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">P</span> 열기/닫기</span>
+          </div>
+
           <GlassCard className="
             px-5
             py-2
@@ -550,6 +691,30 @@ export default function MusicPlayer() {
             )}
           </GlassCard>
         </footer>
+      )}
+      {toast && (
+        <div
+          className={`
+            fixed left-1/2 -translate-x-1/2
+            px-4 py-2
+            text-xs
+            rounded-full
+            backdrop-blur-md
+            bg-white/30
+            border border-white/40
+            shadow-md
+            text-[#4F3F6B]
+            transition-all duration-300 ease-out
+            ${collapsed
+              ? "bottom-16"
+              : showList
+                ? "bottom-76"
+                : "bottom-36"
+            }
+          `}
+        >
+          {toast}
+        </div>
       )}
     </>
   );

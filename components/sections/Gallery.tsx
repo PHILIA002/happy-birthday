@@ -60,7 +60,7 @@ export default function Gallery() {
                         `
                         : `
                           scale-[0.84] md:scale-[0.80] lg:scale-[0.76]
-                          opacity-45 blur-[0.6px]
+                          blur-[3px]
                         `
                     }
                   `}
