@@ -96,9 +96,9 @@ export default function Letter() {
             <div
               className={`
                 absolute left-1/2 -translate-x-1/2
-                top-[40%]
+                top-[36%] sm:top-[38%] md:top-[40%]
 
-                w-[clamp(78px,10vw,100px)]
+                w-[72px] sm:w-[84px] md:w-[100px]
                 aspect-square
 
                 rotate-[-3deg]
@@ -124,14 +124,14 @@ export default function Letter() {
               {/* 텍스트 */}
               <div className="relative z-10">
                 <div
-                  className="text-sm md:text-base font-bold tracking-[0.25em]"
+                  className="text-xs sm:text-sm md:text-base font-bold tracking-[0.22em]"
                   style={{ color: "#5B45A6" }}
                 >
                   {!isBirthdayPast ? "OPEN" : "FOR YOU"}
                 </div>
 
                 <div
-                  className="text-sm md:text-base tracking-[0.2em]"
+                  className="text-xs sm:text-sm md:text-base tracking-[0.18em]"
                   style={{ color: "#7B66C9" }}
                 >
                   {!isBirthdayPast ? "4.19" : ""}

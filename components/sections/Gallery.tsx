@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GALLERY } from "@/data/gallery";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -11,6 +11,27 @@ export default function Gallery() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
   const [modal, setModal] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!modal) return;
+
+    const scrollY = window.scrollY;
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.overflow = "";
+      window.scrollTo(0, scrollY);
+    };
+  }, [modal]);
 
   return (
     <section className="py-12 md:py-24 overflow-visible">
@@ -51,14 +72,13 @@ export default function Gallery() {
                     transition-all duration-700 ease-out
                     cursor-zoom-in
                     
-                    ${
-                      activeIndex === idx
-                        ? `
+                    ${activeIndex === idx
+                      ? `
                           scale-100 opacity-100
                           shadow-[0_16px_30px_rgba(120,80,200,0.32)]
                           md:shadow-[0_20px_42px_rgba(120,80,200,0.38)]
                         `
-                        : `
+                      : `
                           scale-[0.84] md:scale-[0.80] lg:scale-[0.76]
                           blur-[3px]
                         `
@@ -83,10 +103,9 @@ export default function Gallery() {
                 cursor-pointer
                 flex items-center justify-center
                 transition-all duration-300 ease-out
-                ${
-                  activeIndex === idx
-                    ? "border-[#a78bf4] scale-105 shadow-[0_0_8px_rgba(139,108,255,0.45)]"
-                    : "border-[#cfc7e6] opacity-70 hover:opacity-100"
+                ${activeIndex === idx
+                  ? "border-[#a78bf4] scale-105 shadow-[0_0_8px_rgba(139,108,255,0.45)]"
+                  : "border-[#cfc7e6] opacity-70 hover:opacity-100"
                 }
               `}
             >

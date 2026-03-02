@@ -1,19 +1,13 @@
-import {
-  BicepsFlexed, Castle, HeartPulse, Tv, MessageCircle, Package, RefreshCcw,
-  Building2, Layers, Zap, Train, Music, Crown, Sword, Swords, Pickaxe,
-  FlameKindling,
-  TentTree,
-  Hammer,
-  Anvil,
-  Plane,
-  Moon,
+import { 
+  Anvil, Atom, Building2, Castle, Hammer, HardHat,
+  Moon, Pickaxe, Plane, Radiation, Swords, TentTree, Tv
 } from "lucide-react";
 
 export const SERVERS = [
   {
     title: "지력사무소",
     imgSrc: "/servers/지력사무소.webp",
-    icon: BicepsFlexed,
+    icon: HardHat,
   },
   {
     date: "2023.01 ~",
@@ -27,7 +21,7 @@ export const SERVERS = [
     title: "소나랜드",
     text: "플라즈마단",
     imgSrc: "/servers/소나랜드.png",
-    icon: HeartPulse,
+    icon: Atom,
   },
   {
     date: "2023.08 ~",
@@ -46,7 +40,7 @@ export const SERVERS = [
     date: "2024.03 ~",
     title: "포켓꾸",
     imgSrc: null,
-    icon: Package,
+    icon: Atom,
   },
   {
     date: "2024.09 ~",
@@ -67,7 +61,7 @@ export const SERVERS = [
     title: "마병대 시즌2",
     text: "특별소대",
     imgSrc: "/servers/마병대2.webp",
-    icon: Sword,
+    icon: Swords,
   },
   {
     date: "2025.02 ~",
@@ -80,7 +74,7 @@ export const SERVERS = [
     title: "퍼켓몬: PERKeMON",
     text: "바스코프",
     imgSrc: "/servers/퍼켓몬.webp",
-    icon: Crown,
+    icon: Atom,
   },
   {
     date: "2025.03 ~",
@@ -88,6 +82,13 @@ export const SERVERS = [
     text: "제주경찰",
     imgSrc: "/servers/린코레일.webp",
     icon: Plane,
+  },
+  {
+    date: "2025.06 ~",
+    title: "포창서버",
+    text: "지력사무소",
+    imgSrc: "/servers/포창서버.png",
+    icon: Radiation,
   },
   {
     date: "2025.07 ~",
@@ -109,6 +110,13 @@ export const SERVERS = [
     text: "2소대",
     imgSrc: "/servers/마병대3.webp",
     icon: Swords,
+  },
+  {
+    date: "2025.10 ~",
+    title: "육창서버",
+    text: "지력사무소",
+    imgSrc: "/servers/육창서버.png",
+    icon: Radiation,
   },
   {
     date: "2025.11 ~",

@@ -1,7 +1,6 @@
 "use client";
 
-import { Sparkle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SERVERS } from "@/data/servers";
 import GlassCard from "../GlassCard";
 import RevealCard from "../RevealCard";
@@ -9,6 +8,27 @@ import RevealCard from "../RevealCard";
 export default function Server() {
   const TopIcon = SERVERS[0].icon;
   const [modal, setModal] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!modal) return;
+
+    const scrollY = window.scrollY;
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.overflow = "";
+      window.scrollTo(0, scrollY);
+    };
+  }, [modal]);
 
   return (
     <section className="relative py-14 md:py-24 overflow-hidden">
@@ -43,49 +63,63 @@ export default function Server() {
         </GlassCard>
       </div>
 
-      <div className="relative flex flex-col items-center mb-28 md:mb-36 px-6">
+      <div className="relative flex flex-col items-center mb-32 md:mb-40 px-6">
 
-        {/* radial glow */}
+        {/* soft glow behind title */}
         <div
           className="
             absolute
-            -top-10
-            w-72 h-32
-            bg-[radial-gradient(circle_at_50%_50%,rgba(167,139,250,0.45),transparent_70%)]
+            -top-12
+            w-[420px] h-[180px]
+            bg-[radial-gradient(circle_at_50%_50%,rgba(167,139,250,0.35),transparent_70%)]
             blur-3xl
             opacity-70
             pointer-events-none
           "
         />
 
-        {/* 제목 */}
+        {/* sub text */}
+        <p
+          className="
+            mb-3
+            text-[11px] md:text-xs
+            tracking-[0.45em]
+            text-[#9F84FF]/80
+            uppercase
+          "
+        >
+          memories of niniming
+        </p>
+
+        {/* main title */}
         <h2
           className="
             relative
-            text-2xl md:text-3xl
+            text-3xl md:text-4xl
             font-semibold
-            tracking-[0.14em]
+            tracking-[0.18em]
             bg-gradient-to-r
             from-[#6E5A8A]
             via-[#8B6FE8]
-            to-[#B7A6FF]
+            to-[#CBB8FF]
             bg-clip-text
             text-transparent
-            drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+            drop-shadow-[0_6px_18px_rgba(139,111,232,0.35)]
           "
         >
           니니밍의 순간들
         </h2>
 
-        {/* underline */}
+        {/* underline glow */}
         <div
           className="
-            mt-5
-            w-24 h-[1.5px]
+            mt-6
+            w-28 h-[2px]
             bg-gradient-to-r
             from-transparent
-            via-[#A78BFA]/60
+            via-[#B7A6FF]/70
             to-transparent
+            blur-[0.3px]
           "
         />
       </div>
@@ -106,21 +140,20 @@ export default function Server() {
                 py-6 md:py-10
               "
             >
-              {/* dot */}
-              <GlassCard
+              {/* 도트 */}
+              <div
                 className="
                   absolute
-                  -top-3 md:-top-4
+                  -top-2
                   left-1/2 -translate-x-1/2
-                  w-7 h-7 md:w-8 md:h-8
+                  w-3 h-3 md:w-3.5 md:h-3.5
+                  rounded-full
+                  bg-[#B7A6FF]/50
+                  shadow-[0_0_8px_rgba(167,139,250,0.35)]
                 "
-              >
-                <Sparkle
-                  className="w-full h-full p-2 animate-sparkle"
-                  style={{ color: "#9F84FF" }}
-                />
-              </GlassCard>
+              />
 
+              {/* 타임라인 라인 */}
               <div
                 className="
                   pointer-events-none
@@ -179,18 +212,30 @@ export default function Server() {
                     "
                   >
                     {item.date && (
-                      <p className="mb-2 text-[11px] md:text-xs tracking-[0.25em]" style={{ color: "#8B6FE8" }}>
+                      <p
+                        className="mb-2 text-[11px] md:text-xs tracking-[0.25em]"
+                        style={{ color: "#8B6FE8" }}
+                      >
                         {item.date}
                       </p>
                     )}
 
-                    <h3 className="flex items-center justify-center gap-2 text-base md:text-xl font-semibold" style={{ color: "#4F3F6B" }}>
-                      <Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: "#7C66B4" }} />
+                    <h3
+                      className="flex items-center justify-center gap-2 text-base md:text-xl font-semibold"
+                      style={{ color: "#4F3F6B" }}
+                    >
+                      <Icon
+                        className="w-4 h-4 md:w-5 md:h-5"
+                        style={{ color: "#7C66B4" }}
+                      />
                       {item.title}
                     </h3>
 
                     {item.text && (
-                      <p className="mt-2 text-sm md:text-base leading-relaxed" style={{ color: "#6E5A8A" }}>
+                      <p
+                        className="mt-2 text-sm md:text-base leading-relaxed"
+                        style={{ color: "#6E5A8A" }}
+                      >
                         {item.text}
                       </p>
                     )}
