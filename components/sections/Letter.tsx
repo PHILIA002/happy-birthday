@@ -10,18 +10,21 @@ export default function Letter() {
   const [opened, setOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
   const [shake, setShake] = useState(false);
-  const [isBirthdayPast, setIsBirthdayPast] = useState(false);
+  const [isBirthday, setIsBirthday] = useState(false);
 
   // ---------- Birthday Check ----------
   useEffect(() => {
     const now = new Date();
-    const birthday = new Date(`${now.getFullYear()}-04-19T00:00:00+09:00`);
-    setIsBirthdayPast(now >= birthday);
+
+    const start = new Date(`${now.getFullYear()}-04-19T00:00:00+09:00`);
+    const end = new Date(`${now.getFullYear()}-04-20T00:00:00+09:00`);
+
+    setIsBirthday(now >= start && now < end);
   }, []);
 
   // ---------- Open Flow ----------
   const openEnvelope = () => {
-    if (!isBirthdayPast) {
+    if (!isBirthday) {
       setShake(true);
       setTimeout(() => setShake(false), 500);
       return;
@@ -51,6 +54,7 @@ export default function Letter() {
               overflow-hidden
               shadow-[0_20px_160px_rgba(120,90,255,.15)]
               ${shake ? "animate-envelope-shake" : ""}
+              ${isBirthday ? "animate-envelope-glow" : ""}
             `}
           >
             {/* ===== GLASS BASE ===== */}
@@ -127,14 +131,14 @@ export default function Letter() {
                   className="text-xs sm:text-sm md:text-base font-bold tracking-[0.22em]"
                   style={{ color: "#5B45A6" }}
                 >
-                  {!isBirthdayPast ? "OPEN" : "FOR YOU"}
+                  {!isBirthday ? "OPEN" : "FOR YOU"}
                 </div>
 
                 <div
                   className="text-xs sm:text-sm md:text-base tracking-[0.18em]"
                   style={{ color: "#7B66C9" }}
                 >
-                  {!isBirthdayPast ? "4.19" : ""}
+                  {!isBirthday ? "4.19" : ""}
                 </div>
               </div>
             </div>

@@ -124,6 +124,45 @@ export default function Server() {
         />
       </div>
 
+      {/* 타임라인 */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          left-1/2
+          top-[1130px]
+          bottom-0
+          -translate-x-1/2
+          w-[2px]
+          hidden md:block
+        "
+      >
+        {/* main line */}
+        <div
+          className="
+            w-full h-full
+            bg-gradient-to-b
+            from-[#CBB8FF]/0
+            via-[#CBB8FF]/50
+            to-[#CBB8FF]/0
+          "
+        />
+
+        {/* glow */}
+        <div
+          className="
+            absolute inset-0
+            blur-[6px]
+            bg-gradient-to-b
+            from-transparent
+            via-[#C8B8FF]/35
+            to-transparent
+            opacity-70
+            animate-lineGlow
+          "
+        />
+      </div>
+
       {/* 타임라인 서버들 */}
       <div className="space-y-28 md:space-y-48">
         {SERVERS.slice(1).map((item, index) => {
@@ -144,34 +183,36 @@ export default function Server() {
               <div
                 className="
                   absolute
-                  -top-2
+                  -top-3
                   left-1/2 -translate-x-1/2
-                  w-3 h-3 md:w-3.5 md:h-3.5
-                  rounded-full
-                  bg-[#B7A6FF]/50
-                  shadow-[0_0_8px_rgba(167,139,250,0.35)]
+                  flex items-center justify-center
                 "
-              />
+              >
+                {/* glow ring */}
+                <div
+                  className="
+                    absolute
+                    w-6 h-6
+                    rounded-full
+                    bg-[#A78BFA]/30
+                    blur-md
+                    animate-pulse
+                  "
+                />
 
-              {/* 타임라인 라인 */}
-              <div
-                className="
-                  pointer-events-none
-                  absolute left-1/2
-                  top-0
-                  bottom-0
-                  -translate-x-1/2
-                  w-[2px]
-                  bg-gradient-to-b
-                  from-[#C8B8FF]/0
-                  via-[#C8B8FF]/80
-                  to-transparent
-                  blur-[0.3px]
-                  opacity-80
-                  hidden md:block
-                  animate-lineGlow
-                "
-              />
+                {/* core */}
+                <div
+                  className="
+                    relative
+                    w-3 h-3
+                    rounded-full
+                    bg-gradient-to-br
+                    from-[#CBB8FF]
+                    to-[#8B6FE8]
+                    shadow-[0_0_10px_rgba(167,139,250,0.9)]
+                  "
+                />
+              </div>
 
               <div
                 className={`

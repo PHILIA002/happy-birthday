@@ -1,5 +1,5 @@
 import { 
-  Anvil, Atom, Building2, Castle, Hammer, HardHat,
+  Anvil, Atom, Building2, Castle, Flame, Hammer, HardHat,
   Moon, Pickaxe, Plane, Radiation, Swords, TentTree, Tv
 } from "lucide-react";
 
@@ -21,7 +21,7 @@ export const SERVERS = [
     title: "소나랜드",
     text: "플라즈마단",
     imgSrc: "/servers/소나랜드.png",
-    icon: Atom,
+    icon: Flame,
   },
   {
     date: "2023.08 ~",
@@ -39,8 +39,9 @@ export const SERVERS = [
   {
     date: "2024.03 ~",
     title: "포켓꾸",
+    text: "무켓단 2기 | 무없무",
     imgSrc: null,
-    icon: Atom,
+    icon: Flame,
   },
   {
     date: "2024.09 ~",
@@ -52,7 +53,7 @@ export const SERVERS = [
   {
     date: "2024.10 ~",
     title: "요양타운",
-    text: "광천파 니밍박",
+    text: "광천이파 니밍박",
     imgSrc: "/servers/요양타운.jpg",
     icon: Building2,
   },
@@ -65,7 +66,7 @@ export const SERVERS = [
   },
   {
     date: "2025.02 ~",
-    title: "오함마 시즌 1/2",
+    title: "오함마",
     imgSrc: null,
     icon: Hammer,
   },
@@ -74,7 +75,7 @@ export const SERVERS = [
     title: "퍼켓몬: PERKeMON",
     text: "바스코프",
     imgSrc: "/servers/퍼켓몬.webp",
-    icon: Atom,
+    icon: Flame,
   },
   {
     date: "2025.03 ~",

@@ -369,7 +369,7 @@ export default function MusicPlayer() {
       {!hideUI && (
         <div
           className={`md:fixed left-1/2 -translate-x-1/2 z-50 transition
-            ${collapsed ? "bottom-8" : "bottom-28"}
+            ${collapsed ? "bottom-4" : "bottom-24"}
           `}
         >
           <button
@@ -424,7 +424,7 @@ export default function MusicPlayer() {
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">Space</span> 재생/정지</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">←</span> 이전</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">→</span> 다음</span>
-            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">↑ , ↓</span> 볼륨</span>
+            <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">↑↓</span> 볼륨</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">M</span> 음소거</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">R</span> 반복</span>
             <span><span className="px-1.5 py-0.5 rounded bg-white/40 text-[10px] font-medium">L</span> 목록</span>

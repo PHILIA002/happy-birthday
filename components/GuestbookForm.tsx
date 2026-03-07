@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import GlassCard from "./GlassCard";
 import Toast from "./Toast";
@@ -9,6 +9,17 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown((c) => c - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -30,7 +41,7 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
   };
 
   const handleSubmit = async () => {
-    if (loading) return;
+    if (loading || cooldown > 0) return;
 
     if (!message.trim()) {
       showToast("메시지를 입력해주세요!", "error");
@@ -67,6 +78,7 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
     } else {
       onConfirmAdd?.(data, tempId);
       showToast("등록 완료! 반영이 늦으면 새로고침 해주세요.", "success");
+      setCooldown(3);
     }
 
     setMessage("");
@@ -74,7 +86,7 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
     setLoading(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -114,6 +126,7 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
           value={name}
           maxLength={20}
           onChange={(e) => setName(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="
             w-full px-4 py-2 my-2 rounded-xl
             bg-white/20
@@ -153,10 +166,20 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
           "
         />
 
+        <div className="flex justify-between text-xs text-[#7C66B4]/80">
+          <span>{message.length} / 300</span>
+
+          {cooldown > 0 && (
+            <span className="text-[#8B6FE8]">
+              {cooldown}초 후 다시 등록 가능
+            </span>
+          )}
+        </div>
+
         {/* 버튼 */}
         <button
           onClick={handleSubmit}
-          disabled={loading}
+          disabled={loading || cooldown > 0}
           className="
             w-full py-3 rounded-xl
             bg-gradient-to-r
@@ -170,11 +193,14 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
             disabled:opacity-50 cursor-pointer
           "
         >
-          {loading ? "등록 중..." : "등록하기"}
+          {loading
+            ? "등록 중..."
+            : cooldown > 0
+              ? `${cooldown}초`
+              : "등록하기"}
         </button>
       </GlassCard>
 
-      {/* ✅ 토스트 */}
       <Toast
         show={toast.show}
         message={toast.message}
