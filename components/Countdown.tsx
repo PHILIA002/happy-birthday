@@ -59,21 +59,21 @@ export default function Countdown() {
           className="
             flex items-center justify-center
             w-4 h-4 md:w-5 md:h-5
-            animate-[floatSoft_3s_ease-in-out_infinite]
+            animate-[floatSoft_2.6s_ease-in-out_infinite]
           "
         >
           {isBirthday ? (
             <Cake
               className="
                 block w-full h-full text-[#efa0b0]
-                animate-[glowPulseCake_2.2s_ease-in-out_infinite]
+                animate-[glowPulseCake_2.6s_ease-in-out_infinite]
               "
             />
           ) : (
             <Timer
               className="
                 block w-full h-full text-[#a78bf4]
-                animate-[glowPulseTimer_2.4s_ease-in-out_infinite]
+                animate-[glowPulseTimer_2.6s_ease-in-out_infinite]
               "
             />
           )}

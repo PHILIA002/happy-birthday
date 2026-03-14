@@ -1,7 +1,7 @@
 "use client";
 
 import GlassCard from "./GlassCard";
-import { CheckLine, RefreshCcw } from "lucide-react";
+import { Info, RefreshCcw } from "lucide-react";
 
 export default function GuestbookGuide() {
   return (
@@ -19,7 +19,7 @@ export default function GuestbookGuide() {
           "
         >
           <h3 className="font-semibold text-[#4F3F6B] flex items-center gap-2">
-            <CheckLine className="w-5 h-5"/>
+            <Info className="w-5 h-5"/>
             <span>방명록 이용 안내</span>
           </h3>
 

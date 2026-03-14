@@ -196,7 +196,7 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
           {loading
             ? "등록 중..."
             : cooldown > 0
-              ? `${cooldown}초`
+              ? `${cooldown}`
               : "등록하기"}
         </button>
       </GlassCard>

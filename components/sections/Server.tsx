@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { SERVERS } from "@/data/servers";
 import GlassCard from "../GlassCard";
 import RevealCard from "../RevealCard";
+import { CircleQuestionMark } from "lucide-react";
 
 export default function Server() {
   const TopIcon = SERVERS[0].icon;
@@ -65,7 +66,7 @@ export default function Server() {
 
       <div className="relative flex flex-col items-center mb-32 md:mb-40 px-6">
 
-        {/* soft glow behind title */}
+        {/* glow */}
         <div
           className="
             absolute
@@ -137,14 +138,11 @@ export default function Server() {
           hidden md:block
         "
       >
-        {/* main line */}
+        {/* line */}
         <div
           className="
             w-full h-full
-            bg-gradient-to-b
-            from-[#CBB8FF]/0
-            via-[#CBB8FF]/50
-            to-[#CBB8FF]/0
+            bg-[linear-gradient(to_bottom,rgba(203,184,255,0.95)_0%,rgba(203,184,255,0.8)_60%,rgba(203,184,255,0.45)_85%,rgba(203,184,255,0)_100%)] 
           "
         />
 
@@ -153,12 +151,8 @@ export default function Server() {
           className="
             absolute inset-0
             blur-[6px]
-            bg-gradient-to-b
-            from-transparent
-            via-[#C8B8FF]/35
-            to-transparent
+            bg-[#C8B8FF]/35
             opacity-70
-            animate-lineGlow
           "
         />
       </div>

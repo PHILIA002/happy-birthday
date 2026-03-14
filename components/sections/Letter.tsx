@@ -1,16 +1,18 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, use } from "react";
 import GlassCard from "../GlassCard";
 import { LETTER_TEXT } from "@/data/letter";
 import Caret from "../Caret";
 import useHandwriting from "@/hooks/useHandwriting";
+import Toast from "../Toast";
 
 export default function Letter() {
   const [opened, setOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
   const [shake, setShake] = useState(false);
   const [isBirthday, setIsBirthday] = useState(false);
+  const [toast, setToast] = useState(false);
 
   // ---------- Birthday Check ----------
   useEffect(() => {
@@ -26,6 +28,8 @@ export default function Letter() {
   const openEnvelope = () => {
     if (!isBirthday) {
       setShake(true);
+      setToast(true);
+
       setTimeout(() => setShake(false), 500);
       return;
     }
@@ -168,6 +172,12 @@ export default function Letter() {
           <LetterCard />
         )}
       </div>
+      <Toast
+        message="편지는 생일에 열려요."
+        show={toast}
+        type="info"
+        onClose={() => setToast(false)}
+      />
     </section>
   );
 }

@@ -28,7 +28,7 @@ export default function Toast({
       ? "bg-emerald-500/90"
       : type === "error"
       ? "bg-red-500/90"
-      : "bg-[#A78BFA]/90";
+      : "bg-gradient-to-br from-[#A78BFA]/90 to-[#8B5CF6]/85";
 
   return (
     <div className="fixed top-16 md:top-12 lg:top-8 left-1/2 -translate-x-1/2">
@@ -41,6 +41,7 @@ export default function Toast({
           font-medium
           shadow-xl
           backdrop-blur-xl
+          border border-white/40
           ${color}
           animate-[toastUp_.35s_ease]
         `}

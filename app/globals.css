@@ -71,7 +71,7 @@ body::before {
     filter: drop-shadow(0 0 0px rgba(167,139,250,0));
   }
   50% {
-    filter: drop-shadow(0 0 6px rgba(167,139,250,0.7));
+    filter: drop-shadow(0 0 8px rgba(167,139,250,0.7));
   }
 }
 
@@ -80,7 +80,7 @@ body::before {
     filter: drop-shadow(0 0 0px rgba(239,160,176,0));
   }
   50% {
-    filter: drop-shadow(0 0 7px rgba(239,160,176,0.8));
+    filter: drop-shadow(0 0 9px rgba(239,160,176,0.8));
   }
 }
 
@@ -92,16 +92,6 @@ body::before {
 
 .animate-sparkle {
   animation: sparkleFloat 3.2s ease-in-out infinite;
-}
-
-@keyframes lineGlow {
-  0% { opacity: .4; }
-  50% { opacity: 1; }
-  100% { opacity: .4; }
-}
-
-.animate-lineGlow{
-  animation: lineGlow 3s ease-in-out infinite;
 }
 
 .cinematic-card{
