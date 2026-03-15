@@ -14,12 +14,10 @@ export default function Copy() {
       <p
         className="
           text-[10px] md:text-xs
-          opacity-40 hover:opacity-70
-          transition-opacity duration-300
-          tracking-wide
+          opacity-40
         "
       >
-        © {new Date().getFullYear()} Niniming Fan Site. <br className="md:hidden"/>
+        © {new Date().getFullYear()} Happy Birthday Niniming. <br className="md:hidden"/>
         Made by PHILIA.
       </p>
     </footer>

@@ -1,5 +1,5 @@
 import { 
-  Anvil, Atom, Building2, Castle, Flame, Hammer, HardHat,
+  Anvil, Building2, Castle, Flame, Hammer, HardHat,
   Moon, Pickaxe, Plane, Radiation, Swords, TentTree, Tv
 } from "lucide-react";
 
@@ -87,7 +87,6 @@ export const SERVERS = [
   {
     date: "2025.06 ~",
     title: "포창서버",
-    text: "지력사무소",
     imgSrc: "/servers/포창서버.png",
     icon: Radiation,
   },
@@ -115,7 +114,6 @@ export const SERVERS = [
   {
     date: "2025.10 ~",
     title: "육창서버",
-    text: "지력사무소",
     imgSrc: "/servers/육창서버.png",
     icon: Radiation,
   },

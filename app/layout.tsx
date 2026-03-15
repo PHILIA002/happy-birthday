@@ -4,8 +4,8 @@ import ClientShell from "@/components/ClientShell";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "니니밍 생일 축하해 🎂",
-  description: "니니밍을 위한 생일 기념 페이지",
+  title: "니니밍 생일 축하해",
+  description: "니니밍 생일 기념 페이지",
 
   icons: {
     icon: "/favicons/favicon.ico",

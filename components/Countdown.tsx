@@ -53,7 +53,7 @@ export default function Countdown() {
 
   return (
     <GlassCard className="px-4 py-2 h-9 md:h-11 rounded-full">
-      <div className="flex items-center justify-center h-full gap-2 whitespace-nowrap">
+      <div className="flex items-center justify-center h-full gap-2 whitespace-nowrap saturate-150">
 
         <span
           className="
@@ -65,14 +65,14 @@ export default function Countdown() {
           {isBirthday ? (
             <Cake
               className="
-                block w-full h-full text-[#efa0b0]
+                block w-full h-full text-[#EFA0B0]
                 animate-[glowPulseCake_2.6s_ease-in-out_infinite]
               "
             />
           ) : (
             <Timer
               className="
-                block w-full h-full text-[#a78bf4]
+                block w-full h-full text-[#A78BFA]
                 animate-[glowPulseTimer_2.6s_ease-in-out_infinite]
               "
             />
