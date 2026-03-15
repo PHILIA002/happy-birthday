@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import GlassCard from "@/components/GlassCard";
-import { Timer, Cake } from "lucide-react";
+import { Timer, Cake, PartyPopper } from "lucide-react";
 
 export default function Countdown() {
   const [timeText, setTimeText] = useState("");
@@ -14,7 +14,7 @@ export default function Countdown() {
 
     const year = nowDate.getFullYear();
 
-    const birthdayStart = new Date(year, 3, 19, 0, 0, 0).getTime();
+    const birthdayStart = new Date(year, 1, 19, 0, 0, 0).getTime();
     const birthdayEnd = new Date(year, 3, 20, 0, 0, 0).getTime();
 
     const isToday = now >= birthdayStart && now < birthdayEnd;
@@ -52,49 +52,80 @@ export default function Countdown() {
   }, []);
 
   return (
-    <GlassCard className="px-4 py-2 h-9 md:h-11 rounded-full">
-      <div className="flex items-center justify-center h-full gap-2 whitespace-nowrap saturate-150">
+    <div className="flex items-center justify-center gap-2">
 
-        <span
+      {/* Countdown Card */}
+      <GlassCard className="px-4 py-2 h-9 md:h-11 rounded-full">
+        <div className="flex items-center justify-center h-full gap-2 whitespace-nowrap saturate-150">
+
+          <span
+            className="
+              flex items-center justify-center
+              w-4 h-4 md:w-5 md:h-5
+              animate-[floatSoft_2.6s_ease-in-out_infinite]
+            "
+          >
+            {isBirthday ? (
+              <Cake
+                className="
+                  block w-full h-full text-[#EFA0B0]
+                  animate-[glowPulseCake_2.6s_ease-in-out_infinite]
+                "
+              />
+            ) : (
+              <Timer
+                className="
+                  block w-full h-full text-[#A78BFA]
+                  animate-[glowPulseTimer_2.6s_ease-in-out_infinite]
+                "
+              />
+            )}
+          </span>
+
+          <span
+            className={`
+              text-sm md:text-base
+              font-semibold tracking-wide
+              tabular-nums
+              bg-clip-text text-transparent
+              ${isBirthday
+                ? "bg-gradient-to-r from-[#F1D999] via-[#EFA0B0] to-[#C4A1FF]"
+                : "bg-gradient-to-r from-[#F0ABFC] via-[#A78BFA] to-[#885CF6]"
+              }
+            `}
+          >
+            {timeText}
+          </span>
+
+        </div>
+      </GlassCard>
+
+      {/* Firework Card */}
+      {isBirthday && (
+        <GlassCard
+          onClick={() =>
+            window.dispatchEvent(new Event("birthday-firework"))
+          }
           className="
+            px-3 py-2
+            h-9 md:h-11
+            rounded-full
+            cursor-pointer
+            hover:scale-110
+            transition
             flex items-center justify-center
-            w-4 h-4 md:w-5 md:h-5
-            animate-[floatSoft_2.6s_ease-in-out_infinite]
           "
         >
-          {isBirthday ? (
-            <Cake
-              className="
-                block w-full h-full text-[#EFA0B0]
-                animate-[glowPulseCake_2.6s_ease-in-out_infinite]
-              "
-            />
-          ) : (
-            <Timer
-              className="
-                block w-full h-full text-[#A78BFA]
-                animate-[glowPulseTimer_2.6s_ease-in-out_infinite]
-              "
-            />
-          )}
-        </span>
+          <PartyPopper
+            className="
+              w-4 h-4 md:w-5 md:h-5
+              text-[#A78BFA]
+              drop-shadow-[0_0_10px_rgba(167,139,250,0.8)]
+            "
+          />
+        </GlassCard>
+      )}
 
-        <span
-          className={`
-            text-sm md:text-base
-            font-semibold tracking-wide
-            tabular-nums
-            bg-clip-text text-transparent
-            ${isBirthday
-              ? "bg-gradient-to-r from-[#F1D999] via-[#EFA0B0] to-[#C4A1FF]"
-              : "bg-gradient-to-r from-[#F0ABFC] via-[#A78BFA] to-[#885CF6]"
-            }
-          `}
-        >
-          {timeText}
-        </span>
-
-      </div>
-    </GlassCard>
+    </div>
   );
 }
