@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, use } from "react";
+import { useRef, useEffect, useState } from "react";
 import GlassCard from "../GlassCard";
 import { LETTER_TEXT } from "@/data/letter";
 import Caret from "../Caret";
@@ -194,7 +194,7 @@ function LetterCard() {
 
   const body = useHandwriting(LETTER_TEXT, 50);
   const thanks = useHandwriting(
-    "항상 고마워 🌸",
+    "항상 응원해 💜",
     40,
     { start: body.done }
   );

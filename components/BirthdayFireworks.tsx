@@ -6,7 +6,7 @@ export default function BirthdayFireworks() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const birthdayStart = new Date("2026-02-19T00:00:00");
+    const birthdayStart = new Date("2026-04-19T00:00:00");
     const birthdayEnd = new Date("2026-04-20T00:00:00");
     let midnightTriggered = false;
 
@@ -49,11 +49,14 @@ export default function BirthdayFireworks() {
       spin: number;
 
       constructor(x: number, y: number, dir: number) {
+        
         this.x = x;
         this.y = y;
 
-        this.vx = dir * (Math.random() * 1.5 + 0.5);
-        this.vy = -(Math.random() * 3 + 2);
+        const speedFactor = canvas.width / 1200;
+
+        this.vx = dir * (Math.random() * 1.5 + 0.5) * speedFactor;
+        this.vy = -(Math.random() * 3 + 2) * speedFactor;
 
         this.alpha = 1;
         this.size = Math.random() * 2 + 1;
@@ -121,27 +124,31 @@ export default function BirthdayFireworks() {
 
     function spawnParticles() {
       const h = canvas.height;
+      const w = canvas.width;
 
-      // left
-      for (let i = 0; i < 3; i++) {
+      // 화면 크기에 따른 파티클 수
+      const density = Math.max(2, Math.floor(w / 500));
+
+      for (let i = 0; i < density; i++) {
+
+        // left
         particles.push(
           new Particle(
-            20 + Math.random() * 40,
-            h - 40 - Math.random() * 60,
+            w * 0.02 + Math.random() * w * 0.05,
+            h - 40 - Math.random() * 80,
             1
           )
         );
-      }
 
-      // right
-      for (let i = 0; i < 3; i++) {
+        // right
         particles.push(
           new Particle(
-            canvas.width - 20 - Math.random() * 40,
-            h - 40 - Math.random() * 60,
+            w - (w * 0.02 + Math.random() * w * 0.05),
+            h - 40 - Math.random() * 80,
             -1
           )
         );
+
       }
     }
 
@@ -175,7 +182,7 @@ export default function BirthdayFireworks() {
         }
       }
 
-    }, 180);
+    }, window.innerWidth < 640 ? 260 : 180);
 
     function handleFirework() {
       for (let i = 0; i < 30; i++) spawnParticles();
