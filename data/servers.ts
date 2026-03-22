@@ -1,4 +1,4 @@
-import { 
+import {
   Anvil, Building2, Castle, Flame, Hammer, HardHat,
   Moon, Pickaxe, Plane, Radiation, Swords, TentTree, Tv
 } from "lucide-react";
@@ -123,5 +123,12 @@ export const SERVERS = [
     text: "지(만)편한세상",
     imgSrc: "/servers/돌발서버.png",
     icon: Pickaxe,
+  },
+  {
+    date: "2026.03 ~",
+    title: "더켓몬 2",
+    text: "중력길드",
+    imgSrc: null,
+    icon: Flame,
   },
 ];

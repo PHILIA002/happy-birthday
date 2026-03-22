@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { SERVERS } from "@/data/servers";
 import GlassCard from "../GlassCard";
 import RevealCard from "../RevealCard";
-import { CircleQuestionMark } from "lucide-react";
 
 export default function Server() {
   const TopIcon = SERVERS[0].icon;
