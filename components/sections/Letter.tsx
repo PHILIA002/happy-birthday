@@ -194,7 +194,7 @@ function LetterCard() {
 
   const body = useHandwriting(LETTER_TEXT, 50);
   const thanks = useHandwriting(
-    "항상 응원해 💜",
+    "항상 고마워 💜 하얀 천사가",
     40,
     { start: body.done }
   );

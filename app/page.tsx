@@ -1,5 +1,6 @@
 import Gallery from "@/components/sections/Gallery";
 import Server from "@/components/sections/Server";
+import Player from "@/components/sections/Player";
 import Letter from "@/components/sections/Letter";
 import FadeIn from "@/components/FadeIn";
 import TimelineProgress from "@/components/TimelineProgress";
@@ -16,6 +17,7 @@ export default function Home() {
           <TimelineProgress />
           <Gallery />
           <Server />
+          <Player />
           <Letter />
         </FadeIn>
       </main>

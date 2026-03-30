@@ -6,7 +6,7 @@ import {
 export const SERVERS = [
   {
     title: "지력사무소",
-    imgSrc: "/servers/지력사무소.webp",
+    imgSrc: "/servers/지력사무소.jpg",
     icon: HardHat,
   },
   {
