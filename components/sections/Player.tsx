@@ -67,44 +67,54 @@ export default function Player() {
         max-w-5xl
         mx-auto
       ">
-        {VIDEOS.map((video) => (
-          <div
-            key={video.id}
-            className="
-              group
-              transition
-              hover:-translate-y-1
-            "
-          >
-            {/* 제목 */}
-            <p className="
-              mb-2
-              text-sm
-              text-[#6E5A8A]
-              font-medium
-              text-center
-            ">
-              {video.title}
-            </p>
+        {VIDEOS.map((video, index) => {
+          const isLast = index === VIDEOS.length - 1;
 
-            {/* 영상 */}
-            <div className="
-              relative
-              w-full aspect-video
-              rounded-2xl
-              overflow-hidden
-              border border-white/20
-              shadow-[0_20px_60px_rgba(120,90,255,0.18)]
-            ">
-              <iframe
-                src={video.embedUrl}
-                className="w-full h-full"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-              />
+          return (
+            <div
+              key={video.id}
+              className={`
+                group
+                transition
+                hover:-translate-y-1
+
+                ${isLast ? "md:col-span-2 flex justify-center" : ""}
+              `}
+            >
+              <div className={`${isLast ? "w-full max-w-2xl" : ""}`}>
+
+                {/* 제목 */}
+                <p className="
+                  mb-2
+                  text-sm
+                  text-[#6E5A8A]
+                  font-medium
+                  text-center
+                ">
+                  {video.title}
+                </p>
+
+                {/* 영상 */}
+                <div className="
+                  relative
+                  w-full aspect-video
+                  rounded-2xl
+                  overflow-hidden
+                  border border-white/20
+                  shadow-[0_20px_60px_rgba(120,90,255,0.18)]
+                ">
+                  <iframe
+                    src={video.embedUrl}
+                    className="w-full h-full"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                  />
+                </div>
+
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
