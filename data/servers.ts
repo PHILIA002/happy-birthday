@@ -1,5 +1,5 @@
 import {
-  Anvil, Building2, Castle, Flame, Hammer, HardHat,
+  Anvil, Building2, Camera, Castle, Flame, Hammer, HardHat,
   Moon, Pickaxe, Plane, Radiation, Swords, TentTree, Tv
 } from "lucide-react";
 
@@ -79,7 +79,7 @@ export const SERVERS = [
   },
   {
     date: "2025.03 ~",
-    title: "린코레일",
+    title: "린코레일 : 제주행",
     text: "제주경찰",
     imgSrc: "/servers/린코레일.webp",
     icon: Plane,
@@ -130,5 +130,12 @@ export const SERVERS = [
     text: "중력길드",
     imgSrc: null,
     icon: Flame,
+  },
+    {
+    date: "2026.04 ~",
+    title: "린코레일2 : 추억여(행)",
+    text: "ㄱF루밍",
+    imgSrc: null,
+    icon: Camera,
   },
 ];
