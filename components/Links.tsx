@@ -6,102 +6,107 @@ import GlassCard from "./GlassCard";
 import { Home, BookMarked } from "lucide-react";
 
 export default function Links() {
+  const SHOW_INTERNAL = false;
+
   return (
     <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3">
 
-      {/* ===== HOME ===== */}
-      <Link
-        href="/"
-        className="group relative cursor-pointer"
-      >
-        {/* Glow ring */}
-        <div
-          className="
-            absolute inset-0 rounded-full
-            bg-purple-300/30 blur-md opacity-0
-            group-hover:opacity-100
-            transition-opacity duration-300
-          "
-        />
-
-        {/* Button */}
-        <GlassCard
-          className="
-            relative
-            h-9 md:h-11
-            px-2 md:px-3
-            rounded-full
-            flex items-center
-            whitespace-nowrap
-            group-hover:scale-110
-            group-hover:bg-white/35
-            active:scale-95
-            transition-colors duration-300
-            text-[#A78BFA]/90 hover:text-[#8B6FE8]
-          "
-        >
-          <div className="flex items-center gap-1.5">
-            <Home className="w-4 h-4 md:w-5 md:h-5" />
-
-            <span
+      {SHOW_INTERNAL && (
+        <>
+          <Link
+            href="/"
+            className="group relative cursor-pointer"
+          >
+            {/* Glow ring */}
+            <div
               className="
-                hidden md:inline
-                text-xs md:text-base
-                font-medium tracking-wide
+                absolute inset-0 rounded-full
+                bg-purple-300/30 blur-md opacity-0
+                group-hover:opacity-100
+                transition-opacity duration-300
+              "
+            />
+
+            {/* Button */}
+            <GlassCard
+              className="
+                relative
+                h-9 md:h-11
+                px-2 md:px-3
+                rounded-full
+                flex items-center
+                whitespace-nowrap
+                group-hover:scale-110
+                group-hover:bg-white/35
+                active:scale-95
+                transition-colors duration-300
+                text-[#A78BFA]/90 hover:text-[#8B6FE8]
               "
             >
-              홈
-            </span>
-          </div>
-        </GlassCard>
-      </Link>
+              <div className="flex items-center gap-1.5">
+                <Home className="w-4 h-4 md:w-5 md:h-5" />
 
-      {/* ===== 방명록 (내부 라우팅) ===== */}
-      <Link
-        href="/guestbook"
-        className="group relative cursor-pointer"
-      >
-        {/* Glow ring */}
-        <div
-          className="
-            absolute inset-0 rounded-full
-            bg-purple-300/30 blur-md opacity-0
-            group-hover:opacity-100
-            transition-opacity duration-300
-          "
-        />
+                <span
+                  className="
+                    hidden md:inline
+                    text-xs md:text-base
+                    font-medium tracking-wide
+                  "
+                >
+                  홈
+                </span>
+              </div>
+            </GlassCard>
+          </Link>
 
-        {/* Button */}
-        <GlassCard
-          className="
-            relative
-            h-9 md:h-11
-            px-2 md:px-3
-            rounded-full
-            flex items-center
-            whitespace-nowrap
-            group-hover:scale-110
-            group-hover:bg-white/35
-            active:scale-95
-            transition-colors duration-300
-            text-[#A78BFA]/90 hover:text-[#8B6FE8]
-          "
-        >
-          <div className="flex items-center gap-1.5">
-            <BookMarked className="w-4 h-4 md:w-5 md:h-5" />
-
-            <span
+          <Link
+            href="/guestbook"
+            className="group relative cursor-pointer"
+          >
+            {/* Glow ring */}
+            <div
               className="
-                hidden md:inline
-                text-xs md:text-base
-                font-medium tracking-wide
+                absolute inset-0 rounded-full
+                bg-purple-300/30 blur-md opacity-0
+                group-hover:opacity-100
+                transition-opacity duration-300
+              "
+            />
+
+            {/* Button */}
+            <GlassCard
+              className="
+                relative
+                h-9 md:h-11
+                px-2 md:px-3
+                rounded-full
+                flex items-center
+                whitespace-nowrap
+                group-hover:scale-110
+                group-hover:bg-white/35
+                active:scale-95
+                transition-colors
+                duration-300
+                text-[#A78BFA]/90 hover:text-[#8B6FE8]
               "
             >
-              방명록
-            </span>
-          </div>
-        </GlassCard>
-      </Link>
+              <div className="flex items-center gap-1.5">
+                <BookMarked className="w-4 h-4 md:w-5 md:h-5" />
+
+                <span
+                  className="
+                    hidden md:inline
+                    text-xs md:text-base
+                    font-medium tracking-wide
+                  "
+                >
+                  방명록
+                </span>
+              </div>
+            </GlassCard>
+          </Link>
+        </>
+      )}
 
       {/* ===== Divider ===== */}
       <div

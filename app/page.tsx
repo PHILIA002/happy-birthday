@@ -5,6 +5,7 @@ import Letter from "@/components/sections/Letter";
 import FadeIn from "@/components/FadeIn";
 import TimelineProgress from "@/components/TimelineProgress";
 import BirthdayFireworks from "@/components/BirthdayFireworks";
+import NoticeToast from "@/components/NoticeToast";
 
 export default function Home() {
   return (
@@ -15,8 +16,8 @@ export default function Home() {
       <main className="min-h-screen">
         <FadeIn>
           <TimelineProgress />
+          <NoticeToast message="방명록 섭종" />
           <Gallery />
-          <Player />
           <Server />
           <Letter />
         </FadeIn>

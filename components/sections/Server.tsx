@@ -32,37 +32,6 @@ export default function Server() {
 
   return (
     <section className="relative py-14 md:py-24 overflow-hidden">
-
-      {/* MAIN */}
-      <div className="relative flex flex-col items-center mb-32 md:mb-56 px-6">
-        {SERVERS[0].imgSrc && (
-          <img
-            src={SERVERS[0].imgSrc}
-            alt={SERVERS[0].title}
-            onClick={() => setModal(SERVERS[0].imgSrc!)}
-            className="
-              w-full max-w-[720px]
-              aspect-[16/9]
-              object-contain
-              rounded-[28px] md:rounded-3xl
-              border border-white/20
-              shadow-[0_25px_70px_rgba(180,160,255,0.18)]
-              mb-10 md:mb-14
-              cursor-zoom-in
-              transition duration-500
-              hover:scale-[1.02]
-            "
-          />
-        )}
-
-        <GlassCard className="px-9 md:px-14 py-6 md:py-8">
-          <h2 className="flex items-center gap-3 text-lg md:text-2xl font-semibold" style={{ color: "#4F3F6B" }}>
-            <TopIcon className="w-5 h-5 md:w-6 md:h-6" style={{ color: "#7C66B4" }} />
-            {SERVERS[0].title}
-          </h2>
-        </GlassCard>
-      </div>
-
       <div className="relative flex flex-col items-center mb-32 md:mb-40 px-6">
 
         {/* glow */}
@@ -130,7 +99,7 @@ export default function Server() {
           pointer-events-none
           absolute
           left-1/2
-          top-[1130px]
+          top-[350px]
           bottom-0
           -translate-x-1/2
           w-[2px]
@@ -158,7 +127,7 @@ export default function Server() {
 
       {/* 타임라인 서버들 */}
       <div className="space-y-28 md:space-y-48">
-        {SERVERS.slice(1).map((item, index) => {
+        {SERVERS.map((item, index) => {
           const Icon = item.icon;
           const hasImage = Boolean(item.imgSrc);
           const isReversed = index % 2 === 1;

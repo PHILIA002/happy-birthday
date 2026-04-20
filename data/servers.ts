@@ -5,11 +5,6 @@ import {
 
 export const SERVERS = [
   {
-    title: "지력사무소",
-    imgSrc: "/servers/지력사무소.jpg",
-    icon: HardHat,
-  },
-  {
     date: "2023.01 ~",
     title: "퐁퐁랜드",
     text: "괴인상사",

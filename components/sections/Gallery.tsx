@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GALLERY } from "@/data/gallery";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -12,24 +12,32 @@ export default function Gallery() {
   const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
   const [modal, setModal] = useState<string | null>(null);
 
+  const scrollYRef = useRef(0);
+
+  // ✅ 브라우저 스크롤 복원 방지
+  useEffect(() => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  // ✅ 안전한 scroll lock
   useEffect(() => {
     if (!modal) return;
 
-    const scrollY = window.scrollY;
+    scrollYRef.current = window.scrollY;
 
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = "0";
-    document.body.style.right = "0";
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+
     document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
 
     return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
       document.body.style.overflow = "";
-      window.scrollTo(0, scrollY);
+      document.body.style.paddingRight = "";
+
+      window.scrollTo(0, scrollYRef.current);
     };
   }, [modal]);
 
@@ -90,7 +98,7 @@ export default function Gallery() {
           ))}
         </Swiper>
 
-        {/* 하단 썸네일 */}
+        {/* 썸네일 */}
         <div className="mt-6 hidden md:flex justify-center gap-3">
           {GALLERY.map((img, idx) => (
             <button
@@ -120,7 +128,7 @@ export default function Gallery() {
 
       </div>
 
-      {/* ✅ MODAL (추가된 부분) */}
+      {/* MODAL */}
       {modal && (
         <div
           onClick={() => setModal(null)}
@@ -144,7 +152,6 @@ export default function Gallery() {
           />
         </div>
       )}
-
     </section>
   );
 }
