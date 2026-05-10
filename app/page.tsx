@@ -1,28 +1,29 @@
-import Gallery from "@/components/sections/Gallery";
-import Player from "@/components/sections/Player";
-import Server from "@/components/sections/Server";
-import Letter from "@/components/sections/Letter";
-import FadeIn from "@/components/FadeIn";
-import TimelineProgress from "@/components/TimelineProgress";
-import BirthdayFireworks from "@/components/BirthdayFireworks";
-import NoticeToast from "@/components/NoticeToast";
+"use client";
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+
+export default function IntroPage() {
+  const router = useRouter();
+
+  const handleEnter = () => {
+    router.push("/main");
+  };
+
   return (
-    <>
-    
-      <BirthdayFireworks />
+    <div
+      onClick={handleEnter}
+      className="w-full h-screen bg-black cursor-pointer"
+    >
+      <img
+        src="/intro.gif"
+        alt="intro"
+        className="w-full h-full object-cover"
+      />
 
-      <main className="min-h-screen">
-        <FadeIn>
-          <TimelineProgress />
-          <NoticeToast message="방명록 섭종" />
-          <Gallery />
-          <Server />
-          <Letter />
-        </FadeIn>
-      </main>
-
-    </>
+      {/* 클릭 안내 텍스트 */}
+      <div className="absolute bottom-10 w-full text-center text-white text-sm opacity-70">
+        click anywhere to enter
+      </div>
+    </div>
   );
 }

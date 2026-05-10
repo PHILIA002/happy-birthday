@@ -86,13 +86,6 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
     setLoading(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
-    }
-  };
-
   return (
     <section
       className="
@@ -126,7 +119,6 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
           value={name}
           maxLength={20}
           onChange={(e) => setName(e.target.value)}
-          onKeyDown={handleKeyDown}
           className="
             w-full px-4 py-2 my-2 rounded-xl
             bg-white/20
@@ -149,7 +141,6 @@ export default function GuestbookForm({ onConfirmAdd, onRollback }: any) {
           value={message}
           maxLength={300}
           onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={handleKeyDown}
           className="
             w-full px-4 py-3 rounded-xl
             bg-white/20

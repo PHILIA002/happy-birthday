@@ -15,47 +15,115 @@ export default function NoticeToast({
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // 약간 딜레이 주면 UX 좋음
     const t = setTimeout(() => {
       setShow(true);
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
     if (!show) return;
-    const t = setTimeout(() => setShow(false), duration);
+
+    const t = setTimeout(() => {
+      setShow(false);
+    }, duration);
+
     return () => clearTimeout(t);
   }, [show, duration]);
 
   if (!show) return null;
 
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[999] w-[92%] max-w-md animate-slideIn">
+    <div
+      className="
+        fixed top-20 left-1/2 -translate-x-1/2
+        z-[999]
+
+        w-[92%] max-w-md
+
+        animate-[toastUp_.35s_ease]
+      "
+    >
       <div
         className="
           relative
-          px-5 py-3
-          rounded-2xl
-          backdrop-blur-xl
-          border border-white/40
-          shadow-[0_20px_60px_rgba(120,90,255,0.25)]
-          bg-gradient-to-br from-[#EDE9FE]/60 to-[#DDD6FE]/30
+
           flex items-center gap-3
+
+          px-4 py-3
+
+          rounded-2xl
+
+          bg-[var(--bg-sub)]
+
+          border border-[var(--glass-border)]
+
+          shadow-[0_10px_30px_rgba(0,0,0,0.22)]
         "
       >
-        <Info className="w-5 h-5 text-[#7C66B4]" />
+        {/* left accent */}
+        <div
+          className="
+            absolute left-0 top-0 bottom-0
+            w-1 rounded-l-2xl
+            bg-[var(--primary)]
+          "
+        />
 
-        <p className="text-medium text-[#4F3F6B] font-medium flex-1">
+        {/* icon */}
+        <div
+          className="
+            flex items-center justify-center
+
+            w-9 h-9
+            rounded-xl
+
+            bg-[var(--primary)]/12
+            text-[var(--primary-soft)]
+
+            shrink-0
+          "
+        >
+          <Info className="w-4 h-4" />
+        </div>
+
+        {/* text */}
+        <p
+          className="
+            flex-1
+
+            text-sm md:text-[15px]
+            font-medium
+
+            text-[var(--text-main)]
+
+            leading-relaxed
+          "
+        >
           {message}
         </p>
 
+        {/* close */}
         <button
           onClick={() => setShow(false)}
-          className="text-[#7C66B4]/60 hover:text-[#7C66B4]"
+          className="
+            flex items-center justify-center
+
+            w-8 h-8
+            rounded-lg
+
+            text-[var(--text-sub)]
+
+            hover:bg-white/5
+            hover:text-[var(--text-main)]
+
+            transition-all duration-200
+
+            cursor-pointer
+          "
         >
-          <X className="w-4 h-4 cursor-pointer" />
+          <X className="w-4 h-4" />
         </button>
       </div>
     </div>

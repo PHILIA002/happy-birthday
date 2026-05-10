@@ -1,36 +1,17 @@
 import { Metadata } from "next";
-import { Baloo_2, Jua } from "next/font/google";
-import ClientShell from "@/components/ClientShell";
+import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "니니밍 생일 축하해",
   description: "니니밍 생일 기념 페이지",
-
-  icons: {
-    icon: "/favicons/favicon.ico",
-    apple: "/favicons/apple-touch-icon.png",
-  },
-
-  manifest: "/favicons/manifest.webmanifest",
-
-  openGraph: {
-    title: "Happy Birthday Project",
-    description: "Happy Birthday Web Project",
-    type: "website",
-  },
 };
 
-const baloo = Baloo_2({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "600", "700"],
-  variable: "--font-baloo",
-});
-
-const jua = Jua({
+const noto = Noto_Sans_KR({
   subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-jua",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-noto",
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -42,11 +23,12 @@ export default function RootLayout({
     <html lang="ko">
       <body
         className={`
-          ${baloo.variable} ${jua.variable}
+          ${noto.variable}
           min-h-screen flex flex-col
+          font-sans
         `}
       >
-        <ClientShell>{children}</ClientShell>
+        {children}
       </body>
     </html>
   );
