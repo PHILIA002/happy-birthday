@@ -1,4 +1,3 @@
-// hooks/useReveal.ts
 import { useEffect, useRef, useState } from "react";
 
 export function useReveal() {
@@ -18,7 +17,7 @@ export function useReveal() {
       },
       {
         threshold: 0,
-        rootMargin: "0px 0px -140px 0px", // cinematic late
+        rootMargin: "0px 0px -140px 0px",
       }
     );
 

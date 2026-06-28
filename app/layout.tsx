@@ -1,34 +1,31 @@
-import { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
+"use client";
+
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "니니밍 생일 축하해",
-  description: "니니밍 생일 기념 페이지",
-};
+import { usePathname } from "next/navigation";
 
-const noto = Noto_Sans_KR({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-noto",
-  display: "swap",
-});
+import Header from "@/components/layout/Header";
+import { MusicPlayerProvider } from "@/components/music/MusicPlayerProvider";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const showHeader = pathname !== "/";
+
   return (
-    <html lang="ko">
-      <body
-        className={`
-          ${noto.variable}
-          min-h-screen flex flex-col
-          font-sans
-        `}
-      >
-        {children}
+    <html lang="ko" suppressHydrationWarning>
+      <body className="bg-[var(--bg-main)] text-[var(--text-main)]">
+        <MusicPlayerProvider>
+          {showHeader && <Header />}
+
+          <main>
+            {children}
+          </main>
+        </MusicPlayerProvider>
       </body>
     </html>
   );
