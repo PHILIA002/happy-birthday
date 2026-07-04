@@ -41,7 +41,7 @@ export default function MainPage() {
             lg:h-full
             lg:flex-shrink-0
 
-            lg:rounded-3xl
+            lg:rounded-2xl
             lg:border
             lg:border-[var(--border)]
             lg:overflow-hidden

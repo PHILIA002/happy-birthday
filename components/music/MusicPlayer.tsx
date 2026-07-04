@@ -24,7 +24,7 @@ export default function MusicPlayer() {
 
   const onReady: YouTubeProps["onReady"] = (e) => {
     playerRef.current = e.target;
-    e.target.setVolume(volume);
+    playerRef.current.setVolume(volume);
   };
 
   const onStateChange: YouTubeProps["onStateChange"] = (e) => {
@@ -37,19 +37,22 @@ export default function MusicPlayer() {
   };
 
   useEffect(() => {
-    if (!playerRef.current) return;
-
-    playerRef.current.loadVideoById(
-      MUSIC_LIST[currentIndex].videoId
-    );
-  }, [currentIndex]);
+    try {
+      playerRef.current?.loadVideoById(
+        MUSIC_LIST[currentIndex].videoId
+      );
+    } catch {}
+  }, [currentIndex, playerRef]);
 
   const togglePlay = () => {
-    if (!playerRef.current) return;
+    try {
+      const player = playerRef.current;
+      if (!player) return;
 
-    playerRef.current.getPlayerState() === 1
-      ? playerRef.current.pauseVideo()
-      : playerRef.current.playVideo();
+      player.getPlayerState() === 1
+        ? player.pauseVideo()
+        : player.playVideo();
+    } catch {}
   };
 
   const nextTrack = () => {
@@ -71,7 +74,10 @@ export default function MusicPlayer() {
     const t = Number(e.target.value);
 
     setCurrentTime(t);
-    playerRef.current?.seekTo(t, true);
+
+    try {
+      playerRef.current?.seekTo(t, true);
+    } catch {}
   };
 
   const handleVolume = (
@@ -80,36 +86,52 @@ export default function MusicPlayer() {
     const v = Number(e.target.value);
 
     setVolume(v);
-    playerRef.current?.setVolume(v);
+
+    try {
+      playerRef.current?.setVolume(v);
+    } catch {}
   };
 
   const toggleMute = () => {
-    if (!playerRef.current) return;
+    try {
+      const player = playerRef.current;
+      if (!player) return;
 
-    if (volume === 0) {
-      setVolume(70);
-      playerRef.current.setVolume(70);
-    } else {
-      setVolume(0);
-      playerRef.current.setVolume(0);
-    }
+      if (volume === 0) {
+        setVolume(70);
+        player.setVolume(70);
+      } else {
+        setVolume(0);
+        player.setVolume(0);
+      }
+    } catch {}
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!playerRef.current) return;
+      try {
+        const player = playerRef.current;
 
-      setCurrentTime(
-        playerRef.current.getCurrentTime()
-      );
+        if (!player) return;
 
-      setDuration(
-        playerRef.current.getDuration()
-      );
+        setCurrentTime(player.getCurrentTime());
+        setDuration(player.getDuration());
+      } catch {}
     }, 500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [playerRef]);
+
+  // ⭐ 가장 중요
+  useEffect(() => {
+    return () => {
+      try {
+        playerRef.current?.stopVideo();
+      } catch {}
+
+      playerRef.current = null;
+    };
+  }, [playerRef]);
 
   return (
     <>
@@ -124,7 +146,7 @@ export default function MusicPlayer() {
           }}
         />
       </div>
-      
+
       <MusicController
         title={current.title}
         track={currentIndex + 1}

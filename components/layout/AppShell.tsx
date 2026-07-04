@@ -9,14 +9,7 @@ export default function AppShell({
     <div className="h-full">
       <Header />
 
-      <div
-        className="
-          h-full
-          lg:mt-16
-          lg:pt-2
-          lg:px-6
-        "
-      >
+      <div className="h-full lg:mt-18 lg:px-8">
         {children}
       </div>
     </div>

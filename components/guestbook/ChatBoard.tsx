@@ -21,7 +21,7 @@ export default function ChatBoard() {
           flex
           flex-col
 
-          h-[60vh]
+          h-[80vh]
           min-h-[350px]
           max-h-[600px]
 
@@ -57,15 +57,16 @@ export default function ChatBoard() {
             type="button"
             onClick={() => setOpen(true)}
             className="
-              w-8
-              h-8
-
               flex
               items-center
-              justify-center
+              gap-1.5
+
+              px-3
+              h-8
 
               rounded-md
 
+              text-xs
               text-[var(--text-sub)]
 
               hover:bg-[var(--surface-soft)]
@@ -75,7 +76,8 @@ export default function ChatBoard() {
               cursor-pointer
             "
           >
-            <Expand size={18} />
+            <Expand size={16} />
+            <span>전체보기</span>
           </button>
         </div>
 

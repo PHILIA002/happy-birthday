@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import type { Swiper as SwiperType } from "swiper";
+import type { YouTubePlayer } from "react-youtube";
 
 type Context = {
   currentIndex: number;
@@ -24,7 +25,7 @@ type Context = {
     React.SetStateAction<SwiperType | null>
   >;
 
-  playerRef: React.MutableRefObject<any>;
+  playerRef: React.MutableRefObject<YouTubePlayer | null>;
 };
 
 const PlayerContext =
@@ -44,7 +45,9 @@ export function MusicPlayerProvider({
   const [infoSwiper, setInfoSwiper] =
     useState<SwiperType | null>(null);
 
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YouTubePlayer | null>(
+    null
+  );
 
   return (
     <PlayerContext.Provider

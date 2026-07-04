@@ -63,23 +63,24 @@ export default function MusicController({
   return (
     <section
       className="
-        hidden lg:block
-        px-4
+        hidden
+        lg:block
 
+        px-4
+        py-2
       "
     >
-      <div className="mb-4 flex items-end justify-between">
-        <div>
-          <h2 className="text-xl font-bold">
-            {title}
-          </h2>
+      {/* 제목 */}
+      <div className="mb-2">
+        <h2 className="text-lg font-bold leading-tight">
+          {title}
+        </h2>
 
-          <p className="mt-1 text-sm text-[var(--text-sub)]">
-            Track {track}
-          </p>
-        </div>
+        <p className="text-xs text-[var(--text-sub)]">
+          Track {track}
+        </p>
       </div>
-      
+
       {/* 진행바 */}
       <input
         type="range"
@@ -89,30 +90,30 @@ export default function MusicController({
         onChange={onSeek}
         className="
           w-full
+          h-1
           accent-[var(--primary)]
         "
       />
 
       <div
         className="
-          mt-2
+          mt-1
 
           flex
           justify-between
 
-          text-xs
+          text-[11px]
           text-[var(--text-sub)]
         "
       >
         <span>{formatTime(currentTime)}</span>
-
         <span>{formatTime(duration)}</span>
       </div>
 
       {/* 컨트롤 */}
       <div
         className="
-          mt-6
+          mt-3
 
           flex
           items-center
@@ -123,21 +124,21 @@ export default function MusicController({
           className="
             flex
             items-center
-            gap-5
+            gap-3
           "
         >
           <button
             onClick={onPrev}
             className="cursor-pointer"
           >
-            <SkipBack size={24} />
+            <SkipBack size={20} />
           </button>
 
           <button
             onClick={onPlayPause}
             className="
-              w-14
-              h-14
+              w-11
+              h-11
 
               rounded-full
 
@@ -152,9 +153,9 @@ export default function MusicController({
             "
           >
             {playing ? (
-              <Pause size={24} />
+              <Pause size={20} />
             ) : (
-              <Play size={24} />
+              <Play size={20} />
             )}
           </button>
 
@@ -162,7 +163,7 @@ export default function MusicController({
             onClick={onNext}
             className="cursor-pointer"
           >
-            <SkipForward size={24} />
+            <SkipForward size={20} />
           </button>
         </div>
 
@@ -171,9 +172,9 @@ export default function MusicController({
           className="
             flex
             items-center
-            gap-3
+            gap-2
 
-            w-44
+            w-36
           "
         >
           <button
@@ -181,9 +182,9 @@ export default function MusicController({
             className="cursor-pointer"
           >
             {volume === 0 ? (
-              <VolumeX size={20} />
+              <VolumeX size={18} />
             ) : (
-              <Volume2 size={20} />
+              <Volume2 size={18} />
             )}
           </button>
 
@@ -195,6 +196,7 @@ export default function MusicController({
             onChange={onVolume}
             className="
               flex-1
+              h-1
               accent-[var(--primary)]
             "
           />
