@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 
 import MusicController from "./MusicController";
@@ -11,14 +11,30 @@ import { usePlayer } from "./MusicPlayerProvider";
 export default function MusicPlayer() {
   const {
     playerRef,
+
     currentIndex,
     setCurrentIndex,
-  } = usePlayer();
 
-  const [playing, setPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(70);
+    playing,
+    setPlaying,
+
+    currentTime,
+    setCurrentTime,
+
+    duration,
+    setDuration,
+
+    volume,
+
+    play,
+    pause,
+    next,
+    prev,
+    seek,
+
+    changeVolume,
+    toggleMute,
+  } = usePlayer();
 
   const current = MUSIC_LIST[currentIndex];
 
@@ -28,101 +44,51 @@ export default function MusicPlayer() {
   };
 
   const onStateChange: YouTubeProps["onStateChange"] = (e) => {
-    if (e.data === 1) setPlaying(true);
-    if (e.data === 2) setPlaying(false);
+    switch (e.data) {
+      case 1:
+        setPlaying(true);
+        break;
 
-    if (e.data === 0) {
-      nextTrack();
+      case 2:
+        setPlaying(false);
+        break;
+
+      case 0:
+        next();
+        break;
     }
   };
 
   useEffect(() => {
-    try {
-      playerRef.current?.loadVideoById(
-        MUSIC_LIST[currentIndex].videoId
-      );
-    } catch {}
-  }, [currentIndex, playerRef]);
+    const player = playerRef.current;
 
-  const togglePlay = () => {
-    try {
-      const player = playerRef.current;
-      if (!player) return;
-
-      player.getPlayerState() === 1
-        ? player.pauseVideo()
-        : player.playVideo();
-    } catch {}
-  };
-
-  const nextTrack = () => {
-    setCurrentIndex(
-      (currentIndex + 1) % MUSIC_LIST.length
-    );
-  };
-
-  const prevTrack = () => {
-    setCurrentIndex(
-      (currentIndex - 1 + MUSIC_LIST.length) %
-        MUSIC_LIST.length
-    );
-  };
-
-  const handleSeek = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const t = Number(e.target.value);
-
-    setCurrentTime(t);
+    if (!player) return;
 
     try {
-      playerRef.current?.seekTo(t, true);
+      player.cueVideoById(current.videoId);
+      player.pauseVideo();
+
+      setPlaying(false);
+      setCurrentTime(0);
+      setDuration(0);
     } catch {}
-  };
-
-  const handleVolume = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const v = Number(e.target.value);
-
-    setVolume(v);
-
-    try {
-      playerRef.current?.setVolume(v);
-    } catch {}
-  };
-
-  const toggleMute = () => {
-    try {
-      const player = playerRef.current;
-      if (!player) return;
-
-      if (volume === 0) {
-        setVolume(70);
-        player.setVolume(70);
-      } else {
-        setVolume(0);
-        player.setVolume(0);
-      }
-    } catch {}
-  };
+  }, [currentIndex]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const id = setInterval(() => {
+      const player = playerRef.current;
+
+      if (!player) return;
+
       try {
-        const player = playerRef.current;
-
-        if (!player) return;
-
         setCurrentTime(player.getCurrentTime());
         setDuration(player.getDuration());
       } catch {}
-    }, 500);
+    }, 250);
 
-    return () => clearInterval(interval);
-  }, [playerRef]);
+    return () => clearInterval(id);
+  }, []);
 
-  // ⭐ 가장 중요
   useEffect(() => {
     return () => {
       try {
@@ -131,7 +97,7 @@ export default function MusicPlayer() {
 
       playerRef.current = null;
     };
-  }, [playerRef]);
+  }, []);
 
   return (
     <>
@@ -143,6 +109,9 @@ export default function MusicPlayer() {
           opts={{
             width: "0",
             height: "0",
+            playerVars: {
+              autoplay: 0,
+            },
           }}
         />
       </div>
@@ -154,11 +123,17 @@ export default function MusicPlayer() {
         currentTime={currentTime}
         duration={duration}
         volume={volume}
-        onPlayPause={togglePlay}
-        onPrev={prevTrack}
-        onNext={nextTrack}
-        onSeek={handleSeek}
-        onVolume={handleVolume}
+        onPlayPause={() => {
+          playing ? pause() : play();
+        }}
+        onPrev={prev}
+        onNext={next}
+        onSeek={(e) =>
+          seek(Number(e.target.value))
+        }
+        onVolume={(e) =>
+          changeVolume(Number(e.target.value))
+        }
         onMute={toggleMute}
       />
     </>

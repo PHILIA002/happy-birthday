@@ -1,7 +1,13 @@
 "use client";
 
 import { X } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+
 import type { GuestbookMessage } from "@/hooks/useGuestbook";
+import { getNameColor } from "@/components/guestbook/GuestbookList";
+import { useState } from "react";
 
 type Props = {
   open: boolean;
@@ -14,6 +20,8 @@ export default function GuestbookModal({
   onClose,
   messages,
 }: Props) {
+  const [current, setCurrent] = useState(0);
+
   if (!open) return null;
 
   return (
@@ -99,13 +107,8 @@ export default function GuestbookModal({
           </button>
         </div>
 
-        {/* List */}
-        <div
-          className="
-            flex-1
-            overflow-y-auto
-          "
-        >
+        {/* Content */}
+        <div className="flex-1 min-h-0">
           {messages.length === 0 ? (
             <div
               className="
@@ -122,58 +125,94 @@ export default function GuestbookModal({
               방명록이 없습니다.
             </div>
           ) : (
-            messages.map((item) => (
-              <div
-                key={item.id}
-                className="
-                  px-5
-                  py-4
+            <>
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={0}
+                className="h-full"
+                onSlideChange={(swiper) => setCurrent(swiper.activeIndex)}
+              >
+                {messages.map((item) => (
+                  <SwiperSlide key={item.id}>
+                    <div
+                      className="
+                        h-full
 
-                  border-b
-                  border-[var(--border-soft)]
+                        flex
+                        flex-col
+
+                        p-5
+                      "
+                    >
+                      <div className="flex items-center justify-between gap-4 mb-4">
+                        <span
+                          className="font-semibold"
+                          style={{
+                            color: getNameColor(item.name),
+                          }}
+                        >
+                          {item.name}
+                        </span>
+
+                        <span
+                          className="
+                            shrink-0
+
+                            text-xs
+                            text-[var(--text-sub)]
+                          "
+                        >
+                          {new Date(item.created_at).toLocaleString("ko-KR", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+
+                      <div
+                        className="
+                          flex-1
+
+                          overflow-y-auto
+
+                          whitespace-pre-wrap
+                          break-words
+
+                          text-sm
+                          leading-7
+                        "
+                      >
+                        {item.message}
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              {/* Pagination */}
+              <div
+                className="
+                  h-12
+                  shrink-0
+
+                  border-t
+                  border-[var(--border)]
+
+                  flex
+                  items-center
+                  justify-center
+
+                  text-sm
+                  font-medium
+                  text-[var(--text-sub)]
                 "
               >
-                <div className="flex items-center justify-between mb-2 gap-4">
-                  <span
-                    className="
-                      font-semibold
-                      text-[var(--primary)]
-                    "
-                  >
-                    {item.name}
-                  </span>
-
-                  <span
-                    className="
-                      shrink-0
-
-                      text-xs
-                      text-[var(--text-sub)]
-                    "
-                  >
-                    {new Date(item.created_at).toLocaleString("ko-KR", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </div>
-
-                <p
-                  className="
-                    whitespace-pre-wrap
-                    break-words
-
-                    text-sm
-                    leading-6
-                  "
-                >
-                  {item.message}
-                </p>
+                {current + 1} / {messages.length}
               </div>
-            ))
+            </>
           )}
         </div>
       </div>

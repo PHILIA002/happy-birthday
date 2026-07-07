@@ -24,7 +24,7 @@ export default function Header() {
         items-center
         justify-between
 
-        bg-[var(--bg-main)]/20
+        bg-[var(--bg-main)]/40
         lg:bg-[var(--bg-main)]
 
         border-b

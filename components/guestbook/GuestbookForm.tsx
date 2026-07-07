@@ -21,8 +21,21 @@ export default function GuestbookForm() {
   return (
     <div
       className="
+        fixed
+        bottom-0
+        left-0
+        right-0
+        z-50
+
+        lg:static
+
         border-t border-[var(--border)]
+
+        bg-[var(--surface)]
+
         p-3
+
+        pb-[calc(env(safe-area-inset-bottom)+12px)]
       "
     >
       <div className="flex items-center gap-2">
@@ -32,8 +45,7 @@ export default function GuestbookForm() {
           placeholder="닉네임"
           maxLength={20}
           className="
-            w-12
-            lg:w-20
+            w-20
 
             h-10
 

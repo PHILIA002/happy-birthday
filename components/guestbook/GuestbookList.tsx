@@ -7,6 +7,24 @@ type Props = {
   messages: GuestbookMessage[];
 };
 
+const NAME_COLORS = [
+  "text-red-400",
+  "text-blue-400",
+  "text-green-400",
+  "text-yellow-400",
+  "text-pink-400",
+];
+
+export const getNameColor = (name: string) => {
+  let hash = 0;
+
+  for (let i = 0; i < name.length; i++) {
+    hash += name.charCodeAt(i);
+  }
+
+  return NAME_COLORS[hash % NAME_COLORS.length];
+};
+
 export default function GuestbookList({
   messages,
 }: Props) {
@@ -46,15 +64,15 @@ export default function GuestbookList({
             "
           >
             <span
-              className="
+              className={`
                 w-24
                 shrink-0
 
                 truncate
 
                 font-semibold
-                text-[var(--primary)]
-              "
+                ${getNameColor(item.name)}
+              `}
             >
               {item.name}
             </span>

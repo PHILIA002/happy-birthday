@@ -1,9 +1,22 @@
 "use client";
 
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Controller } from "swiper/modules";
 
 import "swiper/css";
+
+import {
+  Pause,
+  Play,
+  SkipBack,
+  SkipForward,
+} from "lucide-react";
 
 import { MUSIC_LIST } from "@/data/music";
 import { usePlayer } from "./MusicPlayerProvider";
@@ -12,21 +25,56 @@ export default function MusicHero() {
   const {
     currentIndex,
     setCurrentIndex,
-    infoSwiper,
+
+    imageSwiper,
     setImageSwiper,
+
+    infoSwiper,
+
+    playing,
+    play,
+    pause,
+    prev,
+    next,
   } = usePlayer();
 
-  return (
-    <div
-      className="
-        w-full
-        h-full
-        min-h-0
+  const [showControls, setShowControls] =
+    useState(false);
 
-        flex
-        flex-col
-      "
-    >
+  const hideTimer =
+    useRef<NodeJS.Timeout | null>(null);
+
+  const showOverlay = () => {
+    setShowControls(true);
+
+    if (hideTimer.current) {
+      clearTimeout(hideTimer.current);
+    }
+
+    hideTimer.current = setTimeout(() => {
+      setShowControls(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    imageSwiper?.slideToLoop(currentIndex);
+    infoSwiper?.slideToLoop(currentIndex);
+  }, [
+    currentIndex,
+    imageSwiper,
+    infoSwiper,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      if (hideTimer.current) {
+        clearTimeout(hideTimer.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="w-full h-full min-h-0 flex flex-col">
       <Swiper
         modules={[Controller]}
         controller={{
@@ -41,39 +89,34 @@ export default function MusicHero() {
       >
         {MUSIC_LIST.map((music, index) => (
           <SwiperSlide key={music.videoId}>
-            <div
-              className="
-                relative
-                w-full
-                h-full
-                min-h-[400px]
-              "
-            >
-              {/* 블러 배경 */}
+            <div className="relative w-full h-full min-h-[40dvh]">
+
+              {/* Blur */}
               <img
                 src={`https://img.youtube.com/vi/${music.videoId}/maxresdefault.jpg`}
                 alt=""
                 className="
                   absolute inset-0
                   w-full h-full
-
                   object-cover
-
                   blur-2xl
                   scale-110
-
                   opacity-40
                 "
               />
 
-              {/* 썸네일 */}
+              {/* Album */}
               <div
+                onClick={showOverlay}
                 className="
-                  absolute inset-0
+                  absolute
+                  inset-0
 
                   flex
                   items-center
                   justify-center
+
+                  cursor-pointer
                 "
               >
                 <img
@@ -86,16 +129,16 @@ export default function MusicHero() {
                     object-contain
 
                     rounded-2xl
-
                     shadow-2xl
                   "
                 />
               </div>
 
-              {/* 오버레이 */}
+              {/* Gradient */}
               <div
                 className="
-                  absolute inset-0
+                  absolute
+                  inset-0
 
                   bg-gradient-to-t
                   from-black/80
@@ -104,13 +147,120 @@ export default function MusicHero() {
                 "
               />
 
-              {/* 모바일 */}
+              {/* Mobile Controls */}
+              <div
+                className={`
+                  absolute
+                  inset-0
+                  z-30
+
+                  flex
+                  lg:hidden
+
+                  items-center
+                  justify-center
+                  gap-8
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    showControls
+                      ? "opacity-100"
+                      : "opacity-0 pointer-events-none"
+                  }
+                `}
+              >
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showOverlay();
+                    prev();
+                  }}
+                  className="
+                    w-14
+                    h-14
+
+                    rounded-full
+
+                    bg-black/45
+                    backdrop-blur
+
+                    flex
+                    items-center
+                    justify-center
+
+                    text-white
+                  "
+                >
+                  <SkipBack size={28} />
+                </button>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showOverlay();
+
+                    playing
+                      ? pause()
+                      : play();
+                  }}
+                  className="
+                    w-16
+                    h-16
+
+                    rounded-full
+
+                    bg-white
+                    text-black
+
+                    flex
+                    items-center
+                    justify-center
+
+                    shadow-xl
+                  "
+                >
+                  {playing ? (
+                    <Pause size={34} />
+                  ) : (
+                    <Play size={34} />
+                  )}
+                </button>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showOverlay();
+                    next();
+                  }}
+                  className="
+                    w-14
+                    h-14
+
+                    rounded-full
+
+                    bg-black/45
+                    backdrop-blur
+
+                    flex
+                    items-center
+                    justify-center
+
+                    text-white
+                  "
+                >
+                  <SkipForward size={28} />
+                </button>
+              </div>
+
+              {/* Mobile Info */}
               <div
                 className="
                   absolute
                   left-6
                   bottom-6
-                  z-10
+                  z-40
 
                   lg:hidden
                 "
