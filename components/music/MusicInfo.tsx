@@ -26,7 +26,7 @@ export default function MusicInfo() {
       className="hidden lg:block w-full"
     >
       {MUSIC_LIST.map((music, index) => (
-        <SwiperSlide key={music.videoId}>
+        <SwiperSlide key={music.url}>
           <div
             className="
               py-4
