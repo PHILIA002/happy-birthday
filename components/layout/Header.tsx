@@ -14,7 +14,7 @@ export default function Header() {
         right-0
         z-50
 
-        h-14
+        h-12
         lg:h-16
 
         px-4
@@ -24,7 +24,7 @@ export default function Header() {
         items-center
         justify-between
 
-        bg-[var(--bg-main)]/50
+        bg-[var(--bg-main)]/30
         lg:bg-[var(--bg-main)]
 
         border-b
@@ -35,7 +35,7 @@ export default function Header() {
         <Countdown />
       </div>
 
-      <div className="flex items-center gap-4 lg:gap-8">
+      <div className="flex items-center gap-2 lg:gap-4">
         <Links />
         <ThemeToggle />
       </div>

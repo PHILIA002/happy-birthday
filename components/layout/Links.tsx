@@ -32,7 +32,7 @@ function NavItem({
         px-2
         py-1
 
-        rounded-xl
+        rounded-lg
 
         ${
           active
@@ -66,7 +66,7 @@ export default function Links() {
     today.getDate() === 19;
 
   return (
-    <nav className="flex items-center gap-1 p-1 rounded-2xl bg-[var(--surface-soft)]/70 border border-[var(--border)]">
+    <nav className="flex items-center lg:gap-1 p-1 rounded-xl bg-[var(--surface-soft)]/70 border border-[var(--border)]">
       <NavItem
         href="/main"
         icon={Home}
@@ -79,13 +79,13 @@ export default function Links() {
         label="팬아트"
       />
 
-      {/* {showLetter && ( */}
+      {showLetter && (
         <NavItem
           href="/letter"
           icon={Mail}
           label="편지"
         />
-      {/* )} */}
+      )}
     </nav>
   );
 }

@@ -64,8 +64,8 @@ export default function Countdown() {
         font-mono
         font-semibold
 
-        text-lg
-        lg:text-xl
+        text-medium
+        lg:text-lg
 
         text-[var(--primary)]
       "
