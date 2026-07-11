@@ -2,64 +2,31 @@
 
 import {
   Play,
-  Pause,
   SkipBack,
   SkipForward,
-  Volume2,
-  VolumeX,
 } from "lucide-react";
 
 type Props = {
   title: string;
   track: number;
 
-  playing: boolean;
+  opened: boolean;
 
-  currentTime: number;
-  duration: number;
-  volume: number;
-
-  onPlayPause: () => void;
+  onOpen: () => void;
   onPrev: () => void;
   onNext: () => void;
-
-  onSeek: (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
-
-  onVolume: (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
-
-  onMute: () => void;
 };
 
 export default function MusicController({
   title,
   track,
 
-  playing,
-  currentTime,
-  duration,
-  volume,
+  opened,
 
-  onPlayPause,
+  onOpen,
   onPrev,
   onNext,
-
-  onSeek,
-  onVolume,
-  onMute,
 }: Props) {
-  const formatTime = (t: number) => {
-    const m = Math.floor(t / 60);
-    const s = Math.floor(t % 60);
-
-    return `${m}:${s
-      .toString()
-      .padStart(2, "0")}`;
-  };
-
   return (
     <section
       className="
@@ -70,8 +37,7 @@ export default function MusicController({
         py-2
       "
     >
-      {/* 제목 */}
-      <div className="mb-2">
+      <div className="mb-4">
         <h2 className="text-lg font-bold leading-tight">
           {title}
         </h2>
@@ -79,128 +45,6 @@ export default function MusicController({
         <p className="text-xs text-[var(--text-sub)]">
           Track {track}
         </p>
-      </div>
-
-      {/* 진행바 */}
-      <input
-        type="range"
-        min={0}
-        max={duration}
-        value={currentTime}
-        onChange={onSeek}
-        className="
-          w-full
-          h-1
-          accent-[var(--primary)]
-        "
-      />
-
-      <div
-        className="
-          mt-1
-
-          flex
-          justify-between
-
-          text-[11px]
-          text-[var(--text-sub)]
-        "
-      >
-        <span>{formatTime(currentTime)}</span>
-        <span>{formatTime(duration)}</span>
-      </div>
-
-      {/* 컨트롤 */}
-      <div
-        className="
-          mt-3
-
-          flex
-          items-center
-          justify-between
-        "
-      >
-        <div
-          className="
-            flex
-            items-center
-            gap-3
-          "
-        >
-          <button
-            onClick={onPrev}
-            className="cursor-pointer"
-          >
-            <SkipBack size={20} />
-          </button>
-
-          <button
-            onClick={onPlayPause}
-            className="
-              w-11
-              h-11
-
-              rounded-full
-
-              bg-[var(--primary)]
-              text-white
-
-              flex
-              items-center
-              justify-center
-
-              cursor-pointer
-            "
-          >
-            {playing ? (
-              <Pause size={20} />
-            ) : (
-              <Play size={20} />
-            )}
-          </button>
-
-          <button
-            onClick={onNext}
-            className="cursor-pointer"
-          >
-            <SkipForward size={20} />
-          </button>
-        </div>
-
-        {/* 볼륨 */}
-        <div
-          className="
-            flex
-            items-center
-            gap-2
-
-            w-36
-          "
-        >
-          <button
-            onClick={onMute}
-            className="cursor-pointer"
-          >
-            {volume === 0 ? (
-              <VolumeX size={18} />
-            ) : (
-              <Volume2 size={18} />
-            )}
-          </button>
-
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={volume}
-            onChange={onVolume}
-            className="
-              flex-1
-              h-1
-              accent-[var(--primary)]
-            "
-          />
-        </div>
       </div>
     </section>
   );

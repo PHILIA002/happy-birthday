@@ -36,43 +36,34 @@ export default function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="테마 변경"
-      className="
+      className={`
         relative
 
         w-16
         h-8
 
         rounded-full
+        border
+
+        border-[var(--border)]
 
         transition-all
         duration-300
-
+        ease-in-out
         cursor-pointer
 
-        border
-        border-[var(--border)]
+        ${
+          dark
+            ? "bg-[var(--primary)]/20"
+            : "bg-[var(--surface-soft)]"
+        }
 
-        bg-[var(--surface-soft)]
-      "
+        hover:scale-[1.03]
+        active:scale-95
+      `}
     >
-      <div
-        className="
-          absolute
-          left-1/2
-          top-1/2
-
-          h-4
-          w-px
-
-          -translate-x-1/2
-          -translate-y-1/2
-
-          bg-[var(--border)]
-        "
-      />
-
       <Sun
-        className="
+        className={`
           absolute
           left-2
           top-1/2
@@ -81,13 +72,19 @@ export default function ThemeToggle() {
           w-4
           h-4
 
-          text-yellow-500
-          opacity-80
-        "
+          transition-opacity
+          duration-300
+
+          ${
+            dark
+              ? "opacity-30"
+              : "opacity-100 text-yellow-500"
+          }
+        `}
       />
 
       <Moon
-        className="
+        className={`
           absolute
           right-2
           top-1/2
@@ -96,9 +93,15 @@ export default function ThemeToggle() {
           w-4
           h-4
 
-          text-indigo-400
-          opacity-80
-        "
+          transition-opacity
+          duration-300
+
+          ${
+            dark
+              ? "opacity-100 text-indigo-400"
+              : "opacity-30"
+          }
+        `}
       />
 
       <div
@@ -106,24 +109,24 @@ export default function ThemeToggle() {
           absolute
           top-1
 
-          flex
-          items-center
-          justify-center
-
           w-6
           h-6
 
           rounded-full
+          shadow-lg
 
-          shadow-md
+          flex
+          items-center
+          justify-center
 
           transition-all
           duration-300
+          ease-in-out
 
           ${
             dark
-              ? "translate-x-9 bg-[var(--primary)]"
-              : "translate-x-1 bg-yellow-400"
+              ? "left-[calc(100%-1.75rem)] bg-[var(--primary)]"
+              : "left-1 bg-yellow-400"
           }
         `}
       >

@@ -103,6 +103,7 @@ export default function UploadBox({
 
         my-8
         py-8
+        lg:my-0
 
         rounded-3xl
         border-2 border-dashed

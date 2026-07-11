@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Controller } from "swiper/modules";
@@ -12,8 +8,6 @@ import { Controller } from "swiper/modules";
 import "swiper/css";
 
 import {
-  Pause,
-  Play,
   SkipBack,
   SkipForward,
 } from "lucide-react";
@@ -24,16 +18,15 @@ import { usePlayer } from "./MusicPlayerProvider";
 export default function MusicHero() {
   const {
     currentIndex,
-    setCurrentIndex,
 
     imageSwiper,
     setImageSwiper,
 
     infoSwiper,
 
-    playing,
-    play,
-    pause,
+    opened,
+    setOpened,
+
     prev,
     next,
   } = usePlayer();
@@ -46,6 +39,7 @@ export default function MusicHero() {
 
   const showOverlay = () => {
     setShowControls(true);
+    setOpened(true);
 
     if (hideTimer.current) {
       clearTimeout(hideTimer.current);
@@ -59,10 +53,14 @@ export default function MusicHero() {
   useEffect(() => {
     imageSwiper?.slideToLoop(currentIndex);
     infoSwiper?.slideToLoop(currentIndex);
+
+    // 곡이 바뀌면 다시 썸네일
+    setOpened(false);
   }, [
     currentIndex,
     imageSwiper,
     infoSwiper,
+    setOpened,
   ]);
 
   useEffect(() => {
@@ -77,37 +75,40 @@ export default function MusicHero() {
     <div className="w-full h-full min-h-0 flex flex-col">
       <Swiper
         modules={[Controller]}
+        loop
+        allowTouchMove={false}
         controller={{
           control: infoSwiper ?? undefined,
         }}
         onSwiper={setImageSwiper}
-        onSlideChange={(swiper) =>
-          setCurrentIndex(swiper.realIndex)
-        }
         initialSlide={currentIndex}
         className="w-full h-full"
       >
         {MUSIC_LIST.map((music, index) => (
-          <SwiperSlide key={music.videoId}>
-            <div className="relative w-full h-full min-h-[40dvh]">
+          <SwiperSlide key={music.url}>
+            <div className="relative w-full h-full min-h-[40dvh] overflow-hidden rounded-2xl">
 
-              {/* Blur */}
+              {/* Blur Background */}
               <img
-                src={`https://img.youtube.com/vi/${music.videoId}/maxresdefault.jpg`}
+                src={music.thumbnail}
                 alt=""
                 className="
-                  absolute inset-0
-                  w-full h-full
+                  absolute
+                  inset-0
+
+                  w-full
+                  h-full
+
                   object-cover
+
                   blur-2xl
                   scale-110
                   opacity-40
                 "
               />
 
-              {/* Album */}
+              {/* Album / Player */}
               <div
-                onClick={showOverlay}
                 className="
                   absolute
                   inset-0
@@ -115,23 +116,39 @@ export default function MusicHero() {
                   flex
                   items-center
                   justify-center
-
-                  cursor-pointer
                 "
               >
-                <img
-                  src={`https://img.youtube.com/vi/${music.videoId}/maxresdefault.jpg`}
-                  alt={music.title}
-                  className="
-                    max-w-[90%]
-                    max-h-[85%]
+                {opened && index === currentIndex ? (
+                  <iframe
+                    key={music.url}
+                    src={music.url}
+                    className="w-full h-full"
+                    allow="autoplay; clipboard-write; web-share"
+                    allowFullScreen
+                  />
+                ) : (
+                  <img
+                    src={music.thumbnail}
+                    alt={music.title}
+                    onClick={showOverlay}
+                    className="
+                      max-w-[85%]
+                      max-h-[85%]
 
-                    object-contain
+                      object-contain
 
-                    rounded-2xl
-                    shadow-2xl
-                  "
-                />
+                      rounded-2xl
+                      shadow-2xl
+
+                      cursor-pointer
+
+                      transition-transform
+                      duration-300
+
+                      hover:scale-[1.03]
+                    "
+                  />
+                )}
               </div>
 
               {/* Gradient */}
@@ -144,6 +161,8 @@ export default function MusicHero() {
                   from-black/80
                   via-black/20
                   to-transparent
+
+                  pointer-events-none
                 "
               />
 
@@ -159,7 +178,7 @@ export default function MusicHero() {
 
                   items-center
                   justify-center
-                  gap-8
+                  gap-16
 
                   transition-all
                   duration-300
@@ -174,7 +193,6 @@ export default function MusicHero() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    showOverlay();
                     prev();
                   }}
                   className="
@@ -199,39 +217,6 @@ export default function MusicHero() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    showOverlay();
-
-                    playing
-                      ? pause()
-                      : play();
-                  }}
-                  className="
-                    w-16
-                    h-16
-
-                    rounded-full
-
-                    bg-white
-                    text-black
-
-                    flex
-                    items-center
-                    justify-center
-
-                    shadow-xl
-                  "
-                >
-                  {playing ? (
-                    <Pause size={34} />
-                  ) : (
-                    <Play size={34} />
-                  )}
-                </button>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    showOverlay();
                     next();
                   }}
                   className="
@@ -273,6 +258,7 @@ export default function MusicHero() {
                   Track {index + 1}
                 </p>
               </div>
+
             </div>
           </SwiperSlide>
         ))}

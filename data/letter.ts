@@ -1,4 +1,4 @@
-export const LETTER_TEXT = `
+export const LETTER = `
 어느새 니니밍을 알게 된 지도
 3년 가까운 시간이 흘렀네.
 
