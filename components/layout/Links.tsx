@@ -79,13 +79,13 @@ export default function Links() {
         label="팬아트"
       />
 
-      {/* {showLetter && ( */}
+      {showLetter && (
         <NavItem
           href="/letter"
           icon={Mail}
           label="편지"
         />
-      {/* )} */}
+      )}
     </nav>
   );
 }

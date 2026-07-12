@@ -18,6 +18,7 @@ import { usePlayer } from "./MusicPlayerProvider";
 export default function MusicHero() {
   const {
     currentIndex,
+    setCurrentIndex,
 
     imageSwiper,
     setImageSwiper,
@@ -81,14 +82,15 @@ export default function MusicHero() {
           control: infoSwiper ?? undefined,
         }}
         onSwiper={setImageSwiper}
+        onSlideChange={(swiper) => {
+          setCurrentIndex(swiper.realIndex);
+        }}
         initialSlide={currentIndex}
         className="w-full h-full"
       >
         {MUSIC_LIST.map((music, index) => (
           <SwiperSlide key={music.url}>
-            <div className="relative w-full h-full min-h-[40dvh] overflow-hidden rounded-2xl">
-
-              {/* Blur Background */}
+            <div className="relative w-full h-full min-h-[40dvh] overflow-hidden">
               <img
                 src={music.thumbnail}
                 alt=""
@@ -107,7 +109,6 @@ export default function MusicHero() {
                 "
               />
 
-              {/* Album / Player */}
               <div
                 className="
                   absolute
@@ -151,7 +152,6 @@ export default function MusicHero() {
                 )}
               </div>
 
-              {/* Gradient */}
               <div
                 className="
                   absolute
@@ -166,80 +166,6 @@ export default function MusicHero() {
                 "
               />
 
-              {/* Mobile Controls */}
-              <div
-                className={`
-                  absolute
-                  inset-0
-                  z-30
-
-                  flex
-                  lg:hidden
-
-                  items-center
-                  justify-center
-                  gap-16
-
-                  transition-all
-                  duration-300
-
-                  ${
-                    showControls
-                      ? "opacity-100"
-                      : "opacity-0 pointer-events-none"
-                  }
-                `}
-              >
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    prev();
-                  }}
-                  className="
-                    w-14
-                    h-14
-
-                    rounded-full
-
-                    bg-black/45
-                    backdrop-blur
-
-                    flex
-                    items-center
-                    justify-center
-
-                    text-white
-                  "
-                >
-                  <SkipBack size={28} />
-                </button>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    next();
-                  }}
-                  className="
-                    w-14
-                    h-14
-
-                    rounded-full
-
-                    bg-black/45
-                    backdrop-blur
-
-                    flex
-                    items-center
-                    justify-center
-
-                    text-white
-                  "
-                >
-                  <SkipForward size={28} />
-                </button>
-              </div>
-
-              {/* Mobile Info */}
               <div
                 className="
                   absolute
@@ -250,12 +176,12 @@ export default function MusicHero() {
                   lg:hidden
                 "
               >
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-xl font-bold text-white">
                   {music.title}
                 </h2>
 
                 <p className="mt-2 text-sm text-white/75">
-                  Track {index + 1}
+                  니밍플리 {index + 1}
                 </p>
               </div>
 

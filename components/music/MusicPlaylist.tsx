@@ -6,6 +6,7 @@ import { usePlayer } from "./MusicPlayerProvider";
 export default function MusicPlaylist() {
   const {
     currentIndex,
+    setCurrentIndex,
     imageSwiper,
     infoSwiper,
   } = usePlayer();
@@ -16,6 +17,7 @@ export default function MusicPlaylist() {
         <button
           key={music.url}
           onClick={() => {
+            setCurrentIndex(index);
             imageSwiper?.slideToLoop(index);
             infoSwiper?.slideToLoop(index);
           }}
@@ -63,7 +65,7 @@ export default function MusicPlaylist() {
             </p>
 
             <p className="text-xs text-[var(--text-sub)]">
-              니니밍 플리 {index + 1}
+              니밍플리 {index + 1}
             </p>
           </div>
         </button>

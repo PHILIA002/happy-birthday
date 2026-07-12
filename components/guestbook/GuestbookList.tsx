@@ -45,19 +45,19 @@ export default function GuestbookList({
         overflow-y-auto
         hide-scrollbar
 
-        px-3
+        px-4
         py-2
       "
     >
       {messages
-        .slice(0, 100)
+        .slice(0, 30)
         .reverse()
         .map((item) => (
           <div
             key={item.id}
             className="
               flex
-              gap-8
+              gap-4
 
               text-sm
               leading-7

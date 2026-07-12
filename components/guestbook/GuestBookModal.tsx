@@ -128,9 +128,10 @@ export default function GuestbookModal({
             <>
               <Swiper
                 slidesPerView={1}
-                spaceBetween={0}
                 className="h-full"
-                onSlideChange={(swiper) => setCurrent(swiper.activeIndex)}
+                onSlideChange={(swiper) =>
+                  setCurrent(swiper.realIndex)
+                }
               >
                 {messages.map((item) => (
                   <SwiperSlide key={item.id}>
@@ -139,64 +140,71 @@ export default function GuestbookModal({
                         h-full
 
                         flex
-                        flex-col
+                        items-center
+                        justify-center
 
-                        p-5
+                        p-6
                       "
                     >
-                      <div className="flex items-center justify-between gap-4 mb-4">
-                        <span
-                          className="font-semibold"
-                          style={{
-                            color: getNameColor(item.name),
-                          }}
-                        >
-                          {item.name}
-                        </span>
-
-                        <span
-                          className="
-                            shrink-0
-
-                            text-xs
-                            text-[var(--text-sub)]
-                          "
-                        >
-                          {new Date(item.created_at).toLocaleString("ko-KR", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </span>
-                      </div>
-
                       <div
                         className="
-                          flex-1
+                          w-full
+                          max-w-xl
 
-                          overflow-y-auto
-
-                          whitespace-pre-wrap
-                          break-words
-
-                          text-sm
-                          leading-7
+                          p-8
                         "
                       >
-                        {item.message}
+                        <div className="text-center">
+                          <p
+                            className="text-xl font-bold"
+                            style={{
+                              color: getNameColor(item.name),
+                            }}
+                          >
+                            {item.name}
+                          </p>
+
+                          <p className="mt-2 text-sm text-[var(--text-sub)]">
+                            {new Date(
+                              item.created_at
+                            ).toLocaleString("ko-KR", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+
+                        <div
+                          className="
+                            mt-8
+
+                            min-h-[220px]
+
+                            whitespace-pre-wrap
+                            break-words
+
+                            text-center
+
+                            text-[15px]
+                            leading-8
+
+                            text-[var(--text-main)]
+                          "
+                        >
+                          {item.message}
+                        </div>
                       </div>
                     </div>
                   </SwiperSlide>
                 ))}
               </Swiper>
 
-              {/* Pagination */}
               <div
                 className="
-                  h-12
-                  shrink-0
+                  h-14
 
                   border-t
                   border-[var(--border)]
@@ -204,13 +212,32 @@ export default function GuestbookModal({
                   flex
                   items-center
                   justify-center
-
-                  text-sm
-                  font-medium
-                  text-[var(--text-sub)]
+                  gap-4
                 "
               >
-                {current + 1} / {messages.length}
+                <div className="flex gap-2">
+                  {messages.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`
+                        h-2
+                        rounded-full
+                        transition-all
+                        duration-300
+
+                        ${
+                          current === index
+                            ? "w-6 bg-[var(--primary)]"
+                            : "w-2 bg-[var(--border)]"
+                        }
+                      `}
+                    />
+                  ))}
+                </div>
+
+                <span className="text-sm text-[var(--text-sub)]">
+                  {current + 1} / {messages.length}
+                </span>
               </div>
             </>
           )}
