@@ -2,6 +2,7 @@ import AppShell from "@/components/layout/AppShell";
 import ChatBoard from "@/components/guestbook/ChatBoard";
 import MusicHero from "@/components/music/MusicHero";
 import MusicPlayer from "@/components/music/MusicPlayer";
+import MusicPlaylist from "@/components/music/MusicPlaylist";
 
 export default function MainPage() {
   return (
@@ -18,20 +19,24 @@ export default function MainPage() {
           lg:gap-[2%]
         "
       >
-        <section
-          className="
-            w-full
+<section
+  className="
+    w-full
 
-            lg:flex-1
-            lg:min-w-0
-          "
-        >
-          <MusicHero />
+    lg:flex-1
+    lg:min-w-0
+  "
+>
+  <MusicHero />
 
-          <div className="mt-5">
-            <MusicPlayer />
-          </div>
-        </section>
+  <div className="hidden lg:block mt-5">
+    <MusicPlaylist />
+  </div>
+
+  <div className="mt-5">
+    <MusicPlayer />
+  </div>
+</section>
 
         <aside
           className="

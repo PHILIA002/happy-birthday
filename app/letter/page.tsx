@@ -1,3 +1,5 @@
+import { Mail } from "lucide-react";
+
 import AppShell from "@/components/layout/AppShell";
 import { LETTER } from "@/data/letter";
 
@@ -6,20 +8,18 @@ export default function LetterPage() {
     <AppShell>
       <main
         className="
-          flex
-          items-center
-          justify-center
-
+          flex flex-col
+          items-center justify-center
           w-full
-          h-full
-          min-h-0
 
-          p-4
-          md:p-8
+          my-8
+          p-8
         "
       >
         <div
           className="
+            relative
+
             w-full
             max-w-3xl
 
@@ -29,41 +29,75 @@ export default function LetterPage() {
             border border-[var(--border)]
 
             bg-[var(--surface)]
-            shadow-xl
-            mt-8
+
+            shadow-[0_16px_40px_rgba(0,0,0,0.08)]
           "
         >
-          <div
-            className="
-              border-b border-[var(--border)]
 
-              px-6
-              py-5
-            "
-          >
-            <h1 className="text-2xl font-bold text-[var(--text-main)]">
-              생일 편지
-            </h1>
+          <div className="relative px-8 py-8">
+            <p
+              className="
+                text-xl
+                font-semibold
 
-            <p className="mt-1 text-sm text-[var(--text-sub)]">
-              오늘만 열어볼 수 있는 편지입니다.
+                text-[var(--primary)]
+              "
+            >
+              To. 니니밍
             </p>
           </div>
 
-          <div
-            className="
-              whitespace-pre-line
+          <div className="relative px-8">
+            <div
+              className="
+                relative
 
-              px-6
-              py-8
+                whitespace-pre-line
 
-              text-[15px]
-              leading-8
+                px-4 lg:px-8
 
-              text-[var(--text-main)]
-            "
-          >
-            {LETTER}
+                text-[16px]
+                leading-9
+
+                text-[var(--text-main)]
+              "
+              style={{
+                backgroundImage: `
+                  repeating-linear-gradient(
+                    to bottom,
+                    transparent 0,
+                    transparent 35px,
+                    var(--primary) 35px,
+                    transparent 36px
+                  )
+                `,
+              }}
+            >
+              {LETTER}
+            </div>
+
+            <div
+              className="
+                mt-12 mb-8
+
+                text-right
+              "
+            >
+              <p className="text-sm text-[var(--text-sub)]">
+                항상 행복하길 바라며.
+              </p>
+
+              <p
+                className="
+                  mt-2
+
+                  font-semibold
+                  text-[var(--primary)]
+                "
+              >
+                From. 니밍너무좋아 ♥
+              </p>
+            </div>
           </div>
         </div>
       </main>
