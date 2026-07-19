@@ -1,22 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Info, X } from "lucide-react";
+import { Bell, X } from "lucide-react";
 
 interface NoticeToastProps {
-  message: string;
   duration?: number;
 }
 
 export default function NoticeToast({
-  message,
-  duration = 10000,
+  duration = 5000,
 }: NoticeToastProps) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    const shown = sessionStorage.getItem("notice-toast");
+
+    if (shown) return;
+
     const t = setTimeout(() => {
       setShow(true);
+      sessionStorage.setItem("notice-toast", "true");
     }, 300);
 
     return () => clearTimeout(t);
@@ -25,10 +28,7 @@ export default function NoticeToast({
   useEffect(() => {
     if (!show) return;
 
-    const t = setTimeout(() => {
-      setShow(false);
-    }, duration);
-
+    const t = setTimeout(() => setShow(false), duration);
     return () => clearTimeout(t);
   }, [show, duration]);
 
@@ -37,94 +37,116 @@ export default function NoticeToast({
   return (
     <div
       className="
-        fixed top-20 left-1/2 -translate-x-1/2
+        fixed
+        top-10
+        left-1/2
+        -translate-x-1/2
         z-[999]
 
-        w-[92%] max-w-md
-
-        animate-[toastUp_.35s_ease]
+        w-[92%]
+        max-w-md
       "
     >
       <div
         className="
           relative
 
-          flex items-center gap-3
-
-          px-4 py-3
+          overflow-hidden
 
           rounded-2xl
+          border
+          border-[var(--border)]
 
-          bg-[var(--bg-sub)]
+          bg-[var(--surface)]
 
-          border border-[var(--glass-border)]
-
-          shadow-[0_10px_30px_rgba(0,0,0,0.22)]
+          shadow-[0_12px_40px_rgba(124,58,237,0.15)]
         "
       >
-        {/* left accent */}
         <div
           className="
-            absolute left-0 top-0 bottom-0
-            w-1 rounded-l-2xl
-            bg-[var(--primary)]
+            absolute
+            inset-x-0
+            top-0
+
+            h-1
+
+            bg-gradient-to-r
+            from-[var(--primary-soft)]
+            via-[var(--primary)]
+            to-[var(--primary-strong)]
           "
         />
 
-        {/* icon */}
-        <div
-          className="
-            flex items-center justify-center
+        <div className="flex items-center gap-4 px-5 py-4">
+          <div
+            className="
+              flex
+              h-11
+              w-11
+              items-center
+              justify-center
 
-            w-9 h-9
-            rounded-xl
+              rounded-xl
 
-            bg-[var(--primary)]/12
-            text-[var(--primary-soft)]
+              bg-[var(--primary)]/10
+              text-[var(--primary)]
+            "
+          >
+            <Bell size={20} />
+          </div>
 
-            shrink-0
-          "
-        >
-          <Info className="w-4 h-4" />
+          <div className="min-w-0 flex-1">
+            <p
+              className="
+                text-sm
+                font-semibold
+
+                text-[var(--primary)]
+              "
+            >
+              공지사항
+            </p>
+
+            <p
+              className="
+                mt-1
+
+                break-words
+
+                text-sm
+                leading-6
+
+                text-[var(--text-main)]
+              "
+            >
+              니니밍 팬사이트 v2
+            </p>
+          </div>
+
+          <button
+            onClick={() => setShow(false)}
+            className="
+              flex
+              h-8
+              w-8
+              items-center
+              justify-center
+
+              rounded-lg
+
+              text-[var(--text-sub)]
+
+              transition-colors
+
+              hover:bg-[var(--bg-sub)]
+              hover:text-[var(--primary)]
+
+              cursor-pointer
+            "
+          >
+            <X size={18} />
+          </button>
         </div>
-
-        {/* text */}
-        <p
-          className="
-            flex-1
-
-            text-sm md:text-[15px]
-            font-medium
-
-            text-[var(--text-main)]
-
-            leading-relaxed
-          "
-        >
-          {message}
-        </p>
-
-        {/* close */}
-        <button
-          onClick={() => setShow(false)}
-          className="
-            flex items-center justify-center
-
-            w-8 h-8
-            rounded-lg
-
-            text-[var(--text-sub)]
-
-            hover:bg-white/5
-            hover:text-[var(--text-main)]
-
-            transition-all duration-200
-
-            cursor-pointer
-          "
-        >
-          <X className="w-4 h-4" />
-        </button>
       </div>
     </div>
   );

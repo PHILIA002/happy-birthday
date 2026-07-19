@@ -15,6 +15,7 @@ export default function GuestbookForm() {
       message,
     });
 
+    setName("");
     setMessage("");
   };
 
@@ -61,6 +62,7 @@ export default function GuestbookForm() {
             outline-none
             text-xs
           "
+          autoFocus
         />
 
         <input

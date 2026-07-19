@@ -66,7 +66,7 @@ export default function Links() {
     today.getDate() === 19;
 
   return (
-    <nav className="flex items-center lg:gap-1 p-1 rounded-xl bg-[var(--surface-soft)]/70 border border-[var(--border)]">
+    <nav className="flex items-center gap-1 p-1 rounded-lg bg-[var(--surface-soft)]/70">
       <NavItem
         href="/main"
         icon={Home}

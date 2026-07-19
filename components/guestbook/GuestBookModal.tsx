@@ -46,14 +46,12 @@ export default function GuestbookModal({
         onClick={(e) => e.stopPropagation()}
         className="
           w-full
-          h-full
-
-          sm:max-w-3xl
-          sm:h-[80vh]
+          max-w-2xl
+          h-[60vh]
 
           bg-[var(--surface)]
 
-          sm:rounded-xl
+          rounded-2xl
 
           flex
           flex-col
@@ -61,7 +59,7 @@ export default function GuestbookModal({
           overflow-hidden
         "
       >
-        {/* Header */}
+
         <div
           className="
             h-14
@@ -107,7 +105,6 @@ export default function GuestbookModal({
           </button>
         </div>
 
-        {/* Content */}
         <div className="flex-1 min-h-0">
           {messages.length === 0 ? (
             <div
@@ -149,25 +146,28 @@ export default function GuestbookModal({
                       <div
                         className="
                           w-full
-                          max-w-xl
+                          h-full
 
-                          p-8
+                          px-6
+                          py-5
+
+                          flex
+                          flex-col
                         "
                       >
-                        <div className="text-center">
+                        <div>
                           <p
-                            className="text-xl font-bold"
-                            style={{
-                              color: getNameColor(item.name),
-                            }}
+                            className={`
+                              text-lg
+                              font-bold
+                              ${getNameColor(item.name)}
+                            `}
                           >
                             {item.name}
                           </p>
 
-                          <p className="mt-2 text-sm text-[var(--text-sub)]">
-                            {new Date(
-                              item.created_at
-                            ).toLocaleString("ko-KR", {
+                          <p className="mt-1 text-sm text-[var(--text-sub)]">
+                            {new Date(item.created_at).toLocaleString("ko-KR", {
                               year: "numeric",
                               month: "2-digit",
                               day: "2-digit",
@@ -179,16 +179,18 @@ export default function GuestbookModal({
 
                         <div
                           className="
-                            mt-8
+                            flex-1
 
-                            min-h-[220px]
+                            flex
+                            items-center
+                            justify-center
 
                             whitespace-pre-wrap
                             break-words
 
                             text-center
 
-                            text-[15px]
+                            text-base
                             leading-8
 
                             text-[var(--text-main)]

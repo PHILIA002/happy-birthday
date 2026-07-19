@@ -36,7 +36,7 @@ export default function MusicPlaylist() {
 
             transition-all
             duration-200
-
+            cursor-pointer
             ${
               currentIndex === index
                 ? "border-[var(--primary)] bg-[var(--primary)]/10"
@@ -65,7 +65,7 @@ export default function MusicPlaylist() {
             </p>
 
             <p className="text-xs text-[var(--text-sub)]">
-              니밍플리 {index + 1}
+              누나밍 {index + 1}
             </p>
           </div>
         </button>

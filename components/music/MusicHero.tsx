@@ -7,11 +7,6 @@ import { Controller } from "swiper/modules";
 
 import "swiper/css";
 
-import {
-  SkipBack,
-  SkipForward,
-} from "lucide-react";
-
 import { MUSIC_LIST } from "@/data/music";
 import { usePlayer } from "./MusicPlayerProvider";
 
@@ -27,16 +22,29 @@ export default function MusicHero() {
 
     opened,
     setOpened,
-
-    prev,
-    next,
   } = usePlayer();
 
   const [showControls, setShowControls] =
     useState(false);
 
+  const [isMobile, setIsMobile] =
+    useState(false);
+
   const hideTimer =
     useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const update = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    update();
+
+    window.addEventListener("resize", update);
+
+    return () =>
+      window.removeEventListener("resize", update);
+  }, []);
 
   const showOverlay = () => {
     setShowControls(true);
@@ -55,7 +63,6 @@ export default function MusicHero() {
     imageSwiper?.slideToLoop(currentIndex);
     infoSwiper?.slideToLoop(currentIndex);
 
-    // 곡이 바뀌면 다시 썸네일
     setOpened(false);
   }, [
     currentIndex,
@@ -77,7 +84,7 @@ export default function MusicHero() {
       <Swiper
         modules={[Controller]}
         loop
-        allowTouchMove={false}
+        allowTouchMove={isMobile}
         controller={{
           control: infoSwiper ?? undefined,
         }}
@@ -157,11 +164,6 @@ export default function MusicHero() {
                   absolute
                   inset-0
 
-                  bg-gradient-to-t
-                  from-black/80
-                  via-black/20
-                  to-transparent
-
                   pointer-events-none
                 "
               />
@@ -170,7 +172,7 @@ export default function MusicHero() {
                 className="
                   absolute
                   left-6
-                  bottom-6
+                  bottom-4
                   z-40
 
                   lg:hidden
@@ -180,8 +182,8 @@ export default function MusicHero() {
                   {music.title}
                 </h2>
 
-                <p className="mt-2 text-sm text-white/75">
-                  니밍플리 {index + 1}
+                <p className="mt-2 text-sm text-white/70">
+                  누나밍 {index + 1}
                 </p>
               </div>
 

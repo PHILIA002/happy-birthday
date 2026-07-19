@@ -9,7 +9,6 @@ import {
 } from "@/data/music";
 
 type Context = {
-  // Playlist
   currentIndex: number;
   setCurrentIndex: React.Dispatch<
     React.SetStateAction<number>
@@ -17,13 +16,11 @@ type Context = {
 
   currentMusic: MusicItem;
 
-  // Player
   opened: boolean;
   setOpened: React.Dispatch<
     React.SetStateAction<boolean>
   >;
 
-  // Swiper
   imageSwiper: SwiperType | null;
   setImageSwiper: React.Dispatch<
     React.SetStateAction<SwiperType | null>
@@ -34,7 +31,6 @@ type Context = {
     React.SetStateAction<SwiperType | null>
   >;
 
-  // Controls
   next: () => void;
   prev: () => void;
 };
